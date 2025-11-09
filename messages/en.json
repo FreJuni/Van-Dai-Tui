@@ -1,0 +1,16 @@
+{
+    "NavBar": {
+        "projectName": "VANDAITUI",
+        "loginRegister": "Login / Register",
+        "search": "SEARCH",
+        "addProduct": "Add product"
+    },
+    "UserInfo": {
+        "profileSettings": "Profile settings",
+        "userOrder": "My orders",
+        "adminOrders": "Orders",
+        "logout": "Logout",
+        "adminProducts": "Your products",
+        "accountSettings": "Account settings"
+    }
+}
