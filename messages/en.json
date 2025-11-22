@@ -12,5 +12,12 @@
         "logout": "Logout",
         "adminProducts": "Your products",
         "accountSettings": "Account settings"
+    },
+    "UserProfile": {
+        "userProfile": "Your Profile",
+        "uploadImage": "Upload Image",
+        "uploading": "Uploading ...",
+        "userInfo": "User Details",
+        "saveChanges": "Save changes"
     }
 }
