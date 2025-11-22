@@ -9,10 +9,11 @@ type AuthFormProps = {
     description: string
     href: string,
     label: string,
-    btnText: string
+    btnText: string,
+    isProvider: boolean
 }
 
-const AuthForm = ({ children, title, description, href, label, btnText }: AuthFormProps) => {
+const AuthForm = ({ children, title, description, href, label, btnText, isProvider }: AuthFormProps) => {
     return (
         <Card className=' w-[500px]'>
             <CardHeader>
@@ -23,8 +24,12 @@ const AuthForm = ({ children, title, description, href, label, btnText }: AuthFo
                 {children}
             </CardContent>
             <CardFooter className=' flex flex-col gap-2'>
-                <Provider />
-                <AuthFooter href={href} label={label} btnText={btnText} />
+                {isProvider && (
+                    <>
+                        <Provider />
+                        <AuthFooter href={href} label={label} btnText={btnText} />
+                    </>
+                )}
             </CardFooter>
         </Card>
     )

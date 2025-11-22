@@ -19,5 +19,20 @@
         "uploading": "Uploading ...",
         "userInfo": "User Details",
         "saveChanges": "Save changes"
+    },
+    "Auth": {
+        "forgetPassword": "Forgot Password?",
+        "email": "Email",
+        "enterEmail": "Enter your email address",
+        "submit": "Submit",
+        "resetPassword": "Reset Password",
+        "newPassword": "New Password",
+        "confirmNewPassword": "Confirm New Password"
+    },
+    "Account": {
+        "accountSettings": "Account Settings",
+        "phoneNumber": "Phone Number",
+        "email": "Email Address",
+        "updateAccount": "Update Account"
     }
 }

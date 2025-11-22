@@ -7,6 +7,7 @@ import { db } from "..";
 import { eq } from "drizzle-orm";
 import { users } from "../schema";
 import { signIn } from "../auth";
+import { revalidatePath } from "next/cache";
 
 export const LoginAction = actionClient
     .inputSchema(LoginSchema)
@@ -18,22 +19,27 @@ export const LoginAction = actionClient
             const checkUserExistOrNot = await db.query.users.findFirst({
                 where: eq(users.email, email)
             })
+
             if (!checkUserExistOrNot) return { error: "Please check your credentials." }
 
             const checkPasswordSameOrNot = await bcrypt.compare(password, checkUserExistOrNot.password!)
             if (!checkPasswordSameOrNot) return { error: "Please check your credentials." }
 
+
             await signIn('credentials', {
                 email,
                 password,
-                redirectTo: '/'
+                redirect: false
             })
 
+            revalidatePath('/');
             return {
                 success: "Login Successfully."
             }
 
         } catch (error) {
+            console.log(error);
+
             return {
                 error: "Something went wrong."
             }

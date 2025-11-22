@@ -68,6 +68,7 @@ const RegisterPage = () => {
                 href='/auth/login'
                 label='Already have an account? '
                 btnText="Sign in"
+                isProvider={true}
             >
                 <Form {...form} >
                     <form className='flex gap-5 flex-col' onSubmit={form.handleSubmit(onSubmit)} >

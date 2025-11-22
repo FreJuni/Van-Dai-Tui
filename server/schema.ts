@@ -41,3 +41,11 @@ export const accounts = pgTable(
         },
     ]
 )
+
+export const generatePasswordResetToken = pgTable("generate_password_reset_token", {
+    id: text("id")
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    userId: text("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+    token: text("token").notNull(),
+});
