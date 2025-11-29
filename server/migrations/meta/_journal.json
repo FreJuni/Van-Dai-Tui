@@ -15,6 +15,13 @@
       "when": 1763790463652,
       "tag": "0001_bumpy_loners",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1764423381915,
+      "tag": "0002_tearful_tomas",
+      "breakpoints": true
     }
   ]
 }

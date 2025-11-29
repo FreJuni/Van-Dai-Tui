@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const ProductSchema = z.object({
-    title: z.string().min(10, {
+    title: z.string().min(5, {
         message: "Please enter at least 10 character."
     }),
     description: z.string().min(20, {

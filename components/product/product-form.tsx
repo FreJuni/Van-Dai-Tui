@@ -17,7 +17,6 @@ import { useTranslations } from 'next-intl';
 import TipTap from './tip-tap';
 
 const ProductForm = () => {
-    const router = useRouter();
     const t = useTranslations('Product');
     const form = useForm<z.infer<typeof ProductSchema>>({
         resolver: zodResolver(ProductSchema),
@@ -45,7 +44,6 @@ const ProductForm = () => {
                     theme: "light",
                 });
             }
-            router.push('/auth/login')
         }
     })
 
@@ -55,13 +53,13 @@ const ProductForm = () => {
             description: values.description,
             price: values.price,
         })
-
     }
 
     return (
         <div>
             <Form {...form} >
                 <form className='flex gap-5 flex-col w-full' onSubmit={form.handleSubmit(onSubmit)} >
+
                     <FormField
                         control={form.control}
                         name="title"
@@ -97,7 +95,12 @@ const ProductForm = () => {
                             <FormItem>
                                 <FormLabel>{t('price')}</FormLabel>
                                 <FormControl>
-                                    <Input type="number" placeholder={t('price')} {...field} />
+                                    <Input
+                                        step={100}
+                                        type='number'
+                                        onChange={(e) => field.onChange(Number(e.target.value))}
+                                        min={0}
+                                        placeholder={t('price')} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

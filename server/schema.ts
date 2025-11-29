@@ -1,5 +1,5 @@
 import { createId } from "@paralleldrive/cuid2";
-import { integer, pgEnum, pgTable, primaryKey, text, timestamp, } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, primaryKey, real, text, timestamp, } from "drizzle-orm/pg-core";
 
 export const RoleEnum = pgEnum('roles', ['user', 'admin']);
 
@@ -49,3 +49,13 @@ export const generatePasswordResetToken = pgTable("generate_password_reset_token
     userId: text("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
     token: text("token").notNull(),
 });
+
+export const products = pgTable('products', {
+    id: text("id")
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    price: real('price').notNull(),
+    createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow()
+})

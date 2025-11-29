@@ -39,6 +39,7 @@
         "addProduct": "Add Product",
         "title": "Title",
         "description": "Description",
-        "price": "Price"
+        "price": "Price",
+        "yourProduct": "Your products {count}"
     }
 }
