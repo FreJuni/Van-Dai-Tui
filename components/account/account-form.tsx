@@ -27,6 +27,9 @@ type AccountFormProps = {
     }
 };
 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Mail, Phone, Settings } from 'lucide-react';
+
 const AccountForm = ({ user }: AccountFormProps) => {
     const t = useTranslations("Account");
 
@@ -61,44 +64,69 @@ const AccountForm = ({ user }: AccountFormProps) => {
     }
 
     return (
-        <Form {...form}>
-            <form className='flex gap-10 flex-col w-full' onSubmit={form.handleSubmit(onSubmit)}>
+        <Card className="border-gray-100 shadow-sm bg-white/50 backdrop-blur-sm">
+            <CardHeader>
+                <div className="flex items-center gap-2 mb-1">
+                    <Settings className="w-5 h-5 text-primary" />
+                    <CardTitle className="text-xl font-bold">{t('accountSettings')}</CardTitle>
+                </div>
+                <CardDescription>Manage your contact information and account security.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Form {...form}>
+                    <form className='flex gap-8 flex-col w-full' onSubmit={form.handleSubmit(onSubmit)}>
 
-                <h2 className='mb-3 font-medium text-xl'>{t('accountSettings')}</h2>
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                                        <Mail className="w-4 h-4 text-gray-400" />
+                                        {t('email')}
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input 
+                                            className="h-11 focus-visible:ring-primary bg-white" 
+                                            type="email" 
+                                            placeholder={t('email')} 
+                                            {...field} 
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
-                <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>{t('email')}</FormLabel>
-                            <FormControl>
-                                <Input type="email" placeholder={t('email')} {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                        <FormField
+                            control={form.control}
+                            name="phone_number"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                                        <Phone className="w-4 h-4 text-gray-400" />
+                                        {t('phoneNumber')}
+                                    </FormLabel>
+                                    <FormControl>
+                                        <PhoneNumberInput field={field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
-                <FormField
-                    control={form.control}
-                    name="phone_number"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>{t('phoneNumber')}</FormLabel>
-                            <FormControl>
-                                <PhoneNumberInput field={field} />
-                                {/* <Input placeholder={t('phoneNumber')} {...field} /> */}
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <Button disabled={status === 'executing'} className={cn(' cursor-pointer', status === 'executing' && 'animate-pulse')} type="submit">{t('updateAccount')}</Button>
-            </form>
+                        <Button 
+                            disabled={status === 'executing'} 
+                            className={cn('h-11 cursor-pointer font-semibold shadow-sm mt-4 transition-all active:scale-[0.98]', status === 'executing' && 'animate-pulse opacity-50')} 
+                            type="submit"
+                        >
+                            {status === 'executing' ? "Updating..." : t('updateAccount')}
+                        </Button>
+                    </form>
+                </Form>
+            </CardContent>
             <ToastContainer />
-        </Form>
+        </Card>
     )
 }
 

@@ -4,12 +4,13 @@ import { auth } from "@/server/auth";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 
+import { Hero, Categories } from "@/components/landing-page/home-components";
+
 export default async function Home() {
-  const session = await auth();
-
   return (
-    <div className="">
-
+    <div className="flex flex-col w-full">
+      <Hero />
+      <Categories />
     </div>
   );
 }

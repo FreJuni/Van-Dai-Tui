@@ -9,13 +9,9 @@ export default async function AccountLayout({
     const session = await auth();
 
     return (
-        <html lang="en">
-            <body>
-                <nav>
-                    <ProfileNavigation session={session!} />
-                </nav>
-                <main>{children}</main>
-            </body>
-        </html>
+        <div className="flex flex-col min-h-full">
+            <ProfileNavigation session={session!} />
+            <div className="flex-1">{children}</div>
+        </div>
     )
 }

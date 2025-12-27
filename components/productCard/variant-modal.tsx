@@ -1,0 +1,231 @@
+"use client";
+
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { useTranslations } from "next-intl";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Input } from "../ui/input";
+import { VariantsSchema } from "@/types/variants-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useFieldArray, useForm } from "react-hook-form";
+import z from "zod";
+import { Button } from "../ui/button";
+import VariantsImage from "./variant-images";
+import { useAction } from "next-safe-action/hooks";
+import { addProductVariantAction } from "@/server/actions/product";
+import { toast, ToastContainer } from "react-toastify";
+import { useEffect, useState } from "react";
+import { VariantsWithImagesTags } from "@/lib/infer-type";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+
+type VariantsModalProps = {
+    children: React.ReactNode;
+    productId: string;
+    editMode?: boolean;
+    variant?: VariantsWithImagesTags;
+}
+
+const VariantModal = ({ children, productId, editMode, variant }: VariantsModalProps) => {
+    const t = useTranslations('Product');
+    const router = useRouter();
+    const [open, setOpen] = useState(false);
+
+
+    const form = useForm<z.infer<typeof VariantsSchema>>({
+        resolver: zodResolver(VariantsSchema),
+        defaultValues: {
+            productID: productId,
+            variantImages: [],
+            color: '#000000',
+            editMode,
+            storages: [],
+            id: undefined,
+            name: '',
+        }
+    })
+
+    const { execute, status, result } = useAction(addProductVariantAction, {
+        onSuccess: (result) => {
+            form.reset();
+            if (result?.data?.success) {
+                toast.success(result.data.success);
+                router.push(`/products`);
+                setOpen(false);
+            }
+            if (result?.data?.error) {
+                toast.error(result.data.error);
+            }
+        },
+    })
+
+    const onSubmit = (values: z.infer<typeof VariantsSchema>) => {
+        const { id, name, color, variantImages, storages, editMode } = values;
+
+        execute({
+            id,
+            productID: productId,
+            name,
+            color,
+            variantImages,
+            storages,
+            editMode
+        });
+    }
+
+    const { fields, append, remove } = useFieldArray({
+        control: form.control,
+        name: "storages",
+    });
+
+    const getOldData = () => {
+
+        if (!editMode && !variant) {
+            form.reset();
+            return;
+        }
+
+        if (editMode && variant) {
+            form.setValue('id', variant.id);
+            form.setValue('name', variant.variantName);
+            form.setValue('editMode', true)
+            form.setValue('color', variant.productVariantColor.color);
+            form.setValue('productID', variant.productId);
+            form.setValue('variantImages', variant?.productVariantImage?.map((image: any) => {
+                return {
+                    url: image.image_url,
+                    name: image.name,
+                    size: Number(image.size),
+                }
+            }));
+            form.setValue('storages', variant?.productVariantOption?.map((storage: any) => {
+                return {
+                    storage: storage.storage,
+                    price: storage.price
+                }
+            }));
+        }
+    }
+
+    useEffect(() => {
+        getOldData();
+    }, [editMode, variant, productId]);
+
+    return (
+        <>
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>{children}</DialogTrigger>
+                <DialogContent className="h-[43rem] overflow-y-scroll">
+                    <DialogHeader>
+                        <DialogTitle>{t('createProductVariants')}</DialogTitle>
+                        <DialogDescription>
+                            {t('addNewProductVariants')}
+                        </DialogDescription>
+                    </DialogHeader>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-7 flex-col">
+
+                            <FormField
+                                control={form.control}
+                                name="productID"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <Input {...field} hidden value={productId!} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('variantName')}</FormLabel>
+                                        <FormControl>
+                                            <Input  {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="color"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('variantColor')}</FormLabel>
+                                        <FormControl>
+                                            <Input type="color"  {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {fields.map((item, index) => {
+                                return (
+                                    <div key={index}>
+                                        <div key={index} className="flex gap-2 justify-end items-end">
+                                            <FormField
+                                                control={form.control}
+                                                name={`storages.${index}.storage`}
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>{t('storage')}</FormLabel>
+                                                        <FormControl>
+                                                            <Input {...field} placeholder="128GB" />
+                                                        </FormControl>
+                                                        {/* <FormMessage /> */}
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={form.control}
+                                                name={`storages.${index}.price`}
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>{t('price')}</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number"
+                                                                {...field}
+                                                                value={field.value === 0 ? '' : field.value ?? ''}
+                                                                onChange={(e) => field.onChange(e.target.value === '' ? 0 : Number(e.target.value))}
+                                                                placeholder="Price"
+                                                            />
+                                                        </FormControl>
+                                                        {/* <FormMessage /> */}
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <Button className="cursor-pointer" variant={"destructive"} type="button" onClick={() => remove(index)}>{t('remove')}</Button>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                            <Button className="cursor-pointer" type="button" onClick={() => append({ storage: "", price: 0 })}>{t('addStorage')}</Button>
+
+
+                            <VariantsImage />
+
+                            <div className=" w-full flex gap-2">
+                                <Button disabled={status === 'executing'} className={cn("cursor-pointer flex-1", status === 'executing' && 'animate-pulse opacity-50')} type="submit">{editMode ? t('updateVariant') : t('createProductVariants')}</Button>
+                            </div>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
+        </>
+    )
+}
+
+export default VariantModal;

@@ -1,0 +1,20 @@
+WHY THE PREVIOUS CODE DIDN'T WORK DYNAMICALLY
+
+1. Lack of Suspense Boundary (The Main Culprit)
+In the Next.js App Router, any component that uses `useSearchParams()` must be wrapped in a `<Suspense>` boundary. Without this boundary, Next.js cannot properly track navigation changes and trigger re-renders when the URL changes. This is why when you clicked a variant, the URL would change in the browser, but the ListingDetails component would "stay" on its initial state (the first variant).
+
+2. Derived State & Re-rendering
+Your code calculated 'variantId' once:
+   const variantId = searchParams.get('variantId') || data.productVariant[0]?.id;
+Because the component wasn't re-rendering correctly (due to no Suspense), it never re-calculated this value when the URL updated. It kept using the value it found when the page first loaded (which was the fallback data.productVariant[0].id).
+
+3. Manual URL Construction Risks
+Building the URL by concatenating a long string:
+   router.push(`/listing-page/${id}?variantName=${variantName}&...`)
+is very prone to errors. If any of those variables (like variantName) were null or undefined during the first render, you would end up pushing "?variantName=null" or "?variantName=" into the URL, which persists the problem. Using URLSearchParams is much safer because it handles encoding and preserves existing valid parameters automatically.
+
+4. Scope of the Map Function
+In your previous version, you were mapping over ALL variants and then mapping over ALL options for EACH variant to show storage. This meant you were showing every possible storage combination for every color at the same time. This made it difficult to determine which specific 'variantId' should be active in the URL, often causing it to default back to the first one available in the data array.
+
+SUMMARY:
+By adding the <Suspense> boundary and using useMemo to calculate the 'currentVariant' based on the actual URL, we forced the component to sync perfectly with the browser's address bar.

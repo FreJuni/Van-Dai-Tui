@@ -18,6 +18,9 @@ type UserNameFormProps = {
     userId: string,
 }
 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { User } from 'lucide-react';
+
 const UserNameForm = ({ name, userId }: UserNameFormProps) => {
     const t = useTranslations("UserProfile");
 
@@ -52,47 +55,60 @@ const UserNameForm = ({ name, userId }: UserNameFormProps) => {
     }
 
     return (
-        <Form {...form}>
-            <form className='flex flex-col gap-2' onSubmit={form.handleSubmit(onSubmit)}>
-                <h2 className=' mb-3 font-medium text-xl'>{t('userInfo')}</h2>
+        <Card className="border-gray-100 shadow-sm bg-white/50 backdrop-blur-sm">
+            <CardHeader>
+                <div className="flex items-center gap-2 mb-1">
+                    <User className="w-5 h-5 text-primary" />
+                    <CardTitle className="text-xl font-bold">{t('userInfo')}</CardTitle>
+                </div>
+                <CardDescription>Update your public display name.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Form {...form}>
+                    <form className='flex flex-col gap-6' onSubmit={form.handleSubmit(onSubmit)}>
+                        <FormField
+                            name='userId'
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input type='hidden'  {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
-                <FormField
-                    name='userId'
-                    control={form.control}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormControl>
-                                <Input type='hidden'  {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                        <FormField
+                            name='name'
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-sm font-semibold text-gray-700">Username</FormLabel>
+                                    <FormControl>
+                                        <Input 
+                                            className='h-11 focus-visible:ring-primary bg-white' 
+                                            placeholder="Your display name"
+                                            type='text'  {...field} 
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
-                <FormField
-                    name='name'
-                    control={form.control}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel >Username</FormLabel>
-                            <FormControl>
-                                <Input className='w-96' type='text'  {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <Button
-                    disabled={status === 'executing'}
-                    className={cn(' cursor-pointer mt-10', status === 'executing' && 'animate-pulse')}
-                    type='submit'
-                >
-                    {t("saveChanges")}
-                </Button>
-            </form>
+                        <Button
+                            disabled={status === 'executing'}
+                            className={cn('h-11 cursor-pointer font-semibold shadow-sm transition-all active:scale-[0.98]', status === 'executing' && 'animate-pulse opacity-50')}
+                            type='submit'
+                        >
+                            {status === 'executing' ? t('uploading') : t("saveChanges")}
+                        </Button>
+                    </form>
+                </Form>
+            </CardContent>
             <ToastContainer />
-        </Form>
+        </Card>
     )
 }
 

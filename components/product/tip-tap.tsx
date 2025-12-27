@@ -1,5 +1,5 @@
 'use client';
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -54,6 +54,12 @@ const TipTap = ({ val }: TipTapProps) => {
             });
         }
     });
+
+    useEffect(() => {
+        if (editor && val !== editor.getHTML()) {
+            editor.commands.setContent(val || '');
+        }
+    }, [val, editor]);
 
     return <div className='flex flex-col gap-3'>
         {
