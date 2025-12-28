@@ -50,6 +50,34 @@
       "when": 1766322047788,
       "tag": "0006_flaky_cammi",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1766839226179,
+      "tag": "0007_familiar_champions",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1766840402664,
+      "tag": "0008_friendly_jane_foster",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1766844011058,
+      "tag": "0009_typical_cardiac",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1766921289327,
+      "tag": "0010_yummy_smiling_tiger",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,5 @@
 import ProductCard from '@/components/productCard/product-card';
-import { fetchAllProducts } from '@/server/actions/product';
+import {  fetchAllAdminProducts } from '@/server/actions/product';
 import React from 'react';
 import noImage from '@/public/images/no-image-available-icon-vector.jpg';
 import { Plus, Package } from 'lucide-react';
@@ -8,10 +8,10 @@ import { Button } from '@/components/ui/button';
 import { getTranslations } from 'next-intl/server';
 
 const Products = async () => {
-    const products = await fetchAllProducts();
+    const products = await fetchAllAdminProducts();
     const t = await getTranslations('Product');
 
-    const productData = products?.map((product) => {
+    const productData = products?.map((product: any) => {
         if (product.productVariant.length === 0) {
             return {
                 id: product.id,

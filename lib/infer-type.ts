@@ -28,7 +28,7 @@ export type InferResultType<
 
 export type VariantsWithImagesTags = InferResultType<
     "productVariant",
-    { productVariantImage: true; productVariantOption: true; productVariantColor: true; }
+    { productVariantImage: true; productVariantOption: true; productVariantColor: true; productVariantCondition: true; }
 >
 
 export type ProductsWithVariants = InferResultType<

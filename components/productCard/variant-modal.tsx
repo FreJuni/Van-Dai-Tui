@@ -24,6 +24,8 @@ import { useEffect, useState } from "react";
 import { VariantsWithImagesTags } from "@/lib/infer-type";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { Package } from "lucide-react";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 type VariantsModalProps = {
     children: React.ReactNode;
@@ -48,6 +50,7 @@ const VariantModal = ({ children, productId, editMode, variant }: VariantsModalP
             storages: [],
             id: undefined,
             name: '',
+            condition: 'New',
         }
     })
 
@@ -66,7 +69,7 @@ const VariantModal = ({ children, productId, editMode, variant }: VariantsModalP
     })
 
     const onSubmit = (values: z.infer<typeof VariantsSchema>) => {
-        const { id, name, color, variantImages, storages, editMode } = values;
+        const { id, name, color, variantImages, storages, editMode, condition } = values;
 
         execute({
             id,
@@ -75,7 +78,8 @@ const VariantModal = ({ children, productId, editMode, variant }: VariantsModalP
             color,
             variantImages,
             storages,
-            editMode
+            editMode,
+            condition
         });
     }
 
@@ -97,6 +101,7 @@ const VariantModal = ({ children, productId, editMode, variant }: VariantsModalP
             form.setValue('editMode', true)
             form.setValue('color', variant.productVariantColor.color);
             form.setValue('productID', variant.productId);
+            form.setValue('condition', variant.productVariantCondition.condition!);
             form.setValue('variantImages', variant?.productVariantImage?.map((image: any) => {
                 return {
                     url: image.image_url,
@@ -170,6 +175,39 @@ const VariantModal = ({ children, productId, editMode, variant }: VariantsModalP
                                         <FormMessage />
                                     </FormItem>
                                 )}
+                            />
+
+                            <FormField
+                            control={form.control}
+                            name="condition"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel className="flex items-center gap-2">
+                                    <Package className="w-4 h-4 text-gray-500" />
+                                    Condition
+                                </FormLabel>
+
+                                <Select
+                                    defaultValue={field.value}
+                                    onValueChange={(value) => field.onChange(value)}
+                                >
+                                    <FormControl>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue  placeholder="Select a category" />
+                                    </SelectTrigger>
+                                    </FormControl>
+                                    <SelectGroup>
+                                    <SelectContent>
+                                    <SelectItem value="New">New</SelectItem>
+                                    <SelectItem value="Used">Used</SelectItem>
+                                    <SelectItem value="Refurbished">Refurbished</SelectItem>
+                                    </SelectContent>
+                                    </SelectGroup>
+                                </Select>
+
+                                <FormMessage />
+                                </FormItem>
+                            )}
                             />
 
                             {fields.map((item, index) => {

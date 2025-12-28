@@ -52,7 +52,9 @@ export const generatePasswordResetToken = pgTable("generate_password_reset_token
 });
 
 
-export const ProductTypeEnum = pgEnum('product_type', ['Phone', 'Tablet', 'Laptop', 'Other']);
+export const CategoryEnum = pgEnum('category', ['Phones', 'Tablets', 'Laptops', 'Others']);
+export const BrandEnum = pgEnum('brand', ['Apple', 'Samsung', 'Xiaomi',"Dell", "HP", "Lenovo", "Asus", "Others"]);
+export const ConditionEnum = pgEnum('condition', ['New', 'Used' , 'Refurbished']);
 
 export const products = pgTable('products', {
     id: text("id")
@@ -61,9 +63,8 @@ export const products = pgTable('products', {
     title: text('title').notNull(),
     description: text('description').notNull(),
     price: real('price').notNull(),
-    type: ProductTypeEnum('type').default('Other'),
-    category: text('category').notNull(), 
-    brand: text('brand').notNull(), 
+    category: CategoryEnum('category').default('Others'),
+    brand: BrandEnum('brand').default('Others'), 
     createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow()
 })
 
@@ -73,6 +74,15 @@ export const productVariant = pgTable('productVariant', {
         .$defaultFn(() => createId()),
     productId: text("productId").notNull().references(() => products.id, { onDelete: "cascade" }),
     variantName: text("variantName").notNull(),
+    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow()
+})
+
+export const productVariantCondition = pgTable('productVariantCondition', {
+    id: text("id")
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    productVariantId: text("productVariantId").notNull().references(() => productVariant.id, { onDelete: "cascade" }),
+    condition: ConditionEnum('condition').default('New'),
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow()
 })
 
@@ -106,8 +116,41 @@ export const productVariantImage = pgTable('productVariantImage', {
     createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow(),
 })
 
+export const favouriteProduct = pgTable('favourite_products', {
+    id : text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+    userId: text('userId')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+    productId: text('productId')
+    .notNull()
+    .references(() => products.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow(),
+},
+    (favouriteProduct) => [
+        {
+            compoundKey: primaryKey({
+                columns: [favouriteProduct.userId, favouriteProduct.productId],
+            }),
+        },
+    ]
+)
+
 export const productsRelations = relations(products, ({ many, one }) => ({
     productVariant: many(productVariant),
+    favouriteProduct : many(favouriteProduct)
+}))
+
+export const favouritesRelations = relations(favouriteProduct , ({many , one}) => ({
+    products : one(products , {
+        fields : [favouriteProduct.productId],
+        references : [products.id]
+    }),
+    users : one(users , {
+        fields : [favouriteProduct.userId],
+        references : [users.id]
+    })
 }))
 
 export const productVariantRelations = relations(productVariant, ({ many, one }) => ({
@@ -120,7 +163,18 @@ export const productVariantRelations = relations(productVariant, ({ many, one })
         fields: [productVariant.id],
         references: [productVariantColor.productVariantId]
     }),
+    productVariantCondition: one(productVariantCondition, {
+        fields: [productVariant.id],
+        references: [productVariantCondition.productVariantId]
+    }),
     productVariantImage: many(productVariantImage),
+}))
+
+export const productVariantConditionRelations = relations(productVariantCondition, ({ one }) => ({
+    productVariant: one(productVariant, {
+        fields: [productVariantCondition.productVariantId],
+        references: [productVariant.id]
+    })
 }))
 
 export const productVariantOptionRelations = relations(productVariantOption, ({ one }) => ({

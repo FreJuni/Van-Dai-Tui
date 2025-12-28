@@ -72,11 +72,11 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
                                 </Link>
                                 :
                                 <>
-                                    <button className='p-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-full transition-all'>
-                                        <HeartIcon size={22} />
-                                    </button>
-                                    <button className='p-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-full transition-all'>
-                                        <ShoppingCartIcon size={22} />
+                                    <Link href={'/favourites'} className='cursor-pointer p-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-full transition-all'>
+                                        <HeartIcon className='cursor-pointer' size={22} />
+                                    </Link>
+                                    <button className='cursor-pointer p-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-full transition-all'>
+                                        <ShoppingCartIcon className='cursor-pointer' size={22} />
                                     </button>
                                 </>
                         }
@@ -94,7 +94,7 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
                             </UserInformation>
                             :
                             <Link href={'/auth/register'}>
-                                <button className='h-11 px-6 bg-gray-900 text-white rounded-xl font-bold text-sm tracking-wide shadow-sm hover:bg-black transition-all active:scale-95'>
+                                <button className='cursor-pointer h-11 px-6 bg-gray-900 text-white rounded-xl font-bold text-sm tracking-wide shadow-sm hover:bg-black transition-all active:scale-95'>
                                     {t("loginRegister")}
                                 </button>
                             </Link>

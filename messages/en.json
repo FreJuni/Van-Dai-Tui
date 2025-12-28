@@ -72,6 +72,11 @@
         "category": "Category",
         "brand": "Brand"
     },
+    "Favourites": {
+        "yourFavourites": "Your Favourites",
+        "yourFavouritesDescription": "Manage your favourite products.",
+        "addToFavourites": "Add to Favourites"
+    },
     "ListingPage" : {
         "color": "Color",
         "storage": "Storage"

@@ -7,9 +7,12 @@ import noImage from '@/public/images/no-image-available-icon-vector.jpg';
 import { priceFormatter } from '@/helper/priceFormatter';
 import { Button } from '../ui/button';
 import { useTranslations } from 'next-intl';
-import { Star, ShoppingCart } from 'lucide-react';
+import { Star, ShoppingCart, HeartIcon } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { addFavourites } from '@/server/actions/favourite';
+import { toast, ToastContainer } from 'react-toastify';
+import { useAction } from 'next-safe-action/hooks';
 
 type ShopProductCardProps = {
     data: {
@@ -19,51 +22,56 @@ type ShopProductCardProps = {
         price: number;
         originalPrice?: number;
         image: string;
-        rating?: number;
-        reviewsCount?: number;
         brand?: string;
         badge?: string;
         badgeColor?: string;
         variants: any[]
-    }
+        condition: string,
+        isFavourite: boolean
+    },
+    userId : string
 }
 
-export const ShopProductCard = ({ data }: ShopProductCardProps) => {
+export const ShopProductCard = ({ data, userId }: ShopProductCardProps) => {
     const t = useTranslations('Shop');
 
-    const renderStars = (rating: number = 5) => {
-        return (
-            <div className="flex items-center gap-0.5">
-                {[1, 2, 3, 4, 5].map((star) => (
-                    <Star 
-                        key={star} 
-                        size={12} 
-                        className={cn(
-                            "transition-colors",
-                            star <= rating ? "fill-yellow-400 text-yellow-400" : "text-gray-200"
-                        )} 
-                    />
-                ))}
-            </div>
-        );
-    };
+    const {execute,result, status} = useAction(addFavourites, {
+        onSuccess : ({data}) => {
+           if(data.success) {
+             toast.success(data.success);
+           }
+           if(data.error) {
+            toast.error(data.error);
+           }
+        },
+    })
+
+    const handleFavouriteToggle = async (userId : string, productId : string) => {
+        execute({userId, productId})
+    }
 
     return (
-        <Card className="group overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-2xl hover:shadow-gray-200/50 hover:-translate-y-1.5 bg-white rounded-3xl">
+        <>
+        <Card className="p-0 group gap-1 overflow-hidden border border-gray-100 transition-all duration-300 bg-white rounded-[6px]">
             {/* Image Section */}
-            <div className="relative aspect-square overflow-hidden bg-gray-50 p-4">
-                {data.badge && (
-                    <div className={cn(
-                        "absolute top-4 left-4 z-10 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider text-white shadow-lg",
-                        data.badgeColor || "bg-primary"
-                    )}>
-                        {data.badge}
-                    </div>
-                )}
+            <div className="relative p-[6px] aspect-square overflow-hidden bg-gray-50">
+                    <button className={cn(
+                        "absolute top-4 right-4 z-10 px-2.5 py-1 rounded-[6px] text-[10px] font-black uppercase tracking-wider text-white shadow-lg",
+                        "bg-primary",
+                        status === "executing" && "bg-primary/50 cursor-not-allowed"
+                    )}
+                    disabled={status === 'executing'}
+                    onClick={() => handleFavouriteToggle(userId, data.id)}
+                    >
+                         <HeartIcon className={cn('cursor-pointer',
+                            data.isFavourite ? 'fill-red-800' : '',
+                            status === "executing" && "text-gray-400 animate-pulse"
+                         )} size={22} />
+                    </button>
                 
                 <Link 
-                    href={`/listing-page/${data?.id}`}
-                    className="relative w-full h-full block rounded-2xl overflow-hidden"
+                    href={`/listing-page/${data?.id}?variantName=${data?.variants[0]?.variantName}&listingTitle=${data?.title}&listingDescription=${data?.description}&listingPrice=${data?.price}&listingImage=${data?.image}&variantId=${data?.variants[0]?.id}&productId=${data?.id}&variantColor=${data?.variants[0]?.productVariantColor?.color}&variantImage=${data?.variants[0]?.productVariantImage[0]?.image_url}&variantStorage=${data?.variants[0]?.productVariantOption[0]?.storage}&variantPrice=${data?.variants[0]?.productVariantOption[0]?.price}`}
+                    className="relative w-full h-full block rounded-[6px] overflow-hidden"
                 >
                     {data.image ? (
                         <Image 
@@ -80,22 +88,14 @@ export const ShopProductCard = ({ data }: ShopProductCardProps) => {
             </div>
 
             {/* Content Section */}
-            <CardContent className='p-6 space-y-3'>
+            <CardContent className='p-[6px] space-y-3'>
                 <div className="space-y-1">
                     <p className="text-[10px] font-bold uppercase tracking-widest text-primary/60">{data.brand || "Tech Store"}</p>
-                    <Link href={`/listing-page/${data.id}`}>
-                        <h3 className='text-sm font-bold text-gray-900 line-clamp-2 min-h-10 group-hover:text-primary transition-colors duration-300'>
+                    <Link href={`/listing-page/${data.id}?variantName=${data?.variants[0]?.variantName}&listingTitle=${data?.title}&listingDescription=${data?.description}&listingPrice=${data?.price}&listingImage=${data?.image}&variantId=${data?.variants[0]?.id}&productId=${data?.id}&variantColor=${data?.variants[0]?.productVariantColor?.color}&variantImage=${data?.variants[0]?.productVariantImage[0]?.image_url}&variantStorage=${data?.variants[0]?.productVariantOption[0]?.storage}&variantPrice=${data?.variants[0]?.productVariantOption[0]?.price}`}>
+                        <h3 className='text-sm font-bold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors duration-300'>
                             {data.title}
                         </h3>
                     </Link>
-                </div>
-
-                <div className="flex items-center gap-2">
-                    {renderStars(data.rating)}
-                    <span className="text-[11px] font-bold text-gray-300">({data.reviewsCount || 0})</span>
-                </div>
-
-                <div className='pt-2 flex flex-col gap-4'>
                     <div className="flex items-end gap-2">
                         <span className='text-lg font-black text-primary'>
                             {priceFormatter({ price: data.price })}
@@ -106,13 +106,21 @@ export const ShopProductCard = ({ data }: ShopProductCardProps) => {
                             </span>
                         )}
                     </div>
+                        <p className='text-sm font-medium text-gray-700 line-clamp-2 group-hover:text-primary transition-colors duration-300'>
+                            {data.condition}
+                        </p>
+                </div>
 
-                    <Button className='w-full h-11 bg-primary hover:bg-black text-white rounded-2xl font-bold text-xs tracking-wider gap-2 group transition-all active:scale-95 shadow-lg shadow-primary/20'>
+                <div className='flex flex-col gap-4'>
+
+                    {/* <Button className='w-full h-11 bg-primary hover:bg-black text-white rounded-2xl font-bold text-xs tracking-wider gap-2 group transition-all active:scale-95 shadow-lg shadow-primary/20'>
                         <ShoppingCart size={16} className="group-hover:-translate-y-0.5 transition-transform" />
                         {t('addToCart')}
-                    </Button>
+                    </Button> */}
                 </div>
             </CardContent>
+            <ToastContainer />
         </Card>
+        </>
     );
 };

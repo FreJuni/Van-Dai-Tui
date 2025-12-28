@@ -1,33 +1,31 @@
 
-import React from 'react';
 import { getTranslations } from 'next-intl/server';
-import { ShopSidebar } from '@/components/shop/shop-sidebar';
-import { ShopToolbar } from '@/components/shop/shop-toolbar';
-import { ShopProductCard } from '@/components/shop/shop-product-card';
-import { Home, ChevronRight } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { fetchAllProducts } from '@/server/actions/product';
+import { FilterBar } from '@/components/shop/filter-bar';
+import { ShopProductCard } from '@/components/shop/shop-product-card';
+import Link from 'next/link';
+import { auth } from '@/server/auth';
 
 export const dynamic = 'force-dynamic';
 
 export default async function SearchPage({ 
     searchParams 
 }: { 
-    searchParams: { [key: string]: string | string[] | undefined } 
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }> 
 }) {
     const t = await getTranslations('Shop');
-    console.log("HELLO",searchParams);
-
+    const params = await searchParams;
+    const session = await auth();
     
     // Fetch products
     const allProducts = await fetchAllProducts();
+    console.log('Total products fetched:', allProducts);
     
     // Filter Logic
     let filteredProducts = Array.isArray(allProducts) ? allProducts : [];
     
     // 1. Search Query
-    const query = typeof searchParams.q === 'string' ? searchParams.q.toLowerCase() : '';
+    const query = typeof params.q === 'string' ? params.q.toLowerCase() : '';
     if (query) {
         filteredProducts = filteredProducts.filter(p => 
             p.title.toLowerCase().includes(query) || 
@@ -35,106 +33,110 @@ export default async function SearchPage({
         );
     }
 
-    console.log("HELLO",query);
-    
-    
-    // 2. Category (Basic title matching as we don't have category column yet)
-    // If user selects "Cameras", updated sidebar sends "Cameras".
-    const category = typeof searchParams.category === 'string' ? searchParams.category.toLowerCase() : '';
-    if (category) {
-        // Simple heuristic: if title contains category name (rough fallback)
-        // Or if we had a category field, we'd use that.
-        // For "Cameras", we match "camera".
-        // For "Laptops", we match "laptop".
-        const keyword = category.replace('s', ''); // naive de-pluralize
+    // 2. Category
+    const category = typeof params.category === 'string' ? params.category.split(',') : [];
+    if (category.length > 0) {
         filteredProducts = filteredProducts.filter(p => 
-            p.title.toLowerCase().includes(keyword) || 
-            (p.description && p.description.toLowerCase().includes(keyword))
+            category.some(cat => p.category?.toLowerCase() === cat.toLowerCase())
         );
     }
-    
-    // 3. Price (Max)
-    // Slider sends "price" parameter (e.g. 260)
-    // Actually our slider has defaultValue 260, but user might change it.
-    // Wait, ShopSidebar Slider didn't have name attribute or push to URL?
-    // In ShopSidebar I added onChange => console.log.
-    // So Price filter IS NOT CONNECTED yet in Sidebar. To connect it, I need debounce update URL.
-    // I left it as TODO in sidebar.
-    // So here I won't filter by price yet unless I implemented it in Sidebar.
-    
+
+    // 3. Brand
+    const brands = typeof params.brand === 'string' ? params.brand.split(',') : [];
+    if (brands.length > 0) {
+        filteredProducts = filteredProducts.filter(p => 
+            brands.some(b => p.brand?.toLowerCase() === b.toLowerCase())
+        );
+    }
+
+    // 4. Condition
+    const conditions = typeof params.condition === 'string' ? params.condition.split(',') : [];
+    if (conditions.length > 0) {
+        filteredProducts = filteredProducts.filter(p => 
+            conditions.some(c => (p as any).productVariant[0].productVariantCondition?.condition?.toLowerCase() === c.toLowerCase())
+        );
+    }
+
+    // 5. Price Range
+    const minPrice = Number(params.minPrice) || 0;
+    const maxPrice = Number(params.maxPrice) || 1000000;
+    if (minPrice > 0 || maxPrice < 1000000) {
+        filteredProducts = filteredProducts.filter(p => p.price >= minPrice && p.price <= maxPrice);
+    }
+
+    // 6. Sorting
+    const sort = typeof params.sort === 'string' ? params.sort : 'relevance';
+    if (sort === 'price-low') {
+        filteredProducts.sort((a, b) => a.price - b.price);
+    } else if (sort === 'price-high') {
+        filteredProducts.sort((a, b) => b.price - a.price);
+    } else if (sort === 'newest') {
+        filteredProducts.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }
+
     // Map products to ShopProductCard format
     const mappedProducts = filteredProducts.map((p: any) => {
-        const firstVariant = p.productVariant && p.productVariant.length > 0 ? p.productVariant[0] : null;
-        // Check for productVariantImage (might be nested or different based on schema fetch)
-        // In fetchAllProducts: with: { productVariant: { with: { productVariantImage: true } } }
-        // So firstVariant should have productVariantImage array.
-        const image = firstVariant?.productVariantImage?.[0]?.image_url || '';
-        
-        return {
-            id: p.id,
-            title: p.title,
-            description: p.description || '',
-            price: p.price,
-            image: image,
-            variants: p.productVariant,
-            // Fallbacks for optional fields
-            brand: "Tech Store", // or derive
-            rating: 5,
-            reviewsCount: 10,
-        };
-    });
+        try {
+            const firstVariant = p.productVariant && p.productVariant.length > 0 ? p.productVariant[0] : null;
+            const image = firstVariant?.productVariantImage?.[0]?.image_url || '';
+            
+            return {
+                id: p.id,
+                title: p.title,
+                description: p.description || '',
+                price: p.price,
+                image: image,
+                brand: p.brand || "Tech Store",
+                condition: p.productVariant[0].productVariantCondition?.condition || "New",
+                isFavourite: p.favouriteProduct,
+                variants: p.productVariant,
+            };
+        } catch (e) {
+            console.error('Error mapping product:', p.id, e);
+            return null;
+        }
+    }).filter(p => p !== null);
+    console.log('Final mapped products:', mappedProducts.length);
 
     return (
-        <div className="min-h-screen bg-gray-50/50">
-            {/* Header / Breadcrumbs */}
-            <div className="bg-white border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-6 py-4">
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <Link href="/" className="hover:text-primary transition-colors flex items-center gap-1">
-                            <Home className="w-4 h-4" />
-                            {t('home')}
-                        </Link>
-                        <ChevronRight className="w-4 h-4 text-gray-300" />
-                        <span className="font-bold text-gray-900">{t('title')}</span>
+        <div className="min-h-screen bg-white">
+            <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+                {/* Heading and Toggle Section */}
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                    <div className="space-y-1">
+                        <h1 className="text-3xl font-black text-gray-900 tracking-tight">
+                            {mappedProducts.length}+ {query ? `"${query}" results` : (params.category || 'Products')}
+                        </h1>
+                        <p className="text-sm font-bold text-gray-400">
+                            Discover the latest tech deals on our store. Amazing prices, every day.
+                        </p>
+                    </div>
+
+                    <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-2xl border border-gray-100">
+                        <span className="text-sm font-bold text-gray-600 mb-0.5">Save this search</span>
+                        <div className="w-10 h-5 bg-gray-200 rounded-full relative cursor-pointer ring-4 ring-white shadow-inner">
+                            <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-all shadow-md translate-x-5" />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <main className="max-w-7xl mx-auto px-6 py-10">
-                <div className="flex flex-col lg:flex-row gap-8">
-                    {/* Sidebar */}
-                    <div className="w-full lg:w-80 shrink-0">
-                        <ShopSidebar />
-                    </div>
+                {/* Filter Bar */}
+                <FilterBar />
 
-                    {/* Content */}
-                    <div className="flex-1 space-y-10">
-                        {/* Description Banner */}
-                        <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32" />
-                            <p className="text-sm leading-relaxed text-gray-500 max-w-4xl relative z-10">
-                                {t('description')}
-                            </p>
+                {/* Grid */}
+                <div>
+                    {mappedProducts.length > 0 ? (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8">
+                            {mappedProducts.map((product: any) => (
+                                <ShopProductCard key={product.id} data={product} userId={session?.user?.id!} />
+                            ))}
                         </div>
-
-                        {/* Toolbar & Grid */}
-                        <div>
-                            <ShopToolbar count={mappedProducts.length} />
-                            
-                            {mappedProducts.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
-                                    {mappedProducts.map((product: any) => (
-                                        <ShopProductCard key={product.id} data={product} />
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="text-center py-20 bg-white rounded-3xl border border-gray-100 border-dashed">
-                                    <h3 className="text-lg font-bold text-gray-900">No products found</h3>
-                                    <p className="text-gray-500 text-sm mt-2">Try adjusting your filters or search query.</p>
-                                </div>
-                            )}
+                    ) : (
+                        <div className="text-center py-32 bg-gray-50 rounded-[3rem] border-4 border-white shadow-2xl">
+                            <h3 className="text-xl font-black text-gray-900 uppercase tracking-widest">No products found</h3>
+                            <p className="text-gray-400 font-bold mt-2">Try adjusting your filters or search query.</p>
                         </div>
-                    </div>
+                    )}
                 </div>
             </main>
         </div>

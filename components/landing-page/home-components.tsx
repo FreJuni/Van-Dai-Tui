@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Smartphone, Laptop, Tablet, Cpu, Settings } from 'lucide-react';
 import Link from 'next/link';
+import LandingPageImage from '@/public/images/Gemini_Generated_Image_97rh8b97rh8b97rh.png';
 
 export const Hero = () => {
     const t = useTranslations("LandingPage");
@@ -44,7 +45,7 @@ export const Hero = () => {
                             </Button>
                         </Link>
                         <Link href="/search">
-                            <Button variant="outline" size="lg" className="h-14 px-8 text-base font-bold bg-white/5 border-zinc-800 text-white hover:bg-white/10 rounded-2xl cursor-pointer">
+                            <Button variant="outline" size="lg" className="h-14 px-8 text-base font-bold bg-white/5 border-zinc-800 text-white hover:bg-white/10 hover:text-white rounded-2xl cursor-pointer">
                                 {t("viewAll")}
                             </Button>
                         </Link>
@@ -55,7 +56,7 @@ export const Hero = () => {
                     <div className="absolute inset-0 bg-primary/20 rounded-full blur-[100px] opacity-50" />
                     <div className="relative w-full h-full max-w-lg lg:max-w-none">
                         <Image 
-                            src="/hero_smartphone_premium.png" 
+                            src={LandingPageImage} 
                             alt="Premium Smartphone" 
                             fill
                             className="object-contain drop-shadow-[0_0_50px_rgba(var(--primary),0.3)] animate-float"
@@ -72,10 +73,10 @@ export const Categories = () => {
     const t = useTranslations("LandingPage");
     
     const categories = [
-        { name: "Phones", icon: Smartphone, color: "bg-blue-500", href: "/products?category=phones" },
-        { name: "Tablets", icon: Tablet, color: "bg-purple-500", href: "/products?category=tablets" },
-        { name: "Accessories", icon: Cpu, color: "bg-orange-500", href: "/products?category=accessories" },
-        { name: "Services", icon: Settings, color: "bg-emerald-500", href: "/products?category=services" },
+        { name: "Phones", icon: Smartphone, color: "bg-blue-500", href: "/search?category=phones" },
+        { name: "Tablets", icon: Tablet, color: "bg-purple-500", href: "/search?category=tablets" },
+        { name: "Accessories", icon: Cpu, color: "bg-orange-500", href: "/search?category=accessories" },
+        { name: "Laptops", icon: Laptop, color: "bg-emerald-500", href: "/search?category=laptops" },
     ];
 
     return (

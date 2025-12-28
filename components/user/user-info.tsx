@@ -12,6 +12,7 @@ import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type UserInformationProps = {
     children: React.ReactNode;
@@ -21,6 +22,7 @@ type UserInformationProps = {
 const UserInformation = ({ children, session }: UserInformationProps) => {
     const t = useTranslations("UserInfo")
     const user = session?.user;
+    const router = useRouter();
 
     return (
         <DropdownMenu modal={false}>
@@ -44,6 +46,7 @@ const UserInformation = ({ children, session }: UserInformationProps) => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => {
                     signOut();
+                    router.push('/');
                 }} className="cursor-pointer select-none">{t("logout")}</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

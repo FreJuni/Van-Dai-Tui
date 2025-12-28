@@ -6,6 +6,7 @@ export const VariantsSchema = z.object({
     name: z.string().min(3, { message: "Please enter at least 3 characters." }),
     editMode: z.boolean(),
     color: z.string().min(3, { message: "Please enter at least 3 characters." }),
+    condition: z.enum(['New', 'Used', 'Refurbished']),
     storages: z.array(z.object({
         storage: z.string().nonempty({ message: "Please enter storage." }),
         price: z.number().nonnegative({ message: "Please enter price." }),

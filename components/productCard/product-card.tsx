@@ -62,10 +62,10 @@ const ProductCard = ({ data }: ProductCardProps) => {
 
 
     return (
-        <Card className="group overflow-hidden border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white">
+        <Card className="p-0 gap-1 rounded-[6px] group overflow-hidden border-gray-100 bg-white">
             <Link 
                 href={`/listing-page/${data?.id}?variantName=${data?.variants[0]?.variantName}&listingTitle=${data?.title}&listingDescription=${data?.description}&listingPrice=${data?.price}&listingImage=${data?.image}&variantId=${data?.variants[0]?.id}&productId=${data?.id}&variantColor=${data?.variants[0]?.productVariantColor?.color}&variantImage=${data?.variants[0]?.productVariantImage[0]?.image_url}&variantStorage=${data?.variants[0]?.productVariantOption[0]?.storage}&variantPrice=${data?.variants[0]?.productVariantOption[0]?.price}`}
-                className="block aspect-square overflow-hidden bg-gray-50 p-2"
+                className="block aspect-square overflow-hidden bg-gray-50 p-[6px]"
             >
                 <div className="relative w-full h-full rounded-lg overflow-hidden">
                     {

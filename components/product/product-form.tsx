@@ -35,9 +35,8 @@ const ProductForm = ({ productId }: ProductFormProps) => {
             title: "",
             description: "",
             price: 0,
-            type: "Other",
-            category: "",
-            brand: "",
+            category: "Others",
+            brand: "Others",
         }
     });
 
@@ -58,7 +57,6 @@ const ProductForm = ({ productId }: ProductFormProps) => {
             description: values.description,
             price: values.price,
             productId: productId ? productId : '',
-            type: values.type,
             category: values.category,
             brand: values.brand,
         })
@@ -71,7 +69,8 @@ const ProductForm = ({ productId }: ProductFormProps) => {
                 description: "",
                 price: 0,
                 productId: "",
-                type: "Other"
+                category: "Others",
+                brand: "Others",
             });
             setIsLoading(false);
             return;
@@ -90,7 +89,6 @@ const ProductForm = ({ productId }: ProductFormProps) => {
                 form.setValue("description", product.product.description);
                 form.setValue("price", Number(product.product.price));
                 form.setValue('productId', productId);
-                form.setValue('type', product.product.type!);
                 form.setValue('category', product.product.category!);
                 form.setValue('brand', product.product.brand!);
             } else {
@@ -99,9 +97,8 @@ const ProductForm = ({ productId }: ProductFormProps) => {
                     description: "",
                     price: 0,
                     productId: "",
-                    type: "Other",
-                    category: "",
-                    brand: "",
+                    category: "Others",
+                    brand: "Others",
                 });
             }
         } catch (error) {
@@ -194,12 +191,12 @@ const ProductForm = ({ productId }: ProductFormProps) => {
 
                         <FormField
                             control={form.control}
-                            name="type"
+                            name="category"
                             render={({ field }) => (
                                 <FormItem>
                                 <FormLabel className="flex items-center gap-2">
                                     <Package className="w-4 h-4 text-gray-500" />
-                                    Product Type
+                                    Category
                                 </FormLabel>
 
                                 <Select
@@ -208,15 +205,15 @@ const ProductForm = ({ productId }: ProductFormProps) => {
                                 >
                                     <FormControl>
                                     <SelectTrigger className="w-full">
-                                        <SelectValue  placeholder="Select a product type" />
+                                        <SelectValue  placeholder="Select a category" />
                                     </SelectTrigger>
                                     </FormControl>
                                     <SelectGroup>
                                     <SelectContent>
-                                    <SelectItem value="Phone">Phone</SelectItem>
-                                    <SelectItem value="Tablet">Tablet</SelectItem>
-                                    <SelectItem value="Laptop">Laptop</SelectItem>
-                                    <SelectItem value="Other">Other</SelectItem>
+                                    <SelectItem value="Phones">Phones</SelectItem>
+                                    <SelectItem value="Tablets">Tablets</SelectItem>
+                                    <SelectItem value="Laptops">Laptops</SelectItem>
+                                    <SelectItem value="Others">Others</SelectItem>
                                     </SelectContent>
                                     </SelectGroup>
                                 </Select>
@@ -228,48 +225,37 @@ const ProductForm = ({ productId }: ProductFormProps) => {
 
                         <FormField
                             control={form.control}
-                            name="category"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="flex items-center gap-2">
-                                        <FileText className="w-4 h-4 text-gray-500" />
-                                        {t('category')}
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input 
-                                            placeholder="e.g. iPhone" 
-                                            className="focus-visible:ring-primary"
-                                            {...field} 
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                         Provide a clear and descriptive name for for category.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
                             name="brand"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="flex items-center gap-2">
-                                        <FileText className="w-4 h-4 text-gray-500" />
-                                        {t('brand')}
-                                    </FormLabel>
+                                <FormLabel className="flex items-center gap-2">
+                                    <Package className="w-4 h-4 text-gray-500" />
+                                    Brand
+                                </FormLabel>
+
+                                <Select
+                                    defaultValue={field.value}
+                                    onValueChange={(value) => field.onChange(value)}
+                                >
                                     <FormControl>
-                                        <Input 
-                                            placeholder="e.g. Apple" 
-                                            className="focus-visible:ring-primary"
-                                            {...field} 
-                                        />
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue  placeholder="Select a category" />
+                                    </SelectTrigger>
                                     </FormControl>
-                                    <FormDescription>
-                                        Provide a clear and descriptive name for your brand.
-                                    </FormDescription>
-                                    <FormMessage />
+                                    <SelectGroup>
+                                    <SelectContent>
+                                    <SelectItem value="Apple">Apple</SelectItem>
+                                    <SelectItem value="Samsung">Samsung</SelectItem>
+                                    <SelectItem value="Xiaomi">Xiaomi</SelectItem>
+                                    <SelectItem value="Dell">Dell</SelectItem>
+                                    <SelectItem value="HP">HP</SelectItem>
+                                    <SelectItem value="Lenovo">Lenovo</SelectItem>
+                                    <SelectItem value="Asus">Asus</SelectItem>
+                                    <SelectItem value="Others">Others</SelectItem>
+                                    </SelectContent>
+                                    </SelectGroup>
+                                </Select>
+                                <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -323,7 +309,7 @@ const ProductForm = ({ productId }: ProductFormProps) => {
 
                         <Button 
                             disabled={status === 'executing'} 
-                            className={cn('mt-4 w-full h-11 text-base font-semibold transition-all hover:scale-[1.01] active:scale-[0.99]')} 
+                            className={cn('cursor-pointer mt-4 w-full h-11 text-base font-semibold transition-all hover:scale-[1.01] active:scale-[0.99]')} 
                             type="submit"
                         >
                             {status === 'executing' ? (

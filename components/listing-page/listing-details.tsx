@@ -34,14 +34,14 @@ const ListingDetails = ({data}: ListingDetailsProps) => {
     
 
   return (
-    <div className='flex flex-col gap-4 text-center lg:text-left'>
+    <div className='flex flex-col gap-4 lg:text-left'>
     <p className='text-3xl md:text-4xl font-bold'>{data.title}</p>
     <div className='text-muted-foreground' dangerouslySetInnerHTML={{__html: data.description || ''}}></div>
     <div className='flex flex-col gap-4 mt-2'>
         <p className='text-3xl md:text-4xl font-bold text-primary'>{priceFormatter({price: variantPrice})}</p>
         <div className='flex flex-col gap-2'>
             <div className=''><span className='text-lg font-medium'>{t('color')}</span> : <span className='font-normal'>{variantName}</span></div>
-            <div className='flex gap-3 items-center justify-center lg:justify-start'>
+            <div className='flex gap-3 items-center  lg:justify-start'>
                 {
                     data?.productVariant?.map((variant ,i) => {
                         return (
@@ -68,7 +68,7 @@ const ListingDetails = ({data}: ListingDetailsProps) => {
     </div>
     <div className='flex flex-col gap-2 mt-2'>
         <div className=''><span className='text-lg font-medium'>{t('storage')}</span> : <span className='font-normal'>{variantStorage} GB</span></div>
-        <div className='flex gap-3 items-center justify-center lg:justify-start flex-wrap'>
+        <div className='flex gap-3 items-center lg:justify-start flex-wrap'>
             {
                 currentVariant?.productVariantOption?.sort((a, b) => Number(a?.storage) - Number(b?.storage))?.map((option, i) => {
                     return (

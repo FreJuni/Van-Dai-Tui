@@ -10,7 +10,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import Image from 'next/image';
-import noImage from '@/public/images/no-image-available-icon-vector.jpg';
+import noImage from '../../public/images/no-image-available-icon-vector.jpg';
 import { useSearchParams } from 'next/navigation';
 import { ProductsWithVariants, VariantsWithImagesTags, VariantsWithProduct } from '@/lib/infer-type';
 import { cn } from '@/lib/utils';
@@ -35,12 +35,11 @@ const ImageCarousel = ({variant} : ImageCarouselProps) => {
     })
   }, [api]);
 
-    
   return (
-    <Carousel setApi={setApi} opts={{loop: true }} className='w-full lg:max-w-[550px]'>
+    <Carousel setApi={setApi} opts={{loop: true }} className='w-full lg:w-[550px]'>
       <CarouselContent>
          {
-                    variant?.map(v => v.variantName === variantName && v.productVariantImage.map(v => {
+                   variant?.length > 0 ? variant?.map(v => v.variantName === variantName && v.productVariantImage.map(v => {
                         return v.image_url ?
                             <CarouselItem key={v.id}>
                                 <Image
@@ -62,6 +61,15 @@ const ImageCarousel = ({variant} : ImageCarouselProps) => {
                                 />
                             </CarouselItem>
                     }))
+                : <CarouselItem>
+                <Image
+                    className="w-full h-auto aspect-square object-cover rounded-xl"
+                    src={noImage}
+                    alt="no-image"
+                    width={550}
+                    height={550}
+                />
+            </CarouselItem>
                 }
       </CarouselContent>
        <div className='flex justify-center lg:justify-start w-full gap-2 mt-2 overflow-x-auto pb-2'>
