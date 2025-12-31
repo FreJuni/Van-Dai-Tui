@@ -9,7 +9,8 @@ const nextConfig: NextConfig = {
   env: {
     DATABASE_URL: process.env.DATABASE_URL,
     SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
-    SENDER_EMAIL: process.env.SENDER_EMAIL
+    SENDER_EMAIL: process.env.SENDER_EMAIL,
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY
   },
   images: {
     domains: ['utfs.io']

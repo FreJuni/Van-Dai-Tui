@@ -29,10 +29,17 @@ type ShopProductCardProps = {
         condition: string,
         isFavourite: boolean
     },
-    userId : string
+    user : {
+        id: string;
+        name: string;
+        email: string;
+        role: string;
+        phone_number: string;
+        isOAuth: boolean;
+    }
 }
 
-export const ShopProductCard = ({ data, userId }: ShopProductCardProps) => {
+export const ShopProductCard = ({ data, user }: ShopProductCardProps) => {
     const t = useTranslations('Shop');
 
     const {execute,result, status} = useAction(addFavourites, {
@@ -55,19 +62,23 @@ export const ShopProductCard = ({ data, userId }: ShopProductCardProps) => {
         <Card className="p-0 group gap-1 overflow-hidden border border-gray-100 transition-all duration-300 bg-white rounded-[6px]">
             {/* Image Section */}
             <div className="relative p-[6px] aspect-square overflow-hidden bg-gray-50">
-                    <button className={cn(
+                {
+                    user.role !== 'admin' && (
+                          <button className={cn(
                         "absolute top-4 right-4 z-10 px-2.5 py-1 rounded-[6px] text-[10px] font-black uppercase tracking-wider text-white shadow-lg",
                         "bg-primary",
                         status === "executing" && "bg-primary/50 cursor-not-allowed"
                     )}
                     disabled={status === 'executing'}
-                    onClick={() => handleFavouriteToggle(userId, data.id)}
+                    onClick={() => handleFavouriteToggle(user.id!, data.id)}
                     >
                          <HeartIcon className={cn('cursor-pointer',
                             data.isFavourite ? 'fill-red-800' : '',
                             status === "executing" && "text-gray-400 animate-pulse"
                          )} size={22} />
                     </button>
+                    )
+                }
                 
                 <Link 
                     href={`/listing-page/${data?.id}?variantName=${data?.variants[0]?.variantName}&listingTitle=${data?.title}&listingDescription=${data?.description}&listingPrice=${data?.price}&listingImage=${data?.image}&variantId=${data?.variants[0]?.id}&productId=${data?.id}&variantColor=${data?.variants[0]?.productVariantColor?.color}&variantImage=${data?.variants[0]?.productVariantImage[0]?.image_url}&variantStorage=${data?.variants[0]?.productVariantOption[0]?.storage}&variantPrice=${data?.variants[0]?.productVariantOption[0]?.price}`}

@@ -96,7 +96,11 @@ export const FilterBar = () => {
   const handleToggle = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set(key, value);
-    router.push(`/search?${params.toString()}`);
+    if(value === "All Categories") {
+      router.push(`/search`);
+    } else {
+      router.push(`/search?${params.toString()}`);
+    }
   };
 
   const handlePriceApply = () => {

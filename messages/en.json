@@ -5,7 +5,14 @@
         "search": "SEARCH",
         "addProduct": "Add product",
         "searchPlaceholder": "Search products...",
-        "searchButton": "Search"
+        "searchButton": "Search",
+        "searching": "Searching...",
+        "noResults": "No results found",
+        "searchResults" : "Search Results",
+        "viewAllResults": "View all results",
+        "tryDifferentSearch": "Try searching for something else.",
+        "itemsFound": "Items found",
+        "scanningInventory" : "Scanning inventory..."
     },
     "UserInfo": {
         "profileSettings": "Profile settings",

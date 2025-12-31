@@ -128,7 +128,7 @@ export default async function SearchPage({
                     {mappedProducts.length > 0 ? (
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8">
                             {mappedProducts.map((product: any) => (
-                                <ShopProductCard key={product.id} data={product} userId={session?.user?.id!} />
+                                <ShopProductCard key={product.id} data={product} user={session?.user!} />
                             ))}
                         </div>
                     ) : (
