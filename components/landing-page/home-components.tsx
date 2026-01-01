@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Smartphone, Laptop, Tablet, Cpu, Settings } from 'lucide-react';
+import { ArrowRight, Smartphone, Laptop, Tablet, Cpu, Settings, Sparkles, Search } from 'lucide-react';
 import Link from 'next/link';
 import LandingPageImage from '@/public/images/Gemini_Generated_Image_97rh8b97rh8b97rh.png';
 
@@ -44,11 +44,48 @@ export const Hero = () => {
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </Button>
                         </Link>
-                        <Link href="/search">
-                            <Button variant="outline" size="lg" className="h-14 px-8 text-base font-bold bg-white/5 border-zinc-800 text-white hover:bg-white/10 hover:text-white rounded-2xl cursor-pointer">
-                                {t("viewAll")}
+                        <Button 
+                            variant="outline" 
+                            size="lg" 
+                            onClick={() => {
+                                const aiBtn = document.querySelector('button.fixed.bottom-8.right-8') as HTMLButtonElement;
+                                if (aiBtn) aiBtn.click();
+                            }}
+                            className="h-14 px-8 text-base font-bold bg-white/5 border-zinc-800 text-white hover:bg-white/10 hover:text-white rounded-2xl cursor-pointer gap-2"
+                        >
+                            <Sparkles className="w-5 h-5 text-primary" />
+                            Ask Volt AI
+                        </Button>
+                    </div>
+
+                    {/* Integrated AI Search Box */}
+                    <div className="relative group max-w-md mx-auto lg:mx-0">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-primary to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                        <div className="relative flex items-center bg-zinc-900 border border-white/10 rounded-2xl p-2 pl-4">
+                            <Search className="w-5 h-5 text-zinc-500" />
+                            <input 
+                                type="text" 
+                                placeholder="I have 2000RM, find me a phone..." 
+                                className="bg-transparent border-none focus:ring-0 text-white text-sm flex-1 px-3 outline-none"
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        const aiBtn = document.querySelector('button.fixed.bottom-8.right-8') as HTMLButtonElement;
+                                        if (aiBtn) aiBtn.click();
+                                    }
+                                }}
+                            />
+                            <Button 
+                                size="sm" 
+                                onClick={() => {
+                                    const aiBtn = document.querySelector('button.fixed.bottom-8.right-8') as HTMLButtonElement;
+                                    if (aiBtn) aiBtn.click();
+                                }}
+                                className="rounded-xl h-10 px-4 font-bold bg-primary hover:bg-primary/90 cursor-pointer"
+                            >
+                                <Sparkles className="w-4 h-4 mr-2" />
+                                Smart Search
                             </Button>
-                        </Link>
+                        </div>
                     </div>
                 </div>
 

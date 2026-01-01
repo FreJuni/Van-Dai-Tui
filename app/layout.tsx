@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 import Footer from "@/components/footer/footer";
+import { AIConcierge } from "@/components/search/ai-concierge";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -41,6 +42,7 @@ export default async function RootLayout({
               {children}
             </main>
             <Footer />
+            <AIConcierge />
           </div>
         </NextIntlClientProvider>
       </body>
