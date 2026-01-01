@@ -32,7 +32,7 @@ type ShopProductCardProps = {
     user : {
         id: string;
         name: string;
-        email: string;
+        address: string;
         role: string;
         phone_number: string;
         isOAuth: boolean;

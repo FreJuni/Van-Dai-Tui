@@ -7,9 +7,6 @@ export const ProductSchema = z.object({
     description: z.string().min(20, {
         message: "Please enter at least 20 character."
     }),
-    price: z.number().min(1, {
-        message: "Price must be at least 1."
-    }),
     productId: z.string().optional(),
     category: z.enum(['Phones', 'Tablets', 'Laptops', 'Others']),
     brand: z.enum(['Apple', 'Samsung', 'Xiaomi', 'Dell', 'HP', 'Lenovo', 'Asus', 'Others']),

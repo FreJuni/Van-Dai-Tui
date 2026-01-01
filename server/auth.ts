@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import { db } from "./index"
-import { accounts, users } from "@/server/schema";
+import {  users } from "@/server/schema";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "@/types/login-schema";
@@ -9,10 +9,6 @@ import { eq } from "drizzle-orm";
 import bcrypt from 'bcrypt';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-    adapter: DrizzleAdapter(db, {
-        usersTable: users,
-        accountsTable: accounts,
-    }),
     secret: process.env.AUTH_SECRET!,
     session: {
         strategy: 'jwt'
@@ -30,7 +26,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (session) {
                 session.user.isOAuth = token.isOAuth as boolean;
                 session.user.name = token.name as string;
-                session.user.email = token.email as string;
+                session.user.address = token.address as string;
                 session.user.image = token.image as string;
                 session.user.phone_number = token.phone_number as string;
             }
@@ -43,12 +39,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 where: eq(users.id, token.sub)
             })
             if (!isExistedUser) return token;
-            const isExistedAccount = await db.query.accounts.findFirst({
-                where: eq(accounts.userId, token.sub)
-            })
-            token.isOAuth = !!isExistedAccount
             token.name = isExistedUser.name
-            token.email = isExistedUser.email
+            token.address = isExistedUser.address
             token.image = isExistedUser.image
             token.role = isExistedUser.role
             token.phone_number = isExistedUser.phone_number
@@ -63,17 +55,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }),
         Credentials({
             credentials: {
-                email: {},
+                phone_number: {},
                 password: {},
             },
             authorize: async (credentials) => {
                 const validateData = LoginSchema.safeParse(credentials);
                 if (!validateData) return null;
 
-                const { email, password } = validateData.data!;
+                const { phone_number, password } = validateData.data!;
 
                 const user = await db.query.users.findFirst({
-                    where: eq(users.email, email)
+                    where: eq(users.phone_number, phone_number)
                 })
 
                 if (!user || !password) return null

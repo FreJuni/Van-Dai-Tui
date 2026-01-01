@@ -31,8 +31,8 @@
     },
     "Auth": {
         "forgetPassword": "Forgot Password?",
-        "email": "Email",
-        "enterEmail": "Enter your email address",
+        "address": "Address",
+        "enterAddress": "Enter your address",
         "submit": "Submit",
         "resetPassword": "Reset Password",
         "newPassword": "New Password",
@@ -41,7 +41,7 @@
     "Account": {
         "accountSettings": "Account Settings",
         "phoneNumber": "Phone Number",
-        "email": "Email Address",
+        "address": "Address",
         "updateAccount": "Update Account"
     },
     "Product": {

@@ -61,15 +61,15 @@ export default async function SearchPage({
     const minPrice = Number(params.minPrice) || 0;
     const maxPrice = Number(params.maxPrice) || 1000000;
     if (minPrice > 0 || maxPrice < 1000000) {
-        filteredProducts = filteredProducts.filter(p => p.price >= minPrice && p.price <= maxPrice);
+        filteredProducts = filteredProducts.filter(p => p.productVariant[0].productVariantOption[0].price >= minPrice && p.productVariant[0].productVariantOption[0].price <= maxPrice);
     }
 
     // 6. Sorting
     const sort = typeof params.sort === 'string' ? params.sort : 'relevance';
     if (sort === 'price-low') {
-        filteredProducts.sort((a, b) => a.price - b.price);
+        filteredProducts.sort((a, b) => a.productVariant[0].productVariantOption[0].price - b.productVariant[0].productVariantOption[0].price);
     } else if (sort === 'price-high') {
-        filteredProducts.sort((a, b) => b.price - a.price);
+        filteredProducts.sort((a, b) => b.productVariant[0].productVariantOption[0].price - a.productVariant[0].productVariantOption[0].price);
     } else if (sort === 'newest') {
         filteredProducts.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     }
@@ -84,7 +84,7 @@ export default async function SearchPage({
                 id: p.id,
                 title: p.title,
                 description: p.description || '',
-                price: p.price,
+                price: p.productVariant[0].productVariantOption[0].price,
                 image: image,
                 brand: p.brand || "Tech Store",
                 condition: p.productVariant[0].productVariantCondition?.condition || "New",
@@ -100,7 +100,7 @@ export default async function SearchPage({
 
     return (
         <div className="min-h-screen bg-white">
-            <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+            <main className=" px-6 md:px-12 lg:px-[100px] py-8 space-y-8">
                 {/* Heading and Toggle Section */}
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                     <div className="space-y-1">

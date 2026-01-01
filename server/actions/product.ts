@@ -149,16 +149,15 @@ export const deleteProduct = actionClient
 
 export const AddProductAction = actionClient
     .inputSchema(ProductSchema)
-    .action(async ({ parsedInput: { title, description, price, productId, category, brand } }) => {
+    .action(async ({ parsedInput: { title, description, productId, category, brand } }) => {
 
         try {
-            if (!title || !description || !price || !category || !brand) return { error: "Something went wrong." }
+            if (!title || !description || !category || !brand) return { error: "Something went wrong." }
 
             if (productId) {
                 await db.update(products).set({
                     title,
                     description,
-                    price,
                     category: sql`${category}::category`, 
                     brand: sql`${brand}::brand`,
                 }).where(eq(products.id, productId));
@@ -170,7 +169,6 @@ export const AddProductAction = actionClient
                 await db.insert(products).values({
                     title ,
                     description,
-                    price,
                     category: sql`${category}::category`, 
                     brand: sql`${brand}::brand`,
                 })

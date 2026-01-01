@@ -44,9 +44,8 @@ const UserInformation = ({ children, session }: UserInformationProps) => {
                     <DropdownMenuItem className="cursor-pointer select-none">{t('accountSettings')}</DropdownMenuItem>
                 </Link>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => {
-                    signOut();
-                    router.push('/');
+                <DropdownMenuItem onClick={async () => {
+                    await signOut({ callbackUrl: '/' });
                 }} className="cursor-pointer select-none">{t("logout")}</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

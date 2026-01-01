@@ -26,7 +26,8 @@ const AuthForm = ({ children, title, description, href, label, btnText, isProvid
             <CardFooter className=' flex flex-col gap-2'>
                 {isProvider && (
                     <>
-                        <Provider />
+                        {/* TODO: we will activate in the future */}
+                        {/* <Provider /> */}
                         <AuthFooter href={href} label={label} btnText={btnText} />
                     </>
                 )}

@@ -8,27 +8,15 @@ import { Button } from '@/components/ui/button';
 import { getTranslations } from 'next-intl/server';
 import { ShopProductCard } from '@/components/shop/shop-product-card';
 import { auth } from '@/server/auth';
-
-//  id: string;
-//         title: string;
-//         description: string;
-//         price: number;
-//         originalPrice?: number;
-//         image: string;
-//         rating?: number;
-//         reviewsCount?: number;
-//         brand?: string;
-//         badge?: string;
-//         badgeColor?: string;
-//         variants: any[]
-//         condition: string,
-//         isFavourite: boolean
+import { redirect } from 'next/navigation';
 
 const FavouritesPage = async () => {
     const products = await fetchFavouriteProducts();
     const t = await getTranslations('Favourites');
     const session = await auth();
 
+    if(!session?.user ) return redirect('/');
+    
       // Map products to ShopProductCard format
     const mappedProducts = products.map((p: any) => {
         try {
@@ -54,7 +42,7 @@ const FavouritesPage = async () => {
     }).filter(p => p !== null);
 
     return (
-        <div className='my-10 mx-6 md:mx-12 max-w-7xl lg:mx-auto' >
+        <div className='px-6 md:px-12 lg:px-[100px]' >
             <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10 border-b pb-6 border-gray-100'>
                 <div>
                     <h1 className='text-3xl font-bold tracking-tight text-gray-900'>{t('yourFavourites')}</h1>
@@ -65,7 +53,7 @@ const FavouritesPage = async () => {
             {mappedProducts && mappedProducts.length > 0 ? (
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
                     {mappedProducts.map(p => (
-                        <ShopProductCard key={p.id} data={p} userId={session?.user?.id!} />
+                        <ShopProductCard key={p.id} data={p} user={session?.user!} />
                     ))}
                 </div>
             ) : (

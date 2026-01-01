@@ -57,7 +57,7 @@ const TipTap = ({ val }: TipTapProps) => {
 
     useEffect(() => {
         if (editor && val !== editor.getHTML()) {
-            editor.commands.setContent(val || '');
+            editor.commands.setContent(val || '', { emitUpdate: false });
         }
     }, [val, editor]);
 

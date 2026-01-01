@@ -1,5 +1,5 @@
 export const FILTERS = {
-  category: ["All Categories","Phones", "Laptops", "Tablets", "Cameras", "Accessories"],
+  category: ["All Categories","Phones", "Laptops"],
   brand: ["Apple", "Samsung", "Dell", "HP", "Lenovo", "Asus"],
   condition: ["New", "Used", "Refurbished"],
 };

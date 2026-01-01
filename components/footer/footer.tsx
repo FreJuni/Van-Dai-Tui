@@ -8,7 +8,7 @@ const Footer = () => {
 
     return (
         <footer className="bg-gray-50 border-t border-gray-200 mt-20">
-            <div className="max-w-7xl mx-auto px-4 md:px-10 lg:px-20 py-12">
+            <div className="px-6 md:px-12 lg:px-[100px] py-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     <div className="flex flex-col gap-4">
                         <Link href="/" className="text-2xl font-bold tracking-tighter text-primary">
@@ -24,16 +24,15 @@ const Footer = () => {
                         <ul className="space-y-2">
                             <li><Link href="/listing-page?category=phone" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('phones')}</Link></li>
                             <li><Link href="/listing-page?category=tablet" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('tablets')}</Link></li>
-                            <li><Link href="/listing-page?category=accessory" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('accessories')}</Link></li>
+                            {/* <li><Link href="/listing-page?category=accessory" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('accessories')}</Link></li> */}
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="font-semibold text-gray-900 mb-4">{t('services')}</h4>
                         <ul className="space-y-2">
-                            <li><Link href="/services/repair" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('repair')}</Link></li>
-                            <li><Link href="/services/trade-in" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('tradeIn')}</Link></li>
-                            <li><Link href="/services/maintenance" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('maintenance')}</Link></li>
+                            <li><Link href="/services" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('repair')}</Link></li>
+                            <li><Link href="/services" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('maintenance')}</Link></li>
                         </ul>
                     </div>
 

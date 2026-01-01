@@ -19,6 +19,7 @@ export async function generateStaticParams() {
                 productVariantOption : true,
                 productVariantColor : true,
                 productVariantImage : true,
+                productVariantCondition : true,
             }
         }
     }
@@ -49,6 +50,7 @@ const ListingPage = async ({params} : ListingPageParams) => {
                     productVariantOption : true,
                     productVariantColor : true,
                     productVariantImage : true,
+                    productVariantCondition : true,
                 }
             }
         }

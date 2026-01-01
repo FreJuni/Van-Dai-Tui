@@ -9,20 +9,20 @@ import { AccountSchema } from "@/types/account-schema";
 
 export const AccountAction = actionClient
     .inputSchema(AccountSchema)
-    .action(async ({ parsedInput: { email, phone_number } }) => {
+    .action(async ({ parsedInput: { address, phone_number } }) => {
 
         try {
-            if (!email || !phone_number) return { error: "Something went wrong." }
+            if (!address || !phone_number) return { error: "Something went wrong." }
 
-            const checkEmailAlreadyExistOrNot = await db.query.users.findFirst({
-                where: eq(users.email, email)
+            const checkAddressAlreadyExistOrNot = await db.query.users.findFirst({
+                where: eq(users.address, address)
             })
-            if (!checkEmailAlreadyExistOrNot) return { error: "Email doesn't exist." }
+            if (!checkAddressAlreadyExistOrNot) return { error: "Address doesn't exist." }
 
             await db.update(users).set({
-                email: email,
+                address: address,
                 phone_number: phone_number
-            }).where(eq(users.email, email));
+            }).where(eq(users.address, address));
 
             return {
                 success: "Account Updated Successfully."

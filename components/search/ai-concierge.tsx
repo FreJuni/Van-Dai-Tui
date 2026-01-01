@@ -10,6 +10,7 @@ import { priceFormatter } from '@/helper/priceFormatter';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 export const AIConcierge = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -239,9 +240,9 @@ export const AIConcierge = () => {
                                     <Button 
                                         type="submit"
                                         disabled={isLoading || !query.trim()}
-                                        className="h-16 w-16 rounded-2xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 shrink-0"
+                                        className="h-16 w-16 cursor-pointer rounded-2xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 shrink-0"
                                     >
-                                        <Send size={24} className={isLoading ? "animate-pulse" : ""} />
+                                        <Send size={24} className={cn('cursor-pointer',isLoading ? "animate-pulse" : "")} />
                                     </Button>
                                 </form>
                                 <p className="mt-3 text-center text-[10px] text-zinc-500 font-medium tracking-wider uppercase">

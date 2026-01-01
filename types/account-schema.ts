@@ -6,8 +6,8 @@ export const AccountSchema = z.object({
     phone_number: z.string().min(8, {
         message: "Please enter phone number."
     }),
-    email: z.string().email({
-        message: "Please enter a valid email"
+    address: z.string().min(1, {
+        message: "Please enter your address"
     }),
     name: z.string().optional(),
     password: z.string().optional(),

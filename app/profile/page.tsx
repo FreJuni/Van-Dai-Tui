@@ -6,9 +6,12 @@ import { auth } from '@/server/auth';
 import React from 'react'
 
 import { BackButton } from '@/components/ui/back-button';
+import { redirect } from 'next/navigation';
 
 const Profile = async () => {
     const session = await auth();
+
+    if(!session?.user) return redirect('/');
 
     return (
         <div className='max-w-4xl mx-auto py-12 px-6'>

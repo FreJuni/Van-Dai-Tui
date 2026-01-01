@@ -111,8 +111,8 @@ export const Categories = () => {
     
     const categories = [
         { name: "Phones", icon: Smartphone, color: "bg-blue-500", href: "/search?category=phones" },
-        { name: "Tablets", icon: Tablet, color: "bg-purple-500", href: "/search?category=tablets" },
-        { name: "Accessories", icon: Cpu, color: "bg-orange-500", href: "/search?category=accessories" },
+        // { name: "Tablets", icon: Tablet, color: "bg-purple-500", href: "/search?category=tablets" },
+        // { name: "Accessories", icon: Cpu, color: "bg-orange-500", href: "/search?category=accessories" },
         { name: "Laptops", icon: Laptop, color: "bg-emerald-500", href: "/search?category=laptops" },
     ];
 

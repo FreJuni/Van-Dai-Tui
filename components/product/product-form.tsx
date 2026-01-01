@@ -12,21 +12,19 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import TipTap from './tip-tap';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Skeleton } from '../ui/skeleton';
-import { DollarSign, FileText, Loader2, Package } from 'lucide-react';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
+import { Apple, Check, FileText, Laptop, LayoutGrid, Loader2, Package, Smartphone } from 'lucide-react';
 
-type ProductFormProps = {
-    productId: string,
-}
-
-const ProductForm = ({ productId }: ProductFormProps) => {
+const ProductForm = () => {
     const t = useTranslations('Product');
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const productId = searchParams.get('productId');
+        
     const [isLoading, setIsLoading] = useState(!!productId);
 
     const form = useForm<z.infer<typeof ProductSchema>>({
@@ -34,7 +32,6 @@ const ProductForm = ({ productId }: ProductFormProps) => {
         defaultValues: {
             title: "",
             description: "",
-            price: 0,
             category: "Others",
             brand: "Others",
         }
@@ -55,7 +52,6 @@ const ProductForm = ({ productId }: ProductFormProps) => {
         execute({
             title: values.title,
             description: values.description,
-            price: values.price,
             productId: productId ? productId : '',
             category: values.category,
             brand: values.brand,
@@ -67,7 +63,6 @@ const ProductForm = ({ productId }: ProductFormProps) => {
             form.reset({
                 title: "",
                 description: "",
-                price: 0,
                 productId: "",
                 category: "Others",
                 brand: "Others",
@@ -87,7 +82,6 @@ const ProductForm = ({ productId }: ProductFormProps) => {
             if (product?.product) {
                 form.setValue("title", product.product.title);
                 form.setValue("description", product.product.description);
-                form.setValue("price", Number(product.product.price));
                 form.setValue('productId', productId);
                 form.setValue('category', product.product.category!);
                 form.setValue('brand', product.product.brand!);
@@ -95,7 +89,6 @@ const ProductForm = ({ productId }: ProductFormProps) => {
                 form.reset({
                     title: "",
                     description: "",
-                    price: 0,
                     productId: "",
                     category: "Others",
                     brand: "Others",
@@ -139,10 +132,12 @@ const ProductForm = ({ productId }: ProductFormProps) => {
     }
 
     return (
-        <Card className="border-none shadow-none lg:border lg:shadow-sm overflow-hidden">
+        <Card className="border-none shadow-none lg:border lg:shadow-sm overflow-hidden bg-white">
             <CardHeader className="bg-gray-50/50 border-b border-gray-100 mb-6">
                 <CardTitle className="text-xl flex items-center gap-2">
-                    <Package className="w-5 h-5 text-primary" />
+                    <div className="p-1.5 bg-primary/10 rounded-lg">
+                        <Package className="w-5 h-5 text-primary" />
+                    </div>
                     {productId ? t('updateProduct') : t('addProduct')}
                 </CardTitle>
                 <CardDescription>
@@ -151,7 +146,7 @@ const ProductForm = ({ productId }: ProductFormProps) => {
             </CardHeader>
             <CardContent>
                 <Form {...form} >
-                    <form className='flex gap-6 flex-col w-full' onSubmit={form.handleSubmit(onSubmit)} >
+                    <form className='flex gap-8 flex-col w-full' onSubmit={form.handleSubmit(onSubmit)} >
                         <FormField
                             control={form.control}
                             name="productId"
@@ -165,156 +160,168 @@ const ProductForm = ({ productId }: ProductFormProps) => {
                             )}
                         />
 
-                        <FormField
-                            control={form.control}
-                            name="title"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="flex items-center gap-2">
-                                        <FileText className="w-4 h-4 text-gray-500" />
-                                        {t('title')}
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input 
-                                            placeholder="e.g. iPhone 15 Pro Max - 256GB" 
-                                            className="focus-visible:ring-primary"
-                                            {...field} 
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Provide a clear and descriptive name for your product.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="category"
-                            render={({ field }) => (
-                                <FormItem>
-                                <FormLabel className="flex items-center gap-2">
-                                    <Package className="w-4 h-4 text-gray-500" />
-                                    Category
-                                </FormLabel>
-
-                                <Select
-                                    defaultValue={field.value}
-                                    onValueChange={(value) => field.onChange(value)}
-                                >
-                                    <FormControl>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue  placeholder="Select a category" />
-                                    </SelectTrigger>
-                                    </FormControl>
-                                    <SelectGroup>
-                                    <SelectContent>
-                                    <SelectItem value="Phones">Phones</SelectItem>
-                                    <SelectItem value="Tablets">Tablets</SelectItem>
-                                    <SelectItem value="Laptops">Laptops</SelectItem>
-                                    <SelectItem value="Others">Others</SelectItem>
-                                    </SelectContent>
-                                    </SelectGroup>
-                                </Select>
-
-                                <FormMessage />
-                                </FormItem>
-                            )}
+                        {/* General Information Section */}
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+                                <FileText className="w-4 h-4 text-primary" />
+                                <h3 className="font-semibold text-gray-900">General Information</h3>
+                            </div>
+                            
+                            <FormField
+                                control={form.control}
+                                name="title"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-gray-700 font-medium">
+                                            {t('title')}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input 
+                                                placeholder="e.g. iPhone 15 Pro Max - 256GB" 
+                                                className="h-11 focus-visible:ring-primary/20 focus-visible:border-primary transition-all"
+                                                {...field} 
+                                            />
+                                        </FormControl>
+                                        <FormDescription className="text-xs">
+                                            Provide a clear and descriptive name for your product.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
 
-                        <FormField
-                            control={form.control}
-                            name="brand"
-                            render={({ field }) => (
-                                <FormItem>
-                                <FormLabel className="flex items-center gap-2">
-                                    <Package className="w-4 h-4 text-gray-500" />
-                                    Brand
-                                </FormLabel>
+                            <FormField
+                                control={form.control}
+                                name="description"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-gray-700 font-medium">
+                                            {t('description')}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <TipTap val={field.value} />
+                                        </FormControl>
+                                        <FormDescription className="text-xs">
+                                            Explain the features, condition, and details of what you're selling.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
 
-                                <Select
-                                    defaultValue={field.value}
-                                    onValueChange={(value) => field.onChange(value)}
-                                >
-                                    <FormControl>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue  placeholder="Select a category" />
-                                    </SelectTrigger>
-                                    </FormControl>
-                                    <SelectGroup>
-                                    <SelectContent>
-                                    <SelectItem value="Apple">Apple</SelectItem>
-                                    <SelectItem value="Samsung">Samsung</SelectItem>
-                                    <SelectItem value="Xiaomi">Xiaomi</SelectItem>
-                                    <SelectItem value="Dell">Dell</SelectItem>
-                                    <SelectItem value="HP">HP</SelectItem>
-                                    <SelectItem value="Lenovo">Lenovo</SelectItem>
-                                    <SelectItem value="Asus">Asus</SelectItem>
-                                    <SelectItem value="Others">Others</SelectItem>
-                                    </SelectContent>
-                                    </SelectGroup>
-                                </Select>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        {/* Categorization Section */}
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+                                <Package className="w-4 h-4 text-primary" />
+                                <h3 className="font-semibold text-gray-900">Categorization</h3>
+                            </div>
+                            
+                            <div className="space-y-8">
+                                <FormField
+                                    control={form.control}
+                                    name="category"
+                                    render={({ field }) => (
+                                        <FormItem className="w-full">
+                                            <FormLabel className="text-gray-700 font-medium mb-3 block text-base">Select Category</FormLabel>
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                                {[
+                                                    { value: "Phones", label: "Phones", icon: Smartphone },
+                                                    { value: "Laptops", label: "Laptops", icon: Laptop },
+                                                    { value: "Others", label: "Others", icon: LayoutGrid },
+                                                ].map((opt) => (
+                                                    <div
+                                                        key={opt.value}
+                                                        onClick={() => field.onChange(opt.value)}
+                                                        className={cn(
+                                                            "relative cursor-pointer group flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all duration-200 hover:shadow-md",
+                                                            field.value === opt.value 
+                                                                ? "border-primary bg-primary/5 shadow-sm" 
+                                                                : "border-gray-100 bg-white hover:border-primary/30"
+                                                        )}
+                                                    >
+                                                        <div className={cn(
+                                                            "p-3 rounded-full mb-3 transition-colors",
+                                                            field.value === opt.value ? "bg-primary text-white" : "bg-gray-50 text-gray-500 group-hover:bg-primary/10 group-hover:text-primary"
+                                                        )}>
+                                                            <opt.icon className="w-6 h-6" />
+                                                        </div>
+                                                        <span className={cn(
+                                                            "font-semibold text-sm",
+                                                            field.value === opt.value ? "text-primary" : "text-gray-600"
+                                                        )}>
+                                                            {opt.label}
+                                                        </span>
+                                                        {field.value === opt.value && (
+                                                            <div className="absolute top-2 right-2 p-1 bg-primary rounded-full text-white">
+                                                                <Check className="w-3 h-3" />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="flex items-center gap-2">
-                                        <Package className="w-4 h-4 text-gray-500" />
-                                        {t('description')}
-                                    </FormLabel>
-                                    <FormControl>
-                                        <TipTap val={field.value} />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Explain the features, condition, and details of what you're selling.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="price"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="flex items-center gap-2">
-                                        <DollarSign className="w-4 h-4 text-gray-500" />
-                                        {t('price')}
-                                    </FormLabel>
-                                    <FormControl>
-                                        <div className="relative">
-                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                                            <Input
-                                                type='number'
-                                                className="pl-8 focus-visible:ring-primary"
-                                                {...field}
-                                                value={field.value === 0 ? '' : field.value ?? ''}
-                                                onChange={(e) => field.onChange(e.target.value === '' ? 0 : Number(e.target.value))}
-                                                placeholder="0.00"
-                                            />
-                                        </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                <FormField
+                                    control={form.control}
+                                    name="brand"
+                                    render={({ field }) => (
+                                        <FormItem className="w-full">
+                                            <FormLabel className="text-gray-700 font-medium mb-3 block text-base">Select Brand</FormLabel>
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                                {[
+                                                    { value: "Apple", label: "Apple", icon: Apple },
+                                                    { value: "Samsung", label: "Samsung", icon: Smartphone },
+                                                    { value: "Others", label: "Others", icon: LayoutGrid },
+                                                ].map((opt) => (
+                                                    <div
+                                                        key={opt.value}
+                                                        onClick={() => field.onChange(opt.value)}
+                                                        className={cn(
+                                                            "relative cursor-pointer group flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all duration-200 hover:shadow-md",
+                                                            field.value === opt.value 
+                                                                ? "border-primary bg-primary/5 shadow-sm" 
+                                                                : "border-gray-100 bg-white hover:border-primary/30"
+                                                        )}
+                                                    >
+                                                        <div className={cn(
+                                                            "p-3 rounded-full mb-3 transition-colors",
+                                                            field.value === opt.value ? "bg-primary text-white" : "bg-gray-50 text-gray-500 group-hover:bg-primary/10 group-hover:text-primary"
+                                                        )}>
+                                                            <opt.icon className="w-6 h-6" />
+                                                        </div>
+                                                        <span className={cn(
+                                                            "font-semibold text-sm",
+                                                            field.value === opt.value ? "text-primary" : "text-gray-600"
+                                                        )}>
+                                                            {opt.label}
+                                                        </span>
+                                                        {field.value === opt.value && (
+                                                            <div className="absolute top-2 right-2 p-1 bg-primary rounded-full text-white">
+                                                                <Check className="w-3 h-3" />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
 
                         <Button 
                             disabled={status === 'executing'} 
-                            className={cn('cursor-pointer mt-4 w-full h-11 text-base font-semibold transition-all hover:scale-[1.01] active:scale-[0.99]')} 
+                            className={cn('cursor-pointer mt-4 w-full h-12 text-base font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all hover:scale-[1.01] active:scale-[0.99] bg-primary text-white')} 
                             type="submit"
                         >
                             {status === 'executing' ? (
                                 <span className="flex items-center gap-2">
-                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    <Loader2 className="w-5 h-5 animate-spin" />
                                     {productId ? 'Updating...' : 'Creating...'}
                                 </span>
                             ) : (

@@ -78,6 +78,27 @@
       "when": 1766921289327,
       "tag": "0010_yummy_smiling_tiger",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1767269190189,
+      "tag": "0011_clumsy_kate_bishop",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1767272653770,
+      "tag": "0012_woozy_colonel_america",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1767275401158,
+      "tag": "0013_futuristic_lethal_legion",
+      "breakpoints": true
     }
   ]
 }

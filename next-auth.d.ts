@@ -3,7 +3,7 @@ import NextAuth, { type DefaultSession } from "next-auth";
 export type ExtendSession = DefaultSession['user'] & {
     id: string,
     name: string,
-    email: string,
+    address: string,
     role: string,
     phone_number: string,
     isOAuth: boolean

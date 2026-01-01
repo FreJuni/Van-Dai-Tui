@@ -36,7 +36,7 @@ const ProfileNavigation = ({ session }: ProfileNavigationProps) => {
 
     return (
         <div className='w-full border-b border-gray-100 bg-white/50 backdrop-blur-sm sticky top-14 md:top-20 z-40 overflow-x-auto no-scrollbar'>
-            <div className='max-w-7xl mx-auto px-4 md:px-10 lg:px-12'>
+            <div className='px-6 md:px-12 lg:px-[100px]'>
                 <div className='flex items-center justify-start gap-4 md:gap-8 min-w-max'>
                     {navItems.filter(item => item.show).map((item) => {
                         const isActive = pathname === item.href;

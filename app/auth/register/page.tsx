@@ -22,7 +22,7 @@ const RegisterPage = () => {
     const form = useForm<z.infer<typeof SignupSchema>>({
         resolver: zodResolver(SignupSchema),
         defaultValues: {
-            email: "",
+            address: "",
             name: "",
             password: "",
             phone_number: ""
@@ -53,7 +53,7 @@ const RegisterPage = () => {
     const onSubmit = async (values: z.infer<typeof SignupSchema>) => {
         execute({
             name: values.name,
-            email: values.email,
+            address: values.address,
             password: values.password,
             phone_number: values.phone_number
         })
@@ -88,12 +88,12 @@ const RegisterPage = () => {
 
                         <FormField
                             control={form.control}
-                            name="email"
+                            name="address"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>Address</FormLabel>
                                     <FormControl>
-                                        <Input type="email" placeholder="Email" {...field} />
+                                        <Input type="text" placeholder="Address" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

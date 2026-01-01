@@ -20,7 +20,7 @@ type AccountFormProps = {
     user: {
         id: string;
         name: string;
-        email: string;
+        address: string;
         role: string;
         phone_number: string;
         isOAuth: boolean;
@@ -28,7 +28,7 @@ type AccountFormProps = {
 };
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Mail, Phone, Settings } from 'lucide-react';
+import { Mail, MapPin, Phone, Settings } from 'lucide-react';
 
 const AccountForm = ({ user }: AccountFormProps) => {
     const t = useTranslations("Account");
@@ -37,7 +37,7 @@ const AccountForm = ({ user }: AccountFormProps) => {
         resolver: zodResolver(AccountSchema),
         defaultValues: {
             phone_number: user.phone_number || "",
-            email: user.email || "",
+            address: user.address || "",
         },
     })
 
@@ -55,11 +55,11 @@ const AccountForm = ({ user }: AccountFormProps) => {
     })
 
     const onSubmit = async (values: z.infer<typeof AccountSchema>) => {
-        const { phone_number, email } = values;
+        const { phone_number, address } = values;
 
         execute({
             phone_number,
-            email
+            address
         });
     }
 
@@ -78,18 +78,18 @@ const AccountForm = ({ user }: AccountFormProps) => {
 
                         <FormField
                             control={form.control}
-                            name="email"
+                            name="address"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                                        <Mail className="w-4 h-4 text-gray-400" />
-                                        {t('email')}
+                                        <MapPin className="w-4 h-4 text-gray-400" />
+                                        {t('address')}
                                     </FormLabel>
                                     <FormControl>
                                         <Input 
                                             className="h-11 focus-visible:ring-primary bg-white" 
-                                            type="email" 
-                                            placeholder={t('email')} 
+                                            type="text" 
+                                            placeholder={t('address')} 
                                             {...field} 
                                         />
                                     </FormControl>

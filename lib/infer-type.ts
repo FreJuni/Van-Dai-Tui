@@ -39,6 +39,7 @@ export type ProductsWithVariants = InferResultType<
                 productVariantOption: true;
                 productVariantColor: true;
                 productVariantImage: true;
+                productVariantCondition: true;
             };
         };
     }

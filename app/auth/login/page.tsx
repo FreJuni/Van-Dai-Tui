@@ -1,6 +1,7 @@
 'use client'
 
 import AuthForm from '@/components/auth/auth-form';
+import PhoneNumberInput from '@/components/phoneInput/phone-number-input';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -11,7 +12,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useAction } from 'next-safe-action/hooks';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import { toast, ToastContainer } from 'react-toastify';
@@ -19,11 +19,10 @@ import z from 'zod';
 
 const LoginPage = () => {
     const t = useTranslations('Auth');
-    const router = useRouter();
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
         defaultValues: {
-            email: "",
+            phone_number: "",
             password: "",
         }
     })
@@ -31,8 +30,6 @@ const LoginPage = () => {
     const { execute, status, result } = useAction(LoginAction, {
         onSuccess({ data }) {
             if (data.error) {
-                console.log(data.error);
-
                 toast.error(data.error)
             }
             if (data.success) {
@@ -46,14 +43,16 @@ const LoginPage = () => {
                     progress: undefined,
                     theme: "light",
                 });
-                router.push('/')
+                if(typeof window !== 'undefined'){
+                    window.location.href = '/'
+                }
             }
         }
     })
 
     const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
         execute({
-            email: values.email,
+            phone_number: values.phone_number,
             password: values.password,
         })
 
@@ -74,12 +73,12 @@ const LoginPage = () => {
 
                         <FormField
                             control={form.control}
-                            name="email"
+                            name="phone_number"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>Phone number</FormLabel>
                                     <FormControl>
-                                        <Input type="email" placeholder="Email" {...field} />
+                                        <PhoneNumberInput field={field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

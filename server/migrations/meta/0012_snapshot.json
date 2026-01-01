@@ -1,6 +1,6 @@
 {
-  "id": "6e3ebb70-5fa3-4392-8e74-83d516550a3a",
-  "prevId": "f1c9bcf2-9f88-4895-a1d6-98266ed62201",
+  "id": "aad0c818-2bfa-4c18-9ac8-1fcf342661b0",
+  "prevId": "94cf8258-e015-455e-8299-5b0555d2cbf0",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -83,6 +83,71 @@
           "tableTo": "user",
           "columnsFrom": [
             "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.favourite_products": {
+      "name": "favourite_products",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "productId": {
+          "name": "productId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "favourite_products_userId_user_id_fk": {
+          "name": "favourite_products_userId_user_id_fk",
+          "tableFrom": "favourite_products",
+          "tableTo": "user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "favourite_products_productId_products_id_fk": {
+          "name": "favourite_products_productId_products_id_fk",
+          "tableFrom": "favourite_products",
+          "tableTo": "products",
+          "columnsFrom": [
+            "productId"
           ],
           "columnsTo": [
             "id"
@@ -229,6 +294,60 @@
         "productVariantColor_productVariantId_productVariant_id_fk": {
           "name": "productVariantColor_productVariantId_productVariant_id_fk",
           "tableFrom": "productVariantColor",
+          "tableTo": "productVariant",
+          "columnsFrom": [
+            "productVariantId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.productVariantCondition": {
+      "name": "productVariantCondition",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "productVariantId": {
+          "name": "productVariantId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "condition": {
+          "name": "condition",
+          "type": "condition",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'New'"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "productVariantCondition_productVariantId_productVariant_id_fk": {
+          "name": "productVariantCondition_productVariantId_productVariant_id_fk",
+          "tableFrom": "productVariantCondition",
           "tableTo": "productVariant",
           "columnsFrom": [
             "productVariantId"
@@ -396,6 +515,22 @@
           "primaryKey": false,
           "notNull": true
         },
+        "category": {
+          "name": "category",
+          "type": "category",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Others'"
+        },
+        "brand": {
+          "name": "brand",
+          "type": "brand",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Others'"
+        },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp",
@@ -428,8 +563,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "email": {
-          "name": "email",
+        "address": {
+          "name": "address",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -446,8 +581,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "emailVerified": {
-          "name": "emailVerified",
+        "addressVerified": {
+          "name": "addressVerified",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
@@ -471,11 +606,11 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "user_email_unique": {
-          "name": "user_email_unique",
+        "user_phone_number_unique": {
+          "name": "user_phone_number_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "email"
+            "phone_number"
           ]
         }
       },
@@ -485,6 +620,39 @@
     }
   },
   "enums": {
+    "public.brand": {
+      "name": "brand",
+      "schema": "public",
+      "values": [
+        "Apple",
+        "Samsung",
+        "Xiaomi",
+        "Dell",
+        "HP",
+        "Lenovo",
+        "Asus",
+        "Others"
+      ]
+    },
+    "public.category": {
+      "name": "category",
+      "schema": "public",
+      "values": [
+        "Phones",
+        "Tablets",
+        "Laptops",
+        "Others"
+      ]
+    },
+    "public.condition": {
+      "name": "condition",
+      "schema": "public",
+      "values": [
+        "New",
+        "Used",
+        "Refurbished"
+      ]
+    },
     "public.roles": {
       "name": "roles",
       "schema": "public",

@@ -9,39 +9,13 @@ export const users = pgTable("user", {
         .primaryKey()
         .$defaultFn(() => createId()),
     name: text("name"),
-    email: text("email").unique(),
+    address: text("address"),
     password: text('password'),
-    phone_number: text('phone_number'),
-    emailVerified: timestamp("emailVerified", { mode: "date" }),
+    phone_number: text('phone_number').unique(),
+    addressVerified: timestamp("addressVerified", { mode: "date" }),
     image: text("image"),
     role: RoleEnum('roles').default('user'),
 });
-
-export const accounts = pgTable(
-    "account",
-    {
-        userId: text("userId")
-            .notNull()
-            .references(() => users.id, { onDelete: "cascade" }),
-        type: text("type").notNull(),
-        provider: text("provider").notNull(),
-        providerAccountId: text("providerAccountId").notNull(),
-        refresh_token: text("refresh_token"),
-        access_token: text("access_token"),
-        expires_at: integer("expires_at"),
-        token_type: text("token_type"),
-        scope: text("scope"),
-        id_token: text("id_token"),
-        session_state: text("session_state"),
-    },
-    (account) => [
-        {
-            compoundKey: primaryKey({
-                columns: [account.provider, account.providerAccountId],
-            }),
-        },
-    ]
-)
 
 export const generatePasswordResetToken = pgTable("generate_password_reset_token", {
     id: text("id")
@@ -62,7 +36,7 @@ export const products = pgTable('products', {
         .$defaultFn(() => createId()),
     title: text('title').notNull(),
     description: text('description').notNull(),
-    price: real('price').notNull(),
+    price: real('price'),
     category: CategoryEnum('category').default('Others'),
     brand: BrandEnum('brand').default('Others'), 
     createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow()

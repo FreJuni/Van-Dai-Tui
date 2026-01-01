@@ -11,13 +11,13 @@ import { revalidatePath } from "next/cache";
 
 export const LoginAction = actionClient
     .inputSchema(LoginSchema)
-    .action(async ({ parsedInput: { email, password } }) => {
+    .action(async ({ parsedInput: { phone_number, password } }) => {
 
         try {
-            if (!email || !password) return { error: "Please fill all the fields." }
+            if (!phone_number || !password) return { error: "Please fill all the fields." }
 
             const checkUserExistOrNot = await db.query.users.findFirst({
-                where: eq(users.email, email)
+                where: eq(users.phone_number, phone_number)
             })
 
             if (!checkUserExistOrNot) return { error: "Please check your credentials." }
@@ -27,12 +27,12 @@ export const LoginAction = actionClient
 
 
             await signIn('credentials', {
-                email,
+                phone_number,
                 password,
-                redirect: false
+                redirect: false,
             })
 
-            revalidatePath('/');
+            revalidatePath('/')
             return {
                 success: "Login Successfully."
             }

@@ -12,36 +12,24 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export const RegisterAction = actionClient
     .inputSchema(SignupSchema)
-    .action(async ({ parsedInput: { name, email, password, phone_number } }) => {
+    .action(async ({ parsedInput: { name, address, password, phone_number } }) => {
 
         try {
-            if (!name || !email || !password || !phone_number) return { error: "Something went wrong." }
+            if (!name || !address || !password || !phone_number) return { error: "Something went wrong." }
 
-            const checkEmailAlreadyExistOrNot = await db.query.users.findFirst({
-                where: eq(users.email, email)
+            const checkPhoneAlreadyExistOrNot = await db.query.users.findFirst({
+                where: eq(users.phone_number, phone_number)
             })
-            if (checkEmailAlreadyExistOrNot) return { error: "Email already existed." }
+            if (checkPhoneAlreadyExistOrNot) return { error: "Phone number already existed." }
 
             const hashPassword = await bcrypt.hash(password, 10);
 
             await db.insert(users).values({
                 name: name,
-                email: email,
+                address: address,
                 password: hashPassword,
                 phone_number: phone_number
             }).returning();
-
-            const msg = {
-                to: email,
-                from: process.env.SENDER_EMAIL,
-                subject: "Welcome to VanDaiTuiWebsite!",
-                text: `Hi ${name}, thanks for signing up for VanDaiTuiWebsite!`,
-                html: `<p>Hi <strong>${name}</strong>,</p>
-                        <p>Thanks for registering with <b>VanDaiTuiWebsite</b>. We're happy to have you!</p>
-                        <p>You can now log in and start using our services.</p>`,
-            };
-
-            await sgMail.send(msg);
 
             return {
                 success: "Register Account Successfully."

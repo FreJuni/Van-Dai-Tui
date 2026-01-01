@@ -52,7 +52,7 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
 
     return (
         <header className='sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md'>
-            <div className='max-w-7xl mx-auto flex justify-between items-center py-4 px-6 md:px-10 lg:px-12'>
+            <div className=' px-6 md:px-12 lg:px-[100px] flex justify-between items-center py-4'>
                 {/* Brand Logo */}
                 <Link href="/" className='flex items-center gap-2 group transition-all active:scale-95'>
                     <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">

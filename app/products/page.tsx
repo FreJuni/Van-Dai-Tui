@@ -6,10 +6,16 @@ import { Plus, Package } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { getTranslations } from 'next-intl/server';
+import { auth } from '@/server/auth';
+import { redirect } from 'next/navigation';
 
 const Products = async () => {
+    const session = await auth();
     const products = await fetchAllAdminProducts();
     const t = await getTranslations('Product');
+
+    if(!session?.user || session?.user?.role !== 'admin') return redirect('/');
+    
 
     const productData = products?.map((product: any) => {
         if (product.productVariant.length === 0) {
@@ -34,7 +40,7 @@ const Products = async () => {
     })
 
     return (
-        <div className='my-10 mx-6 md:mx-12 max-w-7xl lg:mx-auto' >
+        <div className='my-10 px-6 md:px-12 lg:px-[100px]' >
             <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10 border-b pb-6 border-gray-100'>
                 <div>
                     <h1 className='text-3xl font-bold tracking-tight text-gray-900'>{t('yourProducts')}</h1>

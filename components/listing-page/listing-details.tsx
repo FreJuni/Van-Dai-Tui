@@ -30,15 +30,30 @@ const ListingDetails = ({data}: ListingDetailsProps) => {
 
     const variantName = searchParams.get('variantName') || currentVariant?.variantName;
     const variantStorage = searchParams.get('variantStorage') || currentOption?.storage;
-    const variantPrice = Number(searchParams.get('variantPrice')) || currentOption?.price || data.price;
+    const variantPrice = Number(searchParams.get('variantPrice')) || currentOption?.price || data.price || 0;
     
+    const conditionColors: Record<string, string> = {
+        'New': 'bg-emerald-50 text-emerald-700 border-emerald-100',
+        'Used': 'bg-amber-50 text-amber-700 border-amber-100',
+        'Refurbished': 'bg-blue-50 text-blue-700 border-blue-100'
+    }
 
   return (
     <div className='flex flex-col gap-4 lg:text-left'>
     <p className='text-3xl md:text-4xl font-bold'>{data.title}</p>
     <div className='text-muted-foreground' dangerouslySetInnerHTML={{__html: data.description || ''}}></div>
     <div className='flex flex-col gap-4 mt-2'>
-        <p className='text-3xl md:text-4xl font-bold text-primary'>{priceFormatter({price: variantPrice})}</p>
+        <div className='flex items-center gap-4 flex-wrap'>
+            <p className='text-3xl md:text-4xl font-bold text-primary'>{priceFormatter({price: variantPrice})}</p>
+            {currentVariant?.productVariantCondition?.condition && (
+                <div className={cn(
+                    'px-3 py-1 text-xs font-bold rounded-full border shadow-sm uppercase tracking-wider',
+                    conditionColors[currentVariant.productVariantCondition.condition] || 'bg-gray-50 text-gray-700 border-gray-100'
+                )}>
+                   {currentVariant.productVariantCondition.condition}
+                </div>
+            )}
+        </div>
         <div className='flex flex-col gap-2'>
             <div className=''><span className='text-lg font-medium'>{t('color')}</span> : <span className='font-normal'>{variantName}</span></div>
             <div className='flex gap-3 items-center  lg:justify-start'>
@@ -56,7 +71,7 @@ const ListingDetails = ({data}: ListingDetailsProps) => {
                                     variantPrice={variant.productVariantOption[0]?.price || 0}
                                     listingTitle={data.title}
                                     listingDescription={data.description}
-                                    listingPrice={data.price}
+                                    listingPrice={data.price || 0}
                                     listingImage={data.productVariant[0]?.productVariantImage[0]?.image_url || ''}
                                     variantId={variant.id}
                                 />
