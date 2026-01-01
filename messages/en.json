@@ -20,6 +20,7 @@
         "adminOrders": "Orders",
         "logout": "Logout",
         "adminProducts": "Your products",
+        "adminDashboard": "Admin Dashboard",
         "accountSettings": "Account settings"
     },
     "UserProfile": {
@@ -93,6 +94,7 @@
         "description": "Your premium destination for the latest phones and professional mobile services.",
         "categories": "Categories",
         "phones": "Phones",
+        "laptops": "Laptops",
         "accessories": "Accessories",
         "tablets": "Tablets",
         "services": "Services",

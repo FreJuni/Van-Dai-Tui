@@ -40,7 +40,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
     const router = useRouter();
 
     const handleEdit = (productId: string) => {
-        router.push(`/add-product?productId=${productId}`);
+        router.push(`/dashboard/products/manage?productId=${productId}`);
     }
 
     const { execute, status, result } = useAction(deleteProduct, {
@@ -59,6 +59,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
     const handleDelete = (productId: string) => {
         execute({ productId });
     }
+
 
 
     return (

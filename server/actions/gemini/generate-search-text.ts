@@ -41,7 +41,12 @@ export const generateSearchText = async (query: string): Promise<any> => {
     // describe inventoryContext for AI
     const response = await instance.models.generateContent({
       model: 'gemini-2.5-flash',
-      contents: `User Query: "${query}"`,
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: `User Query: "${query}"` }]
+        }
+      ],
       config: {
         systemInstruction: `You are 'Volt Assistant,' a premium tech concierge.
     
@@ -52,8 +57,13 @@ export const generateSearchText = async (query: string): Promise<any> => {
     2. If budget provided (e.g. "2000RM"), prioritize items within that range.
     3. Return 'items' with exact metadata from the matched variant.
     4. For each item, 'urlParams' MUST contain all fields needed for: /listing-page/[id]?[params]
-    5. 'type' is one of: "phone", "laptop", "repair", "battery_change".`,
+    5. 'type' is one of: "phone", "laptop", "repair", "battery_change", "service".
 
+    REPAIR & SERVICES HANDLING:
+    - If the user asks for repairs or services generally (e.g., "I need a repair", "screen fix", "services available"), return an item with type "service" and a helpful message directing them to our services page.
+    - For type "service", you DO NOT need to match an inventory item. Set the name to "Professional Services" and price to 0. The message should say something like "We offer professional repair services for various devices. You can view our full list of services here."
+    - 'repair' and 'battery_change' types can still be used for specific inventory matches if applicable.`,
+        
         responseMimeType: "application/json",
         responseSchema: {
           type: "object",
@@ -67,7 +77,7 @@ export const generateSearchText = async (query: string): Promise<any> => {
                   id: { type: "string" },
                   name: { type: "string" },
                   price: { type: "number" },
-                  type: { type: "string", enum: ["phone", "laptop", "repair", "battery_change"] },
+                  type: { type: "string", enum: ["phone", "laptop", "repair", "battery_change", "service"] },
                   imageUrl: { type: "string" },
                   urlParams: {
                     type: "object",
@@ -92,16 +102,19 @@ export const generateSearchText = async (query: string): Promise<any> => {
             }
           },
           required: ["message", "items"]
-        },
-      },
-
+        }
+      }
     });
 
-    const result = response.candidates?.[0]?.content?.parts?.[0]?.text || response.text;
+    const result = response.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!result) throw new Error("No response from Gemini");
+
     return JSON.parse(result);
   } catch (error) {
     console.error("Gemini Error:", error);
-    return { message: "I'm having trouble accessing the inventory right now, but I can still help with general tech advice!", items: [] };
+    return { 
+      message: "I'm having trouble accessing the inventory right now, but I can still help with general tech advice!", 
+      items: [] 
+    };
   }
 };

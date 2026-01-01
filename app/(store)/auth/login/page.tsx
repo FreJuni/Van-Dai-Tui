@@ -32,19 +32,16 @@ const LoginPage = () => {
             if (data.error) {
                 toast.error(data.error)
             }
-            if (data.success) {
-                toast.success(data.success, {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: false,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
-                if(typeof window !== 'undefined'){
-                    window.location.href = '/'
+            if (data?.success) {
+                toast.success(data.success);
+                
+                if (typeof window !== 'undefined') {
+                    // Redirect based on role
+                    if (data.role === 'admin') {
+                        window.location.href = '/dashboard';
+                    } else {
+                        window.location.href = '/';
+                    }
                 }
             }
         }

@@ -1,3 +1,4 @@
+
 import ProductCard from '@/components/productCard/product-card';
 import {   fetchFavouriteProducts } from '@/server/actions/product';
 import React from 'react';
@@ -9,16 +10,27 @@ import { getTranslations } from 'next-intl/server';
 import { ShopProductCard } from '@/components/shop/shop-product-card';
 import { auth } from '@/server/auth';
 import { redirect } from 'next/navigation';
+import { Pagination } from '@/components/ui/pagination-custom';
 
-const FavouritesPage = async () => {
-    const products = await fetchFavouriteProducts();
+const FavouritesPage = async ({ 
+    searchParams 
+}: { 
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }> 
+}) => {
+    const params = await searchParams;
+    const page = Number(params.page) || 1;
+    const pageSize = 8;
+    
+    const { items: products, totalCount } = await fetchFavouriteProducts(page, pageSize);
     const t = await getTranslations('Favourites');
     const session = await auth();
 
     if(!session?.user ) return redirect('/');
     
-      // Map products to ShopProductCard format
-    const mappedProducts = products.map((p: any) => {
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    // Map products to ShopProductCard format
+    const mappedProducts = (products || []).map((p: any) => {
         try {
             const firstVariant = p.products.productVariant && p.products.productVariant.length > 0 ? p.products.productVariant[0] : null;
             const image = firstVariant?.productVariantImage?.[0]?.image_url || '';
@@ -51,11 +63,15 @@ const FavouritesPage = async () => {
             </div>
 
             {mappedProducts && mappedProducts.length > 0 ? (
-                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
-                    {mappedProducts.map(p => (
-                        <ShopProductCard key={p.id} data={p} user={session?.user!} />
-                    ))}
-                </div>
+                <>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
+                        {mappedProducts.map(p => (
+                            <ShopProductCard key={p.id} data={p} user={session?.user!} />
+                        ))}
+                    </div>
+
+                    <Pagination totalPages={totalPages} currentPage={page} />
+                </>
             ) : (
                 <div className='flex flex-col items-center justify-center py-20 bg-gray-50/50 rounded-3xl border-2 border-dashed border-gray-200 mt-10'>
                     <div className='bg-white p-4 rounded-full shadow-sm mb-4'>

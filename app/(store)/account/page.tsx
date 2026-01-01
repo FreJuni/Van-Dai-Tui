@@ -11,6 +11,7 @@ const AccountSettings = async () => {
     if(!session?.user ) {
         redirect('/');
     }
+    if(session.user.role === 'admin') return redirect('/dashboard/settings/account');
     
 
     return (

@@ -11,6 +11,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 
 export const AIConcierge = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +19,7 @@ export const AIConcierge = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [response, setResponse] = useState<any>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const router = useRouter();
 
     const handleSearch = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
@@ -60,7 +62,7 @@ export const AIConcierge = () => {
             </motion.button>
 
             {/* Concierge Modal Overlay */}
-            <AnimatePresence >
+            <AnimatePresence>
                 {isOpen && (
                     <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm">
                         <motion.div
@@ -76,150 +78,168 @@ export const AIConcierge = () => {
                                         <Bot className="text-primary w-7 h-7" />
                                     </div>
                                     <div>
-                                        <h3 className="text-white font-bold text-lg">Volt Assistant</h3>
+                                        <h3 className="text-white font-bold text-lg text-balance">
+                                            Volt Assistant
+                                        </h3>
                                         <p className="text-zinc-500 text-sm flex items-center gap-1.5">
                                             <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
                                             AI-Powered Tech Concierge
                                         </p>
                                     </div>
                                 </div>
-                                <button 
-                                    onClick={() => setIsOpen(false)}
-                                    className="p-2 hover:bg-white/5 rounded-full transition-colors text-zinc-400 cursor-pointer"
-                                >
-                                    <X size={24} />
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <button 
+                                        onClick={() => setIsOpen(false)}
+                                        className="p-2 hover:bg-white/5 rounded-full transition-colors text-zinc-400 cursor-pointer"
+                                    >
+                                        <X size={24} />
+                                    </button>
+                                </div>
                             </div>
 
-                            {/* Chat Area */}
+                            {/* Main Content Area */}
                             <div 
                                 ref={scrollRef}
                                 className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar scroll-smooth"
                             >
-                                {!response && !isLoading && (
-                                    <div className="h-full flex flex-col items-center justify-center text-center space-y-6 opacity-80">
-                                        <div className="w-20 h-20 bg-zinc-900 rounded-3xl flex items-center justify-center border border-white/5">
-                                            <Sparkles className="text-primary w-10 h-10" />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <h4 className="text-white font-bold text-2xl tracking-tight">How can I help you today?</h4>
-                                            <p className="text-zinc-400 max-w-xs mx-auto">
-                                                Try something like: "I have 2000RM and looking for a phone" or "My screen is broken"
-                                            </p>
-                                        </div>
-                                        
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-md">
-                                            {[
-                                                { text: "Best phone under 1500RM", icon: Smartphone },
-                                                { text: "Need a laptop for work", icon: Laptop },
-                                                { text: "Gaming tablet options", icon: Tablet },
-                                                { text: "My device needs repair", icon: Wrench }
-                                            ].map((suggest) => (
-                                                <button 
-                                                    key={suggest.text}
-                                                    onClick={() => {
-                                                        setQuery(suggest.text);
-                                                        handleSearch();
-                                                    }}
-                                                    className="flex items-center gap-3 p-4 bg-zinc-900/50 border border-white/5 rounded-2xl text-zinc-300 text-sm font-medium hover:bg-zinc-800 hover:border-white/10 hover:text-white transition-all text-left"
-                                                >
-                                                    <suggest.icon className="w-5 h-5 text-primary opacity-70" />
-                                                    {suggest.text}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {isLoading && (
-                                    <div className="flex gap-4">
-                                        <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center shrink-0">
-                                            <Bot className="text-primary w-6 h-6 animate-pulse" />
-                                        </div>
-                                        <div className="bg-zinc-900 border border-white/5 rounded-[22px] p-5 space-y-4 max-w-[85%]">
-                                            <div className="flex items-center gap-2">
-                                                <Loader2 className="w-4 h-4 text-primary animate-spin" />
-                                                <span className="text-zinc-500 text-xs font-bold tracking-widest uppercase">Analyzing inventory...</span>
+                                <>
+                                    {!response && !isLoading && (
+                                        <div className="h-full flex flex-col items-center justify-center text-center space-y-6 opacity-80">
+                                            <div className="w-20 h-20 bg-zinc-900 rounded-3xl flex items-center justify-center border border-white/5">
+                                                <Sparkles className="text-primary w-10 h-10" />
                                             </div>
                                             <div className="space-y-2">
-                                                <div className="w-48 h-3 bg-white/5 rounded-full animate-pulse" />
-                                                <div className="w-32 h-3 bg-white/5 rounded-full animate-pulse" />
+                                                <h4 className="text-white font-bold text-2xl tracking-tight">How can I help you today?</h4>
+                                                <p className="text-zinc-400 max-w-xs mx-auto">
+                                                    Try something like: "I have 2000RM and looking for a phone" or "My screen is broken"
+                                                </p>
+                                            </div>
+                                            
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-md">
+                                                {[
+                                                    { text: "Best phone under 1500RM", icon: Smartphone },
+                                                    { text: "Need a laptop for work", icon: Laptop },
+                                                    { text: "My device needs repair", icon: Wrench }
+                                                ].map((suggest) => (
+                                                    <button 
+                                                        key={suggest.text}
+                                                        onClick={() => {
+                                                            setQuery(suggest.text);
+                                                            handleSearch();
+                                                        }}
+                                                        className="flex items-center gap-3 p-4 bg-zinc-900/50 border border-white/5 rounded-2xl text-zinc-300 text-sm font-medium hover:bg-zinc-800 hover:border-white/10 hover:text-white transition-all text-left"
+                                                    >
+                                                        <suggest.icon className="w-5 h-5 text-primary opacity-70" />
+                                                        {suggest.text}
+                                                    </button>
+                                                ))}
                                             </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
 
-                                {response && (
-                                    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                        {/* User prompt repeating for context */}
-                                        <div className="flex justify-end">
-                                            <div className="bg-primary text-white rounded-t-[22px] rounded-bl-[22px] p-4 max-w-[85%] font-medium">
-                                                {query}
-                                            </div>
-                                        </div>
-
-                                        {/* Bot Response */}
+                                    {isLoading && (
                                         <div className="flex gap-4">
-                                            <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center shrink-0 border border-primary/20">
-                                                <Bot className="text-primary w-6 h-6" />
+                                            <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center shrink-0">
+                                                <Bot className="text-primary w-6 h-6 animate-pulse" />
                                             </div>
-                                            <div className="space-y-6 flex-1">
-                                                <div className="bg-zinc-900/50 border border-white/5 rounded-[22px] p-5 text-zinc-300 leading-relaxed">
-                                                    {response.message}
+                                            <div className="bg-zinc-900 border border-white/5 rounded-[22px] p-5 space-y-4 max-w-[85%]">
+                                                <div className="flex items-center gap-2">
+                                                    <Loader2 className="w-4 h-4 text-primary animate-spin" />
+                                                    <span className="text-zinc-500 text-xs font-bold tracking-widest uppercase">
+                                                        Analyzing inventory...
+                                                    </span>
                                                 </div>
-
-                                                {response.items?.length > 0 && (
-                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                        {response.items.map((item: any) => (
-                                                            <div 
-                                                                key={item.id}
-                                                                className="group relative bg-zinc-900 border border-white/5 rounded-[24px] p-4 hover:border-primary/40 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10"
-                                                            >
-                                                                <div className="relative aspect-square rounded-2xl overflow-hidden bg-black/40 mb-4 border border-white/5">
-                                                                    {item.imageUrl ? (
-                                                                        <Image 
-                                                                            src={item.imageUrl} 
-                                                                            alt={item.name} 
-                                                                            fill 
-                                                                            className="object-contain p-2 group-hover:scale-110 transition-transform duration-500" 
-                                                                        />
-                                                                    ) : (
-                                                                        <div className="w-full h-full flex items-center justify-center text-zinc-700">
-                                                                            {item.type === 'repair' ? <Wrench size={32} /> : <Search size={32} />}
-                                                                        </div>
-                                                                    )}
-                                                                    <Badge className="absolute top-3 left-3 bg-black/60 backdrop-blur-md border border-white/10 text-white font-bold">
-                                                                        {item.type.replace('_', ' ')}
-                                                                    </Badge>
-                                                                </div>
-                                                                <div className="space-y-2">
-                                                                    <h4 className="text-white font-bold text-sm truncate">{item.name}</h4>
-                                                                    <p className="text-primary font-black text-lg">
-                                                                        {priceFormatter({ price: item.price })}
-                                                                    </p>
-                                                                    <Button 
-                                                                        asChild
-                                                                        className="w-full rounded-xl bg-white/5 hover:bg-primary transition-all font-bold text-xs p-0 h-10 cursor-pointer"
-                                                                    >
-                                                                        <Link 
-                                                                            href={
-                                                                                item.type === 'repair' 
-                                                                                ? '/repairs' 
-                                                                                : `/listing-page/${item.id}?variantName=${item.urlParams.variantName}&listingTitle=${item.urlParams.listingTitle}&listingDescription=${item.urlParams.listingDescription || ''}&listingPrice=${item.urlParams.listingPrice}&listingImage=${item.urlParams.listingImage || item.imageUrl}&variantId=${item.urlParams.variantId}&productId=${item.urlParams.productId}&variantColor=${item.urlParams.variantColor || ''}&variantImage=${item.urlParams.variantImage || item.imageUrl}&variantStorage=${item.urlParams.variantStorage || ''}&variantPrice=${item.urlParams.variantPrice || item.price}`
-                                                                            }
-                                                                        >
-                                                                            View Details
-                                                                        </Link>
-                                                                    </Button>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
+                                                <div className="space-y-2">
+                                                    <div className="w-48 h-3 bg-white/5 rounded-full animate-pulse" />
+                                                    <div className="w-32 h-3 bg-white/5 rounded-full animate-pulse" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
+
+                                    {response && (
+                                        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                            <div className="flex justify-end">
+                                                <div className="bg-primary text-white rounded-t-[22px] rounded-bl-[22px] p-4 max-w-[85%] font-medium shadow-lg shadow-primary/20">
+                                                    {query}
+                                                </div>
+                                            </div>
+
+                                            <div className="flex gap-4">
+                                                <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center shrink-0 border border-primary/20">
+                                                    <Bot className="text-primary w-6 h-6" />
+                                                </div>
+                                                <div className="space-y-6 flex-1">
+                                                    <div className="bg-zinc-900/50 border border-white/5 rounded-[22px] p-5 text-zinc-300 leading-relaxed">
+                                                        {response.message}
+                                                    </div>
+
+                                                    {response.items?.length > 0 && (
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                            {response.items.map((item: any) => {
+                                                                const urlParams = new URLSearchParams();
+                                                                if (item.urlParams) {
+                                                                    Object.entries(item.urlParams).forEach(([key, value]) => {
+                                                                        urlParams.append(key, String(value));
+                                                                    });
+                                                                }
+                                                                const href = item.type === 'service' || item.type === 'repair'
+                                                                    ? '/services'
+                                                                    : `/listing-page/${item.id}?${urlParams.toString()}`;
+
+                                                                return (
+                                                                    <div 
+                                                                        key={item.id}
+                                                                        className="group relative bg-zinc-900 border border-white/5 rounded-[24px] p-4 hover:border-primary/40 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10"
+                                                                    >
+                                                                        <div className="relative aspect-square rounded-2xl overflow-hidden bg-black/40 mb-4 border border-white/5">
+                                                                            {item.imageUrl && item.type !== 'service' ? (
+                                                                                <Image 
+                                                                                    src={item.imageUrl} 
+                                                                                    alt={item.name} 
+                                                                                    fill 
+                                                                                    className="object-contain p-2 group-hover:scale-110 transition-transform duration-500" 
+                                                                                />
+                                                                            ) : (
+                                                                                <div className="w-full h-full flex items-center justify-center text-zinc-700">
+                                                                                    {item.type === 'service' || item.type === 'repair' ? <Wrench size={32} /> : <Search size={32} />}
+                                                                                </div>
+                                                                            )}
+                                                                            <Badge className="absolute top-3 left-3 bg-black/60 backdrop-blur-md border border-white/10 text-white font-bold">
+                                                                                {item.type.replace('_', ' ')}
+                                                                            </Badge>
+                                                                        </div>
+                                                                        <div className="space-y-2">
+                                                                            <h4 className="text-white font-bold text-sm truncate">{item.name}</h4>
+                                                                            {item.price > 0 ? (
+                                                                                <p className="text-primary font-black text-lg">
+                                                                                    {priceFormatter({ price: item.price })}
+                                                                                </p>
+                                                                            ) : (
+                                                                                <p className="text-zinc-500 text-sm font-medium">Professional Support</p>
+                                                                            )}
+                                                                            <Link 
+                                                                                href={href}
+                                                                                onClick={() => setIsOpen(false)}
+                                                                                className="block w-full"
+                                                                            >
+                                                                                <Button 
+                                                                                    className="w-full rounded-xl bg-white/5 hover:bg-primary transition-all font-bold text-xs h-10 cursor-pointer"
+                                                                                >
+                                                                                    {item.type === 'service' || item.type === 'repair' ? 'View Services' : 'View Details'}
+                                                                                </Button>
+                                                                            </Link>
+                                                                        </div>
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
                             </div>
 
                             {/* Input Area */}
@@ -228,7 +248,7 @@ export const AIConcierge = () => {
                                     onSubmit={handleSearch}
                                     className="relative flex items-center gap-3"
                                 >
-                                    <div className="relative flex-1">
+                                    <div className="relative flex-1 group">
                                         <Input 
                                             value={query}
                                             onChange={(e) => setQuery(e.target.value)}

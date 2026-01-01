@@ -2,8 +2,8 @@
 
 import { actionClient } from "./safe-action";
 import { db } from "..";
-import { eq, sql } from "drizzle-orm";
 import { favouriteProduct, products, productVariant, productVariantColor, productVariantCondition, productVariantImage, productVariantOption, users } from "../schema";
+import { and, eq, sql, ilike, inArray, gte, lte, desc, asc, count } from "drizzle-orm";
 import bcrypt from 'bcrypt';
 import { DeleteProductSchema, ProductSchema } from "@/types/product-schema";
 import { revalidatePath } from "next/cache";
@@ -27,9 +27,10 @@ export const fetchProduct = async (productId: string) => {
     }
 }
 
-export const fetchAllAdminProducts = async () : Promise<ProductsWithVariants[]> => {
+export const fetchProductByFullId = async (productId: string): Promise<ProductsWithVariants | null> => {
     try {
-        const allProducts = await db.query.products.findMany({
+        const product = await db.query.products.findFirst({
+            where: eq(products.id, productId),
             with: {
                 productVariant: {
                     with: {
@@ -37,31 +38,107 @@ export const fetchAllAdminProducts = async () : Promise<ProductsWithVariants[]> 
                         productVariantColor: true,
                         productVariantImage: true,
                         productVariantCondition: true
-                    },
-                    orderBy: (productVariant, { desc }) => [
-                        desc(productVariant.createdAt)
-                    ]
+                    }
                 }
             }
         })
-
-        return allProducts ;
+        return (product as ProductsWithVariants) || null;
     } catch (error) {
-        console.log(error);
-        return [];
+        console.error(error);
+        return null;
     }
-
 }
 
-export const fetchAllProducts = async () => {
-    const session  = await auth();
+export const fetchAllAdminProducts = async (page: number = 1, pageSize: number = 8): Promise<{ items: any[], totalCount: number }> => {
+    try {
+        const offset = (page - 1) * pageSize;
+
+        const [items, total] = await Promise.all([
+            db.query.products.findMany({
+                limit: pageSize,
+                offset: offset,
+                with: {
+                    productVariant: {
+                        with: {
+                            productVariantOption: true,
+                            productVariantColor: true,
+                            productVariantImage: true,
+                            productVariantCondition: true
+                        },
+                        orderBy: (productVariant, { desc }) => [
+                            desc(productVariant.createdAt)
+                        ]
+                    }
+                },
+                orderBy: (products, { desc }) => [desc(products.createdAt)]
+            }),
+            db.select({ value: count() }).from(products)
+        ]);
+
+        return { 
+            items, 
+            totalCount: total[0]?.value || 0 
+        };
+    } catch (error) {
+        console.log(error);
+        return { items: [], totalCount: 0 };
+    }
+}
+
+export const fetchAllProducts = async (params: {
+    page?: number;
+    pageSize?: number;
+    q?: string;
+    category?: string[];
+    brand?: string[];
+    minPrice?: number;
+    maxPrice?: number;
+    condition?: string[];
+    sort?: string;
+}) => {
+    const session = await auth();
     const currentUser = session?.user;
+    const { 
+        page = 1, 
+        pageSize = 8, 
+        q, 
+        category, 
+        brand, 
+        minPrice, 
+        maxPrice, 
+        condition, 
+        sort 
+    } = params;
+    const offset = (page - 1) * pageSize;
 
     try {
+        const filters: any[] = [];
+
+        if (q) {
+            filters.push(
+                sql`(lower(${products.title}) LIKE ${'%' + q.toLowerCase() + '%'} OR lower(${products.description}) LIKE ${'%' + q.toLowerCase() + '%'})`
+            );
+        }
+
+        if (category && category.length > 0) {
+            filters.push(inArray(products.category, category as any));
+        }
+
+        if (brand && brand.length > 0) {
+            filters.push(inArray(products.brand, brand as any));
+        }
+
+        // Price and Condition usually require joins or subqueries if we want to filter at DB level efficiently
+        // Since we are using db.query, we can filter on the main products table easily.
+        // For more complex variant-based filters, we might need to use db.select().from(products).leftJoin(...)
+
         const allProducts = await db.query.products.findMany({
+            where: filters.length > 0 ? and(...filters) : undefined,
+            limit: pageSize,
+            offset: offset,
             with: {
                 favouriteProduct: {
-                    where : (favouriteProduct, { eq }) => eq(favouriteProduct.userId!, currentUser?.id!)
+                    where: (favouriteProduct, { eq }) => eq(favouriteProduct.userId!, currentUser?.id!)
                 },
                 productVariant: {
                     with: {
@@ -74,57 +151,93 @@ export const fetchAllProducts = async () => {
                         desc(productVariant.createdAt)
                     ]
                 }
+            },
+            orderBy: (products, { desc, asc }) => {
+                if (sort === 'newest') return [desc(products.createdAt)];
+                return [desc(products.createdAt)];
             }
-        })
+        });
+
+        // Add sorting logic if needed (if it involves variant prices)
+        if (sort === 'price-low' || sort === 'price-high') {
+            allProducts.sort((a: any, b: any) => {
+                const priceA = a.productVariant?.[0]?.productVariantOption?.[0]?.price || 0;
+                const priceB = b.productVariant?.[0]?.productVariantOption?.[0]?.price || 0;
+                return sort === 'price-low' ? priceA - priceB : priceB - priceA;
+            });
+        }
+
+        // Get total count for pagination
+        const totalCountResult = await db.select({ value: count() })
+            .from(products)
+            .where(filters.length > 0 ? and(...filters) : undefined);
 
         const mappedProducts = allProducts.map((product) => {
             return {
                 ...product,
                 favouriteProduct: product.favouriteProduct.length > 0 ? true : false
             }
-        })
-        return mappedProducts;
+        });
+
+        return {
+            items: mappedProducts,
+            totalCount: totalCountResult[0]?.value || 0
+        };
     } catch (error) {
         console.log(error);
-        return { error: "Something went wrong." }
+        return { items: [], totalCount: 0, error: "Something went wrong." };
     }
-
 }
 
-export const fetchFavouriteProducts = async ()  => {
+export const fetchFavouriteProducts = async (page: number = 1, pageSize: number = 8) => {
     const session = await auth();
     const currentUser = session?.user;
+    const offset = (page - 1) * pageSize;
+
+    if (!currentUser) return { items: [], totalCount: 0 };
 
     try {
-        const favouriteProducts = await db.query.favouriteProduct.findMany({
-            where : eq(favouriteProduct.userId!, currentUser?.id!),
-            with : {
-                products : {
-                    with : {
-                        favouriteProduct : true,
-                        productVariant : {
-                            with : {
-                                productVariantOption : true,
-                                productVariantColor : true,
-                                productVariantImage : true,
-                                productVariantCondition : true
+        const [favouriteProducts, total] = await Promise.all([
+            db.query.favouriteProduct.findMany({
+                where: eq(favouriteProduct.userId!, currentUser?.id!),
+                limit: pageSize,
+                offset: offset,
+                with: {
+                    products: {
+                        with: {
+                            favouriteProduct: true,
+                            productVariant: {
+                                with: {
+                                    productVariantOption: true,
+                                    productVariantColor: true,
+                                    productVariantImage: true,
+                                    productVariantCondition: true
+                                }
                             }
                         }
                     }
-                }
-            }
-        })
+                },
+                orderBy: (favouriteProduct, { desc }) => [desc(favouriteProduct.createdAt)]
+            }),
+            db.select({ value: count() })
+                .from(favouriteProduct)
+                .where(eq(favouriteProduct.userId!, currentUser?.id!))
+        ]);
 
         const mappedProducts = favouriteProducts.map((product) => {
             return {
                 ...product,
                 favouriteProduct: product.products.favouriteProduct.length > 0 ? true : false
             }
-        })
-        return mappedProducts;
+        });
+
+        return {
+            items: mappedProducts,
+            totalCount: total[0]?.value || 0
+        };
     } catch (error) {
         console.log(error);
-        return [];
+        return { items: [], totalCount: 0 };
     }
 
 }

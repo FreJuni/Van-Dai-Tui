@@ -22,8 +22,8 @@ const Footer = () => {
                     <div>
                         <h4 className="font-semibold text-gray-900 mb-4">{t('categories')}</h4>
                         <ul className="space-y-2">
-                            <li><Link href="/listing-page?category=phone" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('phones')}</Link></li>
-                            <li><Link href="/listing-page?category=tablet" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('tablets')}</Link></li>
+                            <li><Link href="/listing-page?category=phones" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('phones')}</Link></li>
+                            <li><Link href="/listing-page?category=laptops" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('laptops')}</Link></li>
                             {/* <li><Link href="/listing-page?category=accessory" className="text-gray-600 hover:text-primary text-sm transition-colors">{t('accessories')}</Link></li> */}
                         </ul>
                     </div>

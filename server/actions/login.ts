@@ -34,7 +34,8 @@ export const LoginAction = actionClient
 
             revalidatePath('/')
             return {
-                success: "Login Successfully."
+                success: "Login Successfully.",
+                role: checkUserExistOrNot.role
             }
 
         } catch (error) {

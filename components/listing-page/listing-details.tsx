@@ -20,12 +20,12 @@ const ListingDetails = ({data}: ListingDetailsProps) => {
 
     const currentVariant = React.useMemo(() => {
         const variantId = searchParams.get('variantId');
-        return data.productVariant.find(v => v.id === variantId) || data.productVariant[0];
-    }, [searchParams, data.productVariant]);
+        return data?.productVariant?.find(v => v.id === variantId) || data?.productVariant?.[0];
+    }, [searchParams, data?.productVariant]);
 
     const currentOption = React.useMemo(() => {
         const storage = searchParams.get('variantStorage');
-        return currentVariant?.productVariantOption.find(o => o.storage === storage) || currentVariant?.productVariantOption[0];
+        return currentVariant?.productVariantOption?.find(o => o.storage === storage) || currentVariant?.productVariantOption?.[0];
     }, [searchParams, currentVariant]);
 
     const variantName = searchParams.get('variantName') || currentVariant?.variantName;

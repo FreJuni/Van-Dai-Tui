@@ -12,6 +12,7 @@ const Profile = async () => {
     const session = await auth();
 
     if(!session?.user) return redirect('/');
+    if(session.user.role === 'admin') return redirect('/dashboard/settings/profile');
 
     return (
         <div className='max-w-4xl mx-auto py-12 px-6'>

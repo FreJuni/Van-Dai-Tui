@@ -57,6 +57,7 @@ export const ShopProductCard = ({ data, user }: ShopProductCardProps) => {
         execute({userId, productId})
     }
 
+
     return (
         <>
         <Card className="p-0 group gap-1 overflow-hidden border border-gray-100 transition-all duration-300 bg-white rounded-[6px]">
@@ -102,8 +103,10 @@ export const ShopProductCard = ({ data, user }: ShopProductCardProps) => {
             <CardContent className='p-[6px] space-y-3'>
                 <div className="space-y-1">
                     <p className="text-[10px] font-bold uppercase tracking-widest text-primary/60">{data.brand || "Tech Store"}</p>
-                    <Link href={`/listing-page/${data.id}?variantName=${data?.variants[0]?.variantName}&listingTitle=${data?.title}&listingDescription=${data?.description}&listingPrice=${data?.price}&listingImage=${data?.image}&variantId=${data?.variants[0]?.id}&productId=${data?.id}&variantColor=${data?.variants[0]?.productVariantColor?.color}&variantImage=${data?.variants[0]?.productVariantImage[0]?.image_url}&variantStorage=${data?.variants[0]?.productVariantOption[0]?.storage}&variantPrice=${data?.variants[0]?.productVariantOption[0]?.price}`}>
-                        <h3 className='text-sm font-bold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors duration-300'>
+                    <Link 
+                        href={`/listing-page/${data.id}?variantName=${data?.variants[0]?.variantName}&listingTitle=${data?.title}&listingDescription=${data?.description}&listingPrice=${data?.price}&listingImage=${data?.image}&variantId=${data?.variants[0]?.id}&productId=${data?.id}&variantColor=${data?.variants[0]?.productVariantColor?.color}&variantImage=${data?.variants[0]?.productVariantImage[0]?.image_url}&variantStorage=${data?.variants[0]?.productVariantOption[0]?.storage}&variantPrice=${data?.variants[0]?.productVariantOption[0]?.price}`}
+                    >
+                        <h3 className='text-sm font-bold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors duration-300 cursor-pointer'>
                             {data.title}
                         </h3>
                     </Link>

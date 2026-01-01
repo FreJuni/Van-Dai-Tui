@@ -36,14 +36,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider>
-          <div className="flex flex-col min-h-screen">
-            <TopNavBar session={session!} />
-            <main className="grow">
-              {children}
-            </main>
-            <Footer />
-            <AIConcierge />
-          </div>
+          {children}
         </NextIntlClientProvider>
       </body>
     </html>

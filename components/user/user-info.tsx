@@ -31,8 +31,8 @@ const UserInformation = ({ children, session }: UserInformationProps) => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {user?.role === 'admin' &&
-                    <Link href={'/products'}>
-                        <DropdownMenuItem className="cursor-pointer select-none">{t("adminProducts")}</DropdownMenuItem>
+                    <Link href={'/dashboard'}>
+                        <DropdownMenuItem className="cursor-pointer select-none">{t("adminDashboard")}</DropdownMenuItem>
                     </Link>}
                 <Link href={'/order'}>
                     <DropdownMenuItem className="cursor-pointer select-none">{user?.role === 'admin' ? t('adminOrders') : t('userOrder')}</DropdownMenuItem>

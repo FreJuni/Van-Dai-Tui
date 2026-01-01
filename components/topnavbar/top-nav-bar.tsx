@@ -31,7 +31,12 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
     const [searchValue, setSearchValue] = useState("");
 
     const handleGenerateSearchText = async (query: string) => {
-        if (!query.trim()) return;
+
+        if (!query.trim()) {
+            router.push('/search');
+            return;
+        };
+
         setIsSearching(true);
         setShowResults(true);
         try {
@@ -49,6 +54,7 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
         setSearchResults([]);
         setShowResults(false);
     }
+
 
     return (
         <header className='sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md'>
@@ -69,7 +75,7 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
                         e.preventDefault();
                         const formData = new FormData(e.currentTarget);
                         const query = formData.get('search');
-                        if (query) handleGenerateSearchText(query as string);
+                        handleGenerateSearchText(query as string);
                     }}
                     className='hidden md:flex relative w-1/3 lg:w-1/2 group'
                 >
