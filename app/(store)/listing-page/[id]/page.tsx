@@ -1,8 +1,10 @@
 import ImageCarousel from '@/components/listing-page/image-sliders';
 import ListingDetails from '@/components/listing-page/listing-details';
 import { db } from '@/server';
-import { products } from '@/server/schema';
-import { eq } from 'drizzle-orm';
+import { favouriteProduct, products } from '@/server/schema';
+import { BackButton } from '@/components/ui/back-button';
+import { auth } from '@/server/auth';
+import { and, eq } from 'drizzle-orm';
 import React, { Suspense } from 'react';
 
 type ListingPageParams = {
@@ -37,10 +39,9 @@ export async function generateStaticParams() {
 
 }
  
-import { BackButton } from '@/components/ui/back-button';
-
 const ListingPage = async ({params} : ListingPageParams) => {
     const productId = await params?.id;
+    const session = await auth();
 
     const data = await db.query.products.findFirst({
         where : eq(products.id, productId),
@@ -56,6 +57,17 @@ const ListingPage = async ({params} : ListingPageParams) => {
         }
     })
 
+    let isFavorite = false;
+    if (session?.user?.id && productId) {
+        const fav = await db.query.favouriteProduct.findFirst({
+            where: and(
+                eq(favouriteProduct.productId, productId),
+                eq(favouriteProduct.userId, session.user.id)
+            )
+        });
+        if (fav) isFavorite = true;
+    }
+
   return (
     <div className='max-w-7xl mx-auto px-4 md:px-10 lg:px-20 mt-10 md:mt-14'>
         <div className="mb-6">
@@ -67,7 +79,11 @@ const ListingPage = async ({params} : ListingPageParams) => {
             </div>
             <div className='flex-1 w-full'>
                 <Suspense fallback={<div>Loading...</div>}>
-                    <ListingDetails data={data!} />
+                    <ListingDetails 
+                        data={data!} 
+                        userId={session?.user?.id}
+                        isFavoriteInitial={isFavorite}
+                    />
                 </Suspense>
             </div>
         </div>

@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { getTranslations } from 'next-intl/server';
 import { Pagination } from '@/components/ui/pagination-custom';
+import ProductSearchInput from '@/components/dashboard/product-search-input';
 
 const ProductsPage = async ({ 
     searchParams 
@@ -16,8 +17,9 @@ const ProductsPage = async ({
     const params = await searchParams;
     const page = Number(params.page) || 1;
     const pageSize = 8;
+    const searchValue = params.q || '';
 
-    const { items: products, totalCount } = await fetchAllAdminProducts(page, pageSize);
+    const { items: products, totalCount } = await fetchAllAdminProducts(page, pageSize, searchValue as string);
     const t = await getTranslations('Product');
     
     const totalPages = Math.ceil(totalCount / pageSize);
@@ -59,6 +61,8 @@ const ProductsPage = async ({
                     </Button>
                 </Link>
             </div>
+
+            <ProductSearchInput />
 
             {/* List */}
             {productData && productData.length > 0 ? (

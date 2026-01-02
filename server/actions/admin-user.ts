@@ -8,15 +8,6 @@ import { revalidatePath } from "next/cache";
 import { actionClient } from "./safe-action";
 import { z } from "zod";
 
-const DeleteUserSchema = z.object({
-    userId: z.string()
-});
-
-const UpdateRoleSchema = z.object({
-    userId: z.string(),
-    role: z.enum(['user', 'admin'])
-});
-
 export const fetchAllUsers = async (page: number = 1, pageSize: number = 10, search?: string) => {
     const session = await auth();
     if (session?.user?.role !== 'admin') return { items: [], totalCount: 0 };
@@ -50,32 +41,47 @@ export const fetchAllUsers = async (page: number = 1, pageSize: number = 10, sea
     }
 };
 
-export const deleteUser = actionClient
-    .inputSchema(DeleteUserSchema)
-    .action(async ({ parsedInput: { userId } }) => {
-        const session = await auth();
-        if (session?.user?.role !== 'admin') return { error: "Unauthorized" };
+export const DeleteUserAction = async ({userId} : {userId : string}) => {
+     try {
+        if(!userId) return {error : 'User ID is required'}
 
-        try {
-            await db.delete(users).where(eq(users.id, userId));
-            revalidatePath('/dashboard/users');
-            return { success: "User deleted successfully" };
-        } catch (error) {
-            return { error: "Failed to delete user" };
+        const checkUser = await db.query.users.findFirst({
+            where : eq(users.id , userId)
+        })
+
+        if(!checkUser) return {error : 'User not found'}
+
+        await db.delete(users).where(eq(users.id , userId))
+
+        revalidatePath('/dashboard/users');
+        return {success : 'User deleted successfully'}
+
+    } catch (error) {
+        return {
+            error : 'Something went wrong'
         }
-    });
+    }
+}
 
-export const updateUserRole = actionClient
-    .inputSchema(UpdateRoleSchema)
-    .action(async ({ parsedInput: { userId, role } }) => {
-        const session = await auth();
-        if (session?.user?.role !== 'admin') return { error: "Unauthorized" };
+export const ChangeRoleAction = async ({userId} : {userId : string}) => {
+     try {
+        if(!userId) return {error : 'User ID is required'}
 
-        try {
-            await db.update(users).set({ role }).where(eq(users.id, userId));
-            revalidatePath('/dashboard/users');
-            return { success: `User role updated to ${role}` };
-        } catch (error) {
-            return { error: "Failed to update user role" };
+        const checkUser = await db.query.users.findFirst({
+            where : eq(users.id , userId)
+        })
+
+        if(!checkUser) return {error : 'User not found'}
+
+        await db.update(users).set({role : checkUser.role === 'admin' ? 'user' : 'admin'}).where(eq(users.id , userId))
+
+        revalidatePath('/dashboard/users');
+        return {success : 'Update role successfully'}
+
+    } catch (error) {
+        return {
+            error : 'Something went wrong'
         }
-    });
+    }
+}
+

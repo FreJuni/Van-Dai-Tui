@@ -97,7 +97,7 @@ export const generateSearchText = async (query: string): Promise<any> => {
                     required: ["variantName", "listingTitle", "listingPrice", "variantId", "productId"]
                   }
                 },
-                required: ["id", "name", "price", "type", "urlParams"]
+                required: ["id", "name", "price", "type", "urlParams", "productId"]
               }
             }
           },

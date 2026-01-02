@@ -11,6 +11,7 @@ import {
     ArrowDownRight
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 async function getStats() {
     const [productCount, userCount] = await Promise.all([
@@ -25,7 +26,7 @@ async function getStats() {
 }
 
 const StatCard = ({ title, value, icon: Icon, trend, trendValue, color }: any) => (
-    <div className="bg-white p-6 rounded-4xl border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 group">
+    <div className="bg-white p-6 rounded-4xl border cursor-pointer border-gray-100 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 group">
         <div className="flex justify-between items-start mb-4">
             <div className={cn(
                 "w-12 h-12 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 duration-500",
@@ -64,7 +65,8 @@ export default async function DashboardPage() {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                <Link href="/dashboard/products">
                 <StatCard 
                     title="Total Products" 
                     value={stats.products} 
@@ -73,6 +75,8 @@ export default async function DashboardPage() {
                     trendValue="12"
                     color="primary"
                 />
+                </Link>
+                <Link href="/dashboard/users">
                 <StatCard 
                     title="Total Users" 
                     value={stats.users} 
@@ -81,22 +85,7 @@ export default async function DashboardPage() {
                     trendValue="5"
                     color="blue"
                 />
-                <StatCard 
-                    title="Active Sessions" 
-                    value="42" 
-                    icon={Clock} 
-                    trend="down" 
-                    trendValue="2"
-                    color="purple"
-                />
-                <StatCard 
-                    title="Revenue (Mock)" 
-                    value="RM 12,450" 
-                    icon={TrendingUp} 
-                    trend="up" 
-                    trendValue="8"
-                    color="primary"
-                />
+                </Link>
             </div>
 
             {/* Recent Activity / Charts Placeholder */}

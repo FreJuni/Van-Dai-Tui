@@ -3,7 +3,7 @@
 import { actionClient } from "./safe-action";
 import { db } from "..";
 import { favouriteProduct, products, productVariant, productVariantColor, productVariantCondition, productVariantImage, productVariantOption, users } from "../schema";
-import { and, eq, sql, ilike, inArray, gte, lte, desc, asc, count } from "drizzle-orm";
+import { and, eq, sql, ilike, inArray, gte, lte, desc, asc, count, or } from "drizzle-orm";
 import bcrypt from 'bcrypt';
 import { DeleteProductSchema, ProductSchema } from "@/types/product-schema";
 import { revalidatePath } from "next/cache";
@@ -49,9 +49,15 @@ export const fetchProductByFullId = async (productId: string): Promise<ProductsW
     }
 }
 
-export const fetchAllAdminProducts = async (page: number = 1, pageSize: number = 8): Promise<{ items: any[], totalCount: number }> => {
+export const fetchAllAdminProducts = async (page: number = 1, pageSize: number = 8, searchValue: string = ''): Promise<{ items: any[], totalCount: number }> => {
     try {
         const offset = (page - 1) * pageSize;
+          const filters = searchValue ? 
+                    or(
+                        ilike(products.title, `%${searchValue}%`),
+                        ilike(products.description, `%${searchValue}%`)
+                    ) : undefined;
+        
 
         const [items, total] = await Promise.all([
             db.query.products.findMany({
@@ -70,6 +76,7 @@ export const fetchAllAdminProducts = async (page: number = 1, pageSize: number =
                         ]
                     }
                 },
+                where : filters,
                 orderBy: (products, { desc }) => [desc(products.createdAt)]
             }),
             db.select({ value: count() }).from(products)

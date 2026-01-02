@@ -43,6 +43,9 @@ export const AIConcierge = () => {
         }
     }, [response, isLoading]);
 
+    console.log(response);
+    
+
     return (
         <>
             {/* Floating Assistant Button */}
@@ -185,7 +188,7 @@ export const AIConcierge = () => {
                                                                 }
                                                                 const href = item.type === 'service' || item.type === 'repair'
                                                                     ? '/services'
-                                                                    : `/listing-page/${item.id}?${urlParams.toString()}`;
+                                                                    : `/listing-page/${item.productId}?${urlParams.toString()}`;
 
                                                                 return (
                                                                     <div 

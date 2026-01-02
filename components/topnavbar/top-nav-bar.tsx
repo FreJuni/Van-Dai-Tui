@@ -20,6 +20,7 @@ type TopNavBarProps = {
 
 import { Search } from 'lucide-react';
 import { QuerySearch } from '@/server/actions/search';
+import { CartDrawer } from '../cart/cart-drawer';
 
 const TopNavBar = ({ session }: TopNavBarProps) => {
     const t = useTranslations('NavBar')
@@ -54,7 +55,6 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
         setSearchResults([]);
         setShowResults(false);
     }
-
 
     return (
         <header className='sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md'>
@@ -258,9 +258,7 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
                                     <Link href={'/favourites'} className='cursor-pointer p-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-full transition-all'>
                                         <HeartIcon className='cursor-pointer' size={22} />
                                     </Link>
-                                    <button className='cursor-pointer p-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-full transition-all'>
-                                        <ShoppingCartIcon className='cursor-pointer' size={22} />
-                                    </button>
+                                    <CartDrawer user={session?.user!} />
                                 </>
                         }
                     </div>

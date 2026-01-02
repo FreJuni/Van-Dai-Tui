@@ -78,7 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <span className="text-white font-black text-lg italic">V</span>
             </div>
             <div className="flex flex-col group-data-[collapsible=icon]:hidden overflow-hidden">
-                <span className="font-black text-lg tracking-tighter text-gray-900 leading-none truncate">Volt<span className="text-primary">Admin</span></span>
+                <span className="font-black text-lg tracking-tighter text-gray-900 leading-none truncate">VANDAITUI<span className="text-primary">Admin</span></span>
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate">v1.0</span>
             </div>
         </div>
@@ -168,7 +168,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground rounded-xl py-6"
+                  className="cursor-pointer data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground rounded-xl py-6"
                 >
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gray-100 text-sidebar-primary-foreground shrink-0">
                     <User className="size-4 text-gray-500" />
@@ -181,8 +181,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
+                
                 side="top"
-                className="w-[--radix-popper-anchor-width]"
+                className="w-[15rem]"
               >
                 <DropdownMenuItem asChild>
                     <Link href="/" className="cursor-pointer gap-2">
