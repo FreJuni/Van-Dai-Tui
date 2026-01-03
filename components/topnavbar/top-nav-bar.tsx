@@ -2,14 +2,23 @@
 
 import React, { useState } from 'react'
 import { Input } from '../ui/input'
-import { useTranslations } from 'next-intl';
-import { HeartIcon, ShoppingCartIcon, UserIcon } from 'lucide-react';
+import { Locale, useTranslations } from 'next-intl';
+import { Globe, HeartIcon, ShoppingCartIcon, UserIcon } from 'lucide-react';
 import { Session } from 'next-auth';
 import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import UserInformation from '../user/user-info';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link, usePathname, useRouter } from '@/src/i18n/navigation';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 import { Loader2, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { priceFormatter } from '@/helper/priceFormatter';
@@ -21,15 +30,26 @@ type TopNavBarProps = {
 import { Search } from 'lucide-react';
 import { QuerySearch } from '@/server/actions/search';
 import { CartDrawer } from '../cart/cart-drawer';
+import { routing } from '@/src/i18n/routing';
+import { useParams } from 'next/navigation';
+
+const LANGUAGES = {
+    en: { name: 'English', flag: '🇺🇸', code: 'EN' },
+    mm: { name: 'မြန်မာ', flag: '🇲🇲', code: 'MM' }
+} as const;
 
 const TopNavBar = ({ session }: TopNavBarProps) => {
     const t = useTranslations('NavBar')
     const router = useRouter();
+    const pathname = usePathname();
     const isLoggedIn = session && !!session?.user;
     const [searchResults, setSearchResults] = useState<any | null>([]);
     const [isSearching, setIsSearching] = useState(false);
     const [showResults, setShowResults] = useState(false);
     const [searchValue, setSearchValue] = useState("");
+    const params = useParams();
+    const defaultValue = params.locale as Locale;
+
 
     const handleGenerateSearchText = async (query: string) => {
 
@@ -54,6 +74,11 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
         setSearchValue("");
         setSearchResults([]);
         setShowResults(false);
+    }
+
+    const onChangeLanguage = (value: string) => {
+        if (!value) return;
+        router.replace(pathname, { locale: value as Locale });
     }
 
     return (
@@ -241,6 +266,56 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
                     )}
                 </form>
 
+                <div className="flex items-center gap-2 md:gap-4">
+                    <div className='flex items-center'>
+                        <Select 
+                            value={defaultValue}
+                            onValueChange={onChangeLanguage}
+                        >
+                            <SelectTrigger className="w-auto gap-2.5 h-10 cursor-pointer bg-gray-50/50 hover:bg-gray-100 transition-all rounded-xl px-3 focus:ring-0 focus:ring-offset-0 group">
+                                <SelectValue asChild>
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex flex-col items-start leading-none gap-0.5">
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 group-hover:text-primary transition-colors">
+                                                {defaultValue}
+                                            </span>
+                                        </div>
+                                        <Globe size={14} className="text-gray-300 group-hover:text-primary transition-colors ml-0.5" />
+                                    </div>
+                                </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent position="popper" align="end" sideOffset={8} className="rounded-2xl border-gray-100 shadow-2xl min-w-[150px] p-2 z-60">
+                                <SelectGroup>
+                                    <SelectLabel className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 px-3 py-2">
+                                        {t("selectLanguage") || "Language"}
+                                    </SelectLabel>
+                                    {routing.locales.map((locale) => {
+                                        const lang = LANGUAGES[locale as keyof typeof LANGUAGES];
+                                        return (
+                                            <SelectItem 
+                                                key={locale} 
+                                                value={locale}
+                                                className="cursor-pointer py-3 px-3 focus:bg-primary/5 rounded-xl transition-colors mb-1 last:mb-0"
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <span className="text-xl leading-none filter drop-shadow-sm">{lang?.flag}</span>
+                                                    <div className="flex flex-col overflow-hidden">
+                                                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-900 truncate">
+                                                            {lang?.name}
+                                                        </span>
+                                                        <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tighter">
+                                                            {lang?.code}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </SelectItem>
+                                        );
+                                    })}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
                 {/* Action Icons & User Info */}
                 <div className='flex gap-4 md:gap-6 items-center'>
                     <div className="flex items-center gap-2 border-r border-gray-100 pr-4 md:pr-6 mr-1">
@@ -282,7 +357,8 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
                     }
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
     )
 }
 

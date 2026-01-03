@@ -8,7 +8,8 @@ import { priceFormatter } from '@/helper/priceFormatter';
 import { Button } from '../ui/button';
 import { useTranslations } from 'next-intl';
 import { Star, ShoppingCart, HeartIcon } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/src/i18n/navigation';
+
 import { cn } from '@/lib/utils';
 import { addFavourites } from '@/server/actions/favourite';
 import { toast, ToastContainer } from 'react-toastify';
@@ -29,7 +30,7 @@ type ShopProductCardProps = {
         condition: string,
         isFavourite: boolean
     },
-    user : {
+    user? : {
         id: string;
         name: string;
         address: string;
@@ -53,7 +54,12 @@ export const ShopProductCard = ({ data, user }: ShopProductCardProps) => {
         },
     })
 
-    const handleFavouriteToggle = async (userId : string, productId : string) => {
+    const handleFavouriteToggle = async (userId? : string, productId? : string) => {
+        if(!userId) {
+            toast.error("Please login to add to favourites");
+            return;
+        }
+        if(!productId) return;
         execute({userId, productId})
     }
 
@@ -64,14 +70,14 @@ export const ShopProductCard = ({ data, user }: ShopProductCardProps) => {
             {/* Image Section */}
             <div className="relative p-[6px] aspect-square overflow-hidden bg-gray-50">
                 {
-                    user.role !== 'admin' && (
+                    user?.role !== 'admin' && (
                           <button className={cn(
                         "absolute top-4 right-4 z-10 px-2.5 py-1 rounded-[6px] text-[10px] font-black uppercase tracking-wider text-white shadow-lg",
                         "bg-primary",
                         status === "executing" && "bg-primary/50 cursor-not-allowed"
                     )}
                     disabled={status === 'executing'}
-                    onClick={() => handleFavouriteToggle(user.id!, data.id)}
+                    onClick={() => handleFavouriteToggle(user?.id, data.id)}
                     >
                          <HeartIcon className={cn('cursor-pointer',
                             data.isFavourite ? 'fill-red-800' : '',

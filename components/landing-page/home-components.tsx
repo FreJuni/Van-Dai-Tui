@@ -1,11 +1,12 @@
 "use client";
 
+
 import React from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Smartphone, Laptop, Tablet, Cpu, Settings, Sparkles, Search } from 'lucide-react';
-import Link from 'next/link';
+import { Link, useRouter } from '@/src/i18n/navigation';
 import LandingPageImage from '@/public/images/Gemini_Generated_Image_97rh8b97rh8b97rh.png';
 
 export const Hero = () => {

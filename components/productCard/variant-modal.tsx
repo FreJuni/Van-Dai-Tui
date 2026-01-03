@@ -23,7 +23,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import { VariantsWithImagesTags } from "@/lib/infer-type";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { useRouter } from '@/src/i18n/navigation';
 import { Package } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 

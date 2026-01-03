@@ -2,16 +2,21 @@
 import { getOrder } from '@/server/actions/get-user-orders'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import Link from 'next/link'
+import { Link } from '@/src/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, MessageCircle, Truck, Package, MapPin, AlertCircle } from 'lucide-react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 import { getTranslations } from 'next-intl/server'
+import { auth } from '@/server/auth'
+import { redirect } from 'next/navigation'
 
 export default async function OrderDetailsPage({ params }: { params: Promise<{ orderId: string }> }) {
     const { orderId } = await params;
+    const session = await auth();
+    if (!session) redirect('/auth/login');
+
     const { success: order, error } = await getOrder(orderId);
     const t = await getTranslations('MyOrders');
 

@@ -3,7 +3,9 @@
 import { Search, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Input } from '../ui/input';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname } from '@/src/i18n/navigation';
+import { useSearchParams } from 'next/navigation';
+
 
 const UserSearchInput = () => {
     const searchParams = useSearchParams();

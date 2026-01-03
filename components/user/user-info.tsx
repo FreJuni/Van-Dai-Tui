@@ -9,10 +9,10 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Session } from "next-auth";
-import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useRouter } from '@/src/i18n/navigation';
+import { signOut } from "next-auth/react";
+
 
 type UserInformationProps = {
     children: React.ReactNode;
@@ -23,6 +23,10 @@ const UserInformation = ({ children, session }: UserInformationProps) => {
     const t = useTranslations("UserInfo")
     const user = session?.user;
     const router = useRouter();
+
+    const handleSignOut = async () => {
+        await signOut({redirectTo : "/"});
+    }
 
     return (
         <DropdownMenu modal={false}>
@@ -44,9 +48,7 @@ const UserInformation = ({ children, session }: UserInformationProps) => {
                     <DropdownMenuItem className="cursor-pointer select-none">{t('accountSettings')}</DropdownMenuItem>
                 </Link>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={async () => {
-                    await signOut({ callbackUrl: '/' });
-                }} className="cursor-pointer select-none">{t("logout")}</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer select-none">{t("logout")}</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )

@@ -2,7 +2,7 @@ import { parsePhoneNumber } from "libphonenumber-js";
 
 export const FILTERS = {
   category: ["All Categories","Phones", "Laptops"],
-  brand: ["Apple", "Samsung", "Dell", "HP", "Lenovo", "Asus"],
+  brand: ["Apple", "Samsung"],
   condition: ["New", "Used", "Refurbished"],
 };
 

@@ -12,7 +12,8 @@
         "viewAllResults": "View all results",
         "tryDifferentSearch": "Try searching for something else.",
         "itemsFound": "Items found",
-        "scanningInventory" : "Scanning inventory..."
+        "scanningInventory" : "Scanning inventory...",
+        "selectLanguage": "Language"
     },
     "UserInfo": {
         "profileSettings": "Profile settings",

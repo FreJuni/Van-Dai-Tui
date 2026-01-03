@@ -2,16 +2,21 @@
 import { getUserOrders } from '@/server/actions/get-user-orders'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { format } from 'date-fns'
 import { Package, ChevronRight, Calendar, ShoppingBag } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Pagination } from '@/components/ui/pagination-custom'
 import { getTranslations } from 'next-intl/server'
+import { Link } from '@/src/i18n/navigation'
+import { auth } from '@/server/auth'
+import { redirect } from 'next/navigation'
 
 export default async function MyOrdersPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
     const params = await searchParams;
+    const session = await auth();
+    if (!session) redirect('/auth/login');
+
     const page = typeof params.page === 'string' ? Number(params.page) : 1;
     const limit = 6; // Orders per page
     const t = await getTranslations('MyOrders');

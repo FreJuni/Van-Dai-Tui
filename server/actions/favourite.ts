@@ -8,11 +8,16 @@ import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 
+import { auth } from "../auth";
+
 export const addFavourites = actionClient
         .inputSchema(FavouriteSchema)
-        .action(async ({parsedInput : {productId, userId}}) : Promise<{success? : string, error? : string}> => {
+        .action(async ({parsedInput : {productId}}) : Promise<{success? : string, error? : string}> => {
             try {
-              if(!productId || !userId) return {error : "Something went wrong" };
+              const session = await auth();
+              const userId = session?.user?.id;
+              
+              if(!productId || !userId) return {error : "Please login to add to favorites" };
 
               const checkAlreadyAddToFav = await db.query.favouriteProduct.findFirst({
                 where : and(eq(favouriteProduct.productId, productId), eq(favouriteProduct.userId, userId))

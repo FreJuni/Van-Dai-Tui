@@ -1,7 +1,9 @@
 "use client";
 
+
 import React, { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from '@/src/i18n/navigation';
+import { useSearchParams } from 'next/navigation';
 import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -128,7 +130,7 @@ export const FilterBar = () => {
     
     <div className="flex flex-row items-center justify-between py-4 px-6">
          <DrawerClose>
-          <button className="text-white cursor-pointer select-none">Close</button>
+          <p className="text-white cursor-pointer select-none">Close</p>
         </DrawerClose>
         <DrawerTitle className="text-xl font-black tracking-tight text-white">Filters and Sort</DrawerTitle>
     </div>
@@ -432,7 +434,7 @@ export const FilterBar = () => {
         <Drawer direction="top"  open={isMoreOpen} onOpenChange={setIsMoreOpen}>
             <DrawerTrigger>
                 <p className={cn(
-                    "flex items-center gap-2 px-6 py-2 rounded-full border text-sm font-black uppercase tracking-widest transition-all cursor-pointer",
+                    "flex items-center gap-2 px-6 py-2 rounded-full border text-[11px] md:text-sm font-black uppercase tracking-widest transition-all cursor-pointer",
                     hasFilters ? "bg-primary border-primary text-white" : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50"
                 )}>
                     More filters

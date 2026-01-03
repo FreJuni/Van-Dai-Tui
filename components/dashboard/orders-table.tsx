@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import Link from 'next/link'
+import { Link, useRouter } from '@/src/i18n/navigation';
 import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

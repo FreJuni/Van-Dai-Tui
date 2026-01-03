@@ -29,8 +29,8 @@ import {
   SidebarRail,
   SidebarSeparator,
 } from "@/components/ui/sidebar"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { Link, useRouter, usePathname } from '@/src/i18n/navigation';
+
 import { cn } from "@/lib/utils"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { signOut } from "next-auth/react"

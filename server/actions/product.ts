@@ -3,7 +3,7 @@
 import { actionClient } from "./safe-action";
 import { db } from "..";
 import { favouriteProduct, products, productVariant, productVariantColor, productVariantCondition, productVariantImage, productVariantOption, users } from "../schema";
-import { and, eq, sql, ilike, inArray, gte, lte, desc, asc, count, or } from "drizzle-orm";
+import { and, eq, sql, ilike, inArray, gte, lte, desc, asc, count, or, exists } from "drizzle-orm";
 import bcrypt from 'bcrypt';
 import { DeleteProductSchema, ProductSchema } from "@/types/product-schema";
 import { revalidatePath } from "next/cache";
@@ -135,9 +135,38 @@ export const fetchAllProducts = async (params: {
             filters.push(inArray(products.brand, brand as any));
         }
 
-        // Price and Condition usually require joins or subqueries if we want to filter at DB level efficiently
-        // Since we are using db.query, we can filter on the main products table easily.
-        // For more complex variant-based filters, we might need to use db.select().from(products).leftJoin(...)
+        if (minPrice !== undefined || maxPrice !== undefined) {
+            filters.push(
+                exists(
+                    db.select()
+                        .from(productVariant)
+                        .innerJoin(productVariantOption, eq(productVariant.id, productVariantOption.productVariantId))
+                        .where(
+                            and(
+                                eq(productVariant.productId, products.id),
+                                minPrice !== undefined ? gte(productVariantOption.price, minPrice) : undefined,
+                                maxPrice !== undefined ? lte(productVariantOption.price, maxPrice) : undefined
+                            )
+                        )
+                )
+            );
+        }
+
+        if (condition && condition.length > 0) {
+            filters.push(
+                exists(
+                    db.select()
+                        .from(productVariant)
+                        .innerJoin(productVariantCondition, eq(productVariant.id, productVariantCondition.productVariantId))
+                        .where(
+                            and(
+                                eq(productVariant.productId, products.id),
+                                inArray(productVariantCondition.condition, condition as any)
+                            )
+                        )
+                )
+            );
+        }
 
         const allProducts = await db.query.products.findMany({
             where: filters.length > 0 ? and(...filters) : undefined,

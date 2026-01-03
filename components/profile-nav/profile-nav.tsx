@@ -3,8 +3,8 @@
 import { cn } from '@/lib/utils';
 import { Session } from 'next-auth';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Link, usePathname } from '@/src/i18n/navigation';
+
 import React, { useState } from 'react';
 
 type ProfileNavigationProps = {

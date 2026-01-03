@@ -11,7 +11,9 @@ import {
 } from "@/components/ui/carousel"
 import Image from 'next/image';
 import noImage from '../../public/images/no-image-available-icon-vector.jpg';
+import { useRouter, usePathname } from '@/src/i18n/navigation';
 import { useSearchParams } from 'next/navigation';
+
 import { ProductsWithVariants, VariantsWithImagesTags, VariantsWithProduct } from '@/lib/infer-type';
 import { cn } from '@/lib/utils';
 

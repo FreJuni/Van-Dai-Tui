@@ -16,14 +16,15 @@ import { priceFormatter } from "@/helper/priceFormatter";
 import Image from "next/image";
 import { Minus, Plus, ShoppingBag, Trash2, ShoppingCart, MessageCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
+import { Link, useRouter } from '@/src/i18n/navigation';
 import { OrderCreate } from '@/server/actions/order';
 
 
 type CartDrawerProps = {
-    user : {
+    user? : {
     id: string;
     name: string;
     address: string;
@@ -37,12 +38,16 @@ type CartDrawerProps = {
 export const CartDrawer = ({user} : CartDrawerProps) => {
     const t = useTranslations('Cart'); 
   const { cartItems, addToCart, removeOne, removeFromCart } = useCartStore();
-const ownCartItems = cartItems.filter(item => item.userId === user.id);
+const ownCartItems = cartItems.filter(item => item.userId === user?.id);
   
   const totalPrice = ownCartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const totalItems = ownCartItems.length;
 
   const handleWhatsAppCheckout = async () => {
+    if (!user) {
+        toast.error("Please login to place an order");
+        return;
+    }
     if (ownCartItems.length === 0) return;
 
     const adminPhone = process.env.ADMIN_PHONE_NUMBER!; 

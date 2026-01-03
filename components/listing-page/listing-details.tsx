@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { ProductsWithVariants } from '@/lib/infer-type';
 import { useTranslations } from 'next-intl';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname } from '@/src/i18n/navigation';
+import { useSearchParams } from 'next/navigation';
 import VariantPicker from './variant-picker';
 import { cn } from '@/lib/utils';
 import { priceFormatter } from '@/helper/priceFormatter';
@@ -74,10 +75,14 @@ const ListingDetails = ({data, userId, isFavoriteInitial = false}: ListingDetail
     };
 
     const handleAddToCart = () => {
+        if (!userId) {
+            toast.error("Please login to add to cart");
+            return;
+        }
         if (!currentVariant || !currentOption) return;
 
         addToCart({
-            userId : userId || '',
+            userId : userId,
             id: data.id,
             title: data.title,
             image: currentVariant.productVariantImage[0]?.image_url || '',

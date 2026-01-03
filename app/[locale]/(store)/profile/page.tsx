@@ -11,7 +11,7 @@ import { redirect } from 'next/navigation';
 const Profile = async () => {
     const session = await auth();
 
-    if(!session?.user) return redirect('/');
+    if(!session?.user) return redirect('/auth/login');
     if(session.user.role === 'admin') return redirect('/dashboard/settings/profile');
 
     return (

@@ -3,12 +3,12 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { useTranslations } from "next-intl";
-import { UploadDropzone } from "@/app/api/uploadthing/uploadthing";
 import z from "zod";
 import { VariantsSchema } from "@/types/variants-schema";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { UploadDropzone } from "@/app/[locale]/api/uploadthing/uploadthing";
 
 const VariantsImage = () => {
     const t = useTranslations('Product');

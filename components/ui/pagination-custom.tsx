@@ -1,8 +1,10 @@
 "use client";
 
 import React from 'react';
-import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { Link, useRouter, usePathname } from '@/src/i18n/navigation';
+import { useSearchParams } from 'next/navigation';
+
+
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';

@@ -8,10 +8,9 @@ import { Input } from '@/components/ui/input';
 import { generateSearchText } from '@/server/actions/gemini/generate-search-text';
 import { priceFormatter } from '@/helper/priceFormatter';
 import Image from 'next/image';
-import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
+import { Link, useRouter } from '@/src/i18n/navigation';
 import { useTranslations } from 'next-intl';
 
 export const AIConcierge = () => {
@@ -57,9 +56,9 @@ export const AIConcierge = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-8 cursor-pointer right-8 z-[100] w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-2xl shadow-primary/40 group overflow-hidden"
+                className="fixed bottom-8 cursor-pointer right-8 z-100 w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-2xl shadow-primary/40 group overflow-hidden"
             >
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-linear-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 <Sparkles className="text-white w-7 h-7 animate-pulse" />
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center">
                     <div className="w-2 h-2 bg-primary rounded-full animate-ping" />
@@ -69,7 +68,7 @@ export const AIConcierge = () => {
             {/* Concierge Modal Overlay */}
             <AnimatePresence>
                 {isOpen && (
-                    <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm">
+                    <div className="fixed inset-0 z-101 flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}

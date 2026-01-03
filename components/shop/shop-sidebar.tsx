@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from '@/src/i18n/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Checkbox } from "../ui/checkbox";
 import { cn } from "@/lib/utils";
 

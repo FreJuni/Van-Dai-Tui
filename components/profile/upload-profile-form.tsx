@@ -16,11 +16,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import { ImageUploadSchema } from '@/types/upload-profile-form-schema';
-import { UploadButton } from '@/app/api/uploadthing/uploadthing';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useAction } from 'next-safe-action/hooks';
 import { UploadImageAction } from '@/server/actions/upload-profile-image';
 import { toast, ToastContainer } from 'react-toastify';
+import { UploadButton } from '@/app/[locale]/api/uploadthing/uploadthing';
 
 type UploadProfileFormProps = {
     image: string
