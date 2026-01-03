@@ -29,6 +29,7 @@ export const generatePasswordResetToken = pgTable("generate_password_reset_token
 export const CategoryEnum = pgEnum('category', ['Phones', 'Tablets', 'Laptops', 'Others']);
 export const BrandEnum = pgEnum('brand', ['Apple', 'Samsung', 'Xiaomi',"Dell", "HP", "Lenovo", "Asus", "Others"]);
 export const ConditionEnum = pgEnum('condition', ['New', 'Used' , 'Refurbished']);
+export const StatusEnum = pgEnum('status', ['Pending', 'Shipped', 'Delivered', 'Completed', 'Cancelled']);
 
 export const products = pgTable('products', {
     id: text("id")
@@ -111,9 +112,78 @@ export const favouriteProduct = pgTable('favourite_products', {
     ]
 )
 
+export const orders = pgTable('orders', {
+    id : text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+    userId: text('userId')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+    quantity: integer('quantity').notNull(),
+    status: StatusEnum('status').default('Pending'),
+    totalPrice: real('totalPrice').notNull(),
+    createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow(),
+},
+    (orders) => [
+        {
+            compoundKey: primaryKey({
+                columns: [orders.userId, orders.id],
+            }),
+        },
+    ]
+)
+
+export const orderProducts = pgTable('order_products', {
+    id : text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+    orderId: text('orderId')
+    .notNull()
+    .references(() => orders.id, { onDelete: 'cascade' }),
+    productVariantId: text('productVariantId')
+    .notNull()
+    .references(() => productVariant.id, { onDelete: 'cascade' }),
+   productId: text('productId')
+    .notNull()
+    .references(() => products.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow(),
+},
+    (orderProducts) => [
+        {
+            compoundKey: primaryKey({
+                columns: [orderProducts.orderId, orderProducts.productId],
+            }),
+        },
+    ]
+)
+
 export const productsRelations = relations(products, ({ many, one }) => ({
     productVariant: many(productVariant),
-    favouriteProduct : many(favouriteProduct)
+    favouriteProduct : many(favouriteProduct),
+    orderProducts : many(orderProducts)
+}))
+
+export const ordersRelations = relations(orders, ({ many , one }) => ({
+    orderProducts : many(orderProducts),
+    user : one(users , {
+        fields : [orders.userId],
+        references : [users.id]
+    })
+}))
+
+export const orderProductsRelations = relations(orderProducts, ({ one }) => ({
+    orders : one(orders , {
+        fields : [orderProducts.orderId],
+        references : [orders.id]
+    }),
+    productVariant : one(productVariant , {
+        fields : [orderProducts.productVariantId],
+        references : [productVariant.id]
+    }),
+    products : one(products , {
+        fields : [orderProducts.productId],
+        references : [products.id]
+    })
 }))
 
 export const favouritesRelations = relations(favouriteProduct , ({many , one}) => ({
@@ -142,6 +212,7 @@ export const productVariantRelations = relations(productVariant, ({ many, one })
         references: [productVariantCondition.productVariantId]
     }),
     productVariantImage: many(productVariantImage),
+    orderProducts : many(orderProducts)
 }))
 
 export const productVariantConditionRelations = relations(productVariantCondition, ({ one }) => ({

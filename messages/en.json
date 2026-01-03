@@ -28,7 +28,10 @@
         "uploadImage": "Upload Image",
         "uploading": "Uploading ...",
         "userInfo": "User Details",
-        "saveChanges": "Save changes"
+        "saveChanges": "Save changes",
+        "updateYourPublicDisplayName": "Update your public display name",
+        "username": "Username",
+        "yourDisplayName": "Your display name"
     },
     "Auth": {
         "forgetPassword": "Forgot Password?",
@@ -37,13 +40,17 @@
         "submit": "Submit",
         "resetPassword": "Reset Password",
         "newPassword": "New Password",
-        "confirmNewPassword": "Confirm New Password"
+        "confirmNewPassword": "Confirm New Password",
+        "phoneNumber": "Phone Number",
+        "password": "Password",
+        "name": "Name"
     },
     "Account": {
         "accountSettings": "Account Settings",
         "phoneNumber": "Phone Number",
         "address": "Address",
-        "updateAccount": "Update Account"
+        "updateAccount": "Update Account",
+        "accountDescription": "Manage your contact information and account security."
     },
     "Product": {
         "addProduct": "Add Product",
@@ -78,16 +85,23 @@
         "addStorage": "Add Storage",
         "updateVariant": "Update variant",
         "category": "Category",
-        "brand": "Brand"
+        "brand": "Brand",
+        "generalInformation": "General Information",
+        "provideClearAndDescriptiveNameForYourProduct": "Provide a clear and descriptive name for your product.",
+        "explainTheFeaturesConditionAndDetailsOfWhatYouAreSelling": "Explain the features, condition, and details of what you're selling.",
+        "categorization": "Categorization"
     },
     "Favourites": {
         "yourFavourites": "Your Favourites",
         "yourFavouritesDescription": "Manage your favourite products.",
-        "addToFavourites": "Add to Favourites"
+        "addToFavourites": "Add to Favourites",
+        "noFavouriteProductsFound": "No favourite products found",
+        "noFavouriteProductsFoundDescription": "You haven't added any favourite products yet."
     },
     "ListingPage" : {
         "color": "Color",
-        "storage": "Storage"
+        "storage": "Storage",
+        "addToCart": "Add to Cart"
     },
     "Footer": {
         "projectName": "VANDAITUI",
@@ -115,7 +129,9 @@
         "shopNow": "Shop Now",
         "featuredCategories": "Featured Categories",
         "latestProducts": "Latest Arrivals",
-        "viewAll": "View All"
+        "viewAll": "View All",
+        "askVoltAI": "Ask Volt AI",
+        "smartSearch": "Smart Search"
     },
     "Shop": {
         "title": "Shop",
@@ -136,6 +152,177 @@
         "priceLowHigh": "Price: Low to High",
         "priceHighLow": "Price: High to High",
         "addToCart": "ADD TO CART",
-        "customize": "CUSTOMIZE"
+        "customize": "CUSTOMIZE",
+        "discoverLatestTechDeals": "Discover the latest tech deals on our store. Amazing prices, every day.",
+        "noProductsFound": "No products found",
+        "tryAdjustingYourFiltersOrSearchQuery": "Try adjusting your filters or search query."
+    },
+    "Dashboard": {
+        "manageProducts": "Manage Products",
+        "addEditAndOrganizeYourEntireProductCatalog": "Add, edit and organize your entire product catalog.",
+        "youHaveNotAddedAnyProductsYetStartByCreatingYourFirstListing": "You haven't added any products yet. Start by creating your first listing.",
+        "noProductsFound": "No products found",
+        "manageProduct": "Manage Product",
+        "createANewProductOrUpdateAnExistingOne": "Create a new product or update an existing one.",
+        "backToProducts": "Back to Products",
+        "accountSettings": "Account Settings",
+        "updateYourAddressAndContactInformation": "Update your address and contact information.",
+        "profileSettings": "Profile Settings",
+        "manageYourPublicInformationAndAvatar": "Manage your public information and avatar.",
+        "profileAvatar": "Profile Avatar",
+        "userManagement": "User Management",
+        "viewAndManageAllRegisteredCustomersAndTheirRoles": "View and manage all registered customers and their roles.",
+        "showing": "Showing",
+        "of": "of",
+        "users": "users",
+        "noUsersFound": "No users found",
+        "tryADifferentSearchTerm": "Try a different search term.",
+        "backToStore": "Back to Store",
+        "signOut": "Sign out",
+        "quickAdd": "Quick Add",
+        "confirmStatusChange": "Confirm Status Change",
+        "confirmStatusChangeDescription": "Are you sure you want to change the order status from {currentStatus} to {selectedStatus}? This action will update the order and may notify the customer.",
+        "noOrdersFound": "No orders found matching your filters.",
+        "overview": {
+            "title": "Dashboard Overview",
+            "subtitle": "Welcome back, Admin. Here's what's happening today."
+        },
+        "addProduct": "Add Product",
+        "stats": {
+            "totalRevenue": "Total Revenue",
+            "totalOrders": "Total Orders",
+            "completedOrders": "Completed Orders",
+            "pendingOrders": "Pending Orders",
+            "totalProducts": "Total Products",
+            "totalUsers": "Total Users"
+        },
+        "charts": {
+            "activityChartTitle": "Activity Chart",
+            "activityChartDescription": "Detailed analytics and sales charts will appear here as the store grows.",
+            "quickStatsTitle": "Quick Stats",
+            "revenue": "Revenue",
+            "completed": "Completed",
+            "pending": "Pending",
+            "products": "Products"
+        },
+        "orders": {
+            "title": "Orders Management",
+            "subtitle": "Manage all customer orders",
+            "totalOrders": "{count} total orders",
+            "filters": "Filters",
+            "filterDescription": "Filter and search orders",
+            "searchOrderId": "Search Order ID",
+            "searchPlaceholder": "Search by order ID...",
+            "status": "Status",
+            "allStatuses": "All Statuses",
+            "pending": "Pending",
+            "shipped": "Shipped",
+            "delivered": "Delivered",
+            "completed": "Completed",
+            "cancelled": "Cancelled",
+            "applyFilters": "Apply Filters",
+            "backToOrders": "Back to Orders",
+            "couldNotLoadOrder": "Could not load order",
+            "orderNotFound": "Order not found",
+            "order": "Order",
+            "placedOn": "Placed on",
+            "customerInformation": "Customer Information",
+            "items": "Items",
+            "noImage": "No Image",
+            "color": "Color",
+            "storage": "Storage",
+            "orderStatus": "Order Status",
+            "currentStatus": "Current Status",
+            "lastUpdated": "Last Updated",
+            "paymentSummary": "Payment Summary",
+            "subtotal": "Subtotal",
+            "shipping": "Shipping",
+            "cashOnDelivery": "Cash on Delivery",
+            "total": "Total",
+            "deliveryAddress": "Delivery Address",
+            "noAddressProvided": "No delivery address provided",
+            "orderId": "Order ID"
+        }
+    },
+    "MyOrders": {
+        "title": "My Orders",
+        "subtitle": "View and manage your order history.",
+        "description": "Your recent purchases.",
+        "noOrders": "No orders found",
+        "noOrdersDescription": "You haven't placed any orders yet. Start shopping to fill this page with amazing products!",
+        "startShopping": "Start Shopping",
+        "order": "Order",
+        "items": "items",
+        "item": "item",
+        "viewDetails": "View Details",
+        "placedOn": "Placed on",
+        "orderDetails": "Order Details",
+        "backToOrders": "Back to My Orders",
+        "couldNotLoadOrder": "Could not load order",
+        "orderNotFound": "Order not found",
+        "orderItems": "Order Items",
+        "color": "Color",
+        "storage": "Storage",
+        "noImage": "No Image",
+        "paymentSummary": "Payment Summary",
+        "subtotal": "Subtotal",
+        "shipping": "Shipping",
+        "cashOnDelivery": "Cash on Delivery",
+        "total": "Total",
+        "paymentMethod": "Payment Method",
+        "payWhenReceive": "Pay when you receive",
+        "deliveryAddress": "Delivery Address",
+        "noAddressProvided": "No delivery address provided",
+        "needHelp": "Need Help?",
+        "chatOnWhatsApp": "Chat on WhatsApp",
+        "errorLoadingOrders": "Error loading orders",
+        "totalAmount": "Total Amount",
+        "chatSupport": "Chat Support",
+        "returnToList": "Return to list",
+        "whatsappOrderHelp": "Hi, I need help with my order #{id}.",
+        "whatsappGeneralHelp": "Hi, I have a question about my orders.",
+        "orderStatus": "Order Status",
+        "lastUpdated": "Last Updated",
+        "currentStatus": "Current Status",
+        "paymentStatus": "Payment Status"
+
+    },
+    "Search" : {
+        "voltAssistant": "Volt Assistant",
+        "aiPoweredTechConcierge": "AI-Powered Tech Concierge",
+        "howCanIHelpYouToday": "How can I help you today?",
+        "trySomethingLike": "Try something like:",
+        "iHave2000RMAndLookingForPhone": "I have 2000RM and looking for a phone",
+        "myScreenIsBroken": "My screen is broken",
+        "or": "or",
+        "analyzingInventory": "Analyzing inventory...",
+        "professionalSupport": "Professional Support",
+        "voltAiCanMakeMistakes": "Volt AI can make mistakes. Check important information."
+    },
+    "Services" : {
+        "professionalHardwareServices": "Professional Hardware Services",
+        "restoreYourDeviceToPerfection": "Restore Your Device to Perfection",
+        "expertRepairsForSmartphonesTabletsAndLaptops": "Expert repairs for smartphones, tablets, and laptops. We specialize in precision hardware solutions with premium components and industry-leading turnaround times.",
+        "consultRepairNow": "Consult Repair Now",
+        "viewPricing": "View Pricing",
+        "ourCoreSpecialities": "Our Core Specialities",
+        "fromMinorFixesToMajorHardwareOverhaulsOurCertifiedTechniciansEnsureEveryRepairMeetsStrictQualityStandardsBeforeItLeavesOurLab": "From minor fixes to major hardware overhauls, our certified technicians ensure every Repair meets strict quality standards before it leaves our lab.",
+        "certifiedTechs": "Certified Techs",
+        "100QualityAssurance": "100% Quality Assurance",
+        "learnDetailProcess": "Learn detail process",
+        "needACustomQuote": "Need a Custom Quote?",
+        "chatWithOurHardwareExpertsTodayForAPreciseEstimateOnYourDeviceRepair": "Chat with our hardware experts today for a precise estimate on your device repair.",
+        "whatsappUs": "WhatsApp Us",
+        "checkFAQ": "Check FAQ"
+    },
+    "Cart": {
+        "shoppingCart": "Shopping Cart",
+        "items": "items",
+        "subtotal": "Subtotal",
+        "shippingAndTaxesCalculatedAtCheckout": "Shipping and taxes calculated at checkout.",
+        "orderViaWhatsApp": "Order via WhatsApp",
+        "yourCartIsEmpty": "Your cart is empty",
+        "looksLikeYouHaveNotAddedAnythingYet": "Looks like you haven't added anything yet.",
+        "startShopping": "Start Shopping"
     }
 }

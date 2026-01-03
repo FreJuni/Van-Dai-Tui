@@ -20,7 +20,7 @@ const ProductsPage = async ({
     const searchValue = params.q || '';
 
     const { items: products, totalCount } = await fetchAllAdminProducts(page, pageSize, searchValue as string);
-    const t = await getTranslations('Product');
+    const t = await getTranslations('Dashboard');
     
     const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -51,8 +51,8 @@ const ProductsPage = async ({
             {/* Header */}
             <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6'>
                 <div>
-                    <h1 className='text-4xl font-black text-gray-900 tracking-tighter'>Manage Products</h1>
-                    <p className='text-gray-500 mt-2 font-medium'>Add, edit and organize your entire product catalog.</p>
+                    <h1 className='text-4xl font-black text-gray-900 tracking-tighter'>{t('manageProducts')}</h1>
+                    <p className='text-gray-500 mt-2 font-medium'>{t('addEditAndOrganizeYourEntireProductCatalog')}</p>
                 </div>
                 <Link href="/dashboard/products/manage">
                     <Button className='gap-2 h-12 cursor-pointer px-8 font-bold shadow-lg shadow-primary/20 rounded-2xl'>
@@ -82,9 +82,9 @@ const ProductsPage = async ({
                     <div className='bg-primary/5 p-6 rounded-3xl mb-6'>
                         <Package className='w-12 h-12 text-primary/40' />
                     </div>
-                    <h3 className='text-2xl font-black text-gray-900'>No products found</h3>
+                    <h3 className='text-2xl font-black text-gray-900'>{t('noProductsFound')}</h3>
                     <p className='text-gray-400 max-w-xs text-center mt-2 font-medium'>
-                        You haven't added any products yet. Start by creating your first listing.
+                        {t('youHaveNotAddedAnyProductsYetStartByCreatingYourFirstListing')}
                     </p>
                     <Link href="/dashboard/products/manage" className='mt-8'>
                         <Button variant="outline" className='gap-2 h-11 cursor-pointer px-6 font-bold rounded-xl border-gray-200 hover:bg-gray-50'>

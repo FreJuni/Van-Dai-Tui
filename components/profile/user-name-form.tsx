@@ -61,7 +61,7 @@ const UserNameForm = ({ name, userId }: UserNameFormProps) => {
                     <User className="w-5 h-5 text-primary" />
                     <CardTitle className="text-xl font-bold">{t('userInfo')}</CardTitle>
                 </div>
-                <CardDescription>Update your public display name.</CardDescription>
+                <CardDescription>{t('updateYourPublicDisplayName')}</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
@@ -84,11 +84,11 @@ const UserNameForm = ({ name, userId }: UserNameFormProps) => {
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-sm font-semibold text-gray-700">Username</FormLabel>
+                                    <FormLabel className="text-sm font-semibold text-gray-700">{t('username')}</FormLabel>
                                     <FormControl>
                                         <Input 
                                             className='h-11 focus-visible:ring-primary bg-white' 
-                                            placeholder="Your display name"
+                                            placeholder={t('yourDisplayName')}
                                             type='text'  {...field} 
                                         />
                                     </FormControl>

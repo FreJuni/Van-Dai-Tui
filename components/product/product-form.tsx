@@ -164,7 +164,7 @@ const ProductForm = () => {
                         <div className="space-y-6">
                             <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
                                 <FileText className="w-4 h-4 text-primary" />
-                                <h3 className="font-semibold text-gray-900">General Information</h3>
+                                <h3 className="font-semibold text-gray-900">{t('generalInformation')}</h3>
                             </div>
                             
                             <FormField
@@ -183,7 +183,7 @@ const ProductForm = () => {
                                             />
                                         </FormControl>
                                         <FormDescription className="text-xs">
-                                            Provide a clear and descriptive name for your product.
+                                            {t('provideClearAndDescriptiveNameForYourProduct')}
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -202,7 +202,7 @@ const ProductForm = () => {
                                             <TipTap val={field.value} />
                                         </FormControl>
                                         <FormDescription className="text-xs">
-                                            Explain the features, condition, and details of what you're selling.
+                                            {t('explainTheFeaturesConditionAndDetailsOfWhatYouAreSelling')}
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -214,7 +214,7 @@ const ProductForm = () => {
                         <div className="space-y-6">
                             <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
                                 <Package className="w-4 h-4 text-primary" />
-                                <h3 className="font-semibold text-gray-900">Categorization</h3>
+                                <h3 className="font-semibold text-gray-900">{t('categorization')}</h3>
                             </div>
                             
                             <div className="space-y-8">

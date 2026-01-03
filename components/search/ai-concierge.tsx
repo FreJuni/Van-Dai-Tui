@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export const AIConcierge = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +21,7 @@ export const AIConcierge = () => {
     const [response, setResponse] = useState<any>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
+    const t = useTranslations('Search');
 
     const handleSearch = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
@@ -82,11 +84,11 @@ export const AIConcierge = () => {
                                     </div>
                                     <div>
                                         <h3 className="text-white font-bold text-lg text-balance">
-                                            Volt Assistant
+                                            {t('voltAssistant')}
                                         </h3>
                                         <p className="text-zinc-500 text-sm flex items-center gap-1.5">
                                             <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                                            AI-Powered Tech Concierge
+                                            {t('aiPoweredTechConcierge')}
                                         </p>
                                     </div>
                                 </div>
@@ -112,9 +114,9 @@ export const AIConcierge = () => {
                                                 <Sparkles className="text-primary w-10 h-10" />
                                             </div>
                                             <div className="space-y-2">
-                                                <h4 className="text-white font-bold text-2xl tracking-tight">How can I help you today?</h4>
+                                                <h4 className="text-white font-bold text-2xl tracking-tight">{t('howCanIHelpYouToday')}</h4>
                                                 <p className="text-zinc-400 max-w-xs mx-auto">
-                                                    Try something like: "I have 2000RM and looking for a phone" or "My screen is broken"
+                                                    {t('trySomethingLike')} {t('iHave2000RMAndLookingForPhone')} {t('or')} {t('myScreenIsBroken')}
                                                 </p>
                                             </div>
                                             
@@ -149,7 +151,7 @@ export const AIConcierge = () => {
                                                 <div className="flex items-center gap-2">
                                                     <Loader2 className="w-4 h-4 text-primary animate-spin" />
                                                     <span className="text-zinc-500 text-xs font-bold tracking-widest uppercase">
-                                                        Analyzing inventory...
+                                                        {t('analyzingInventory')}
                                                     </span>
                                                 </div>
                                                 <div className="space-y-2">
@@ -219,7 +221,7 @@ export const AIConcierge = () => {
                                                                                     {priceFormatter({ price: item.price })}
                                                                                 </p>
                                                                             ) : (
-                                                                                <p className="text-zinc-500 text-sm font-medium">Professional Support</p>
+                                                                                <p className="text-zinc-500 text-sm font-medium">{t('professionalSupport')}</p>
                                                                             )}
                                                                             <Link 
                                                                                 href={href}
@@ -269,7 +271,7 @@ export const AIConcierge = () => {
                                     </Button>
                                 </form>
                                 <p className="mt-3 text-center text-[10px] text-zinc-500 font-medium tracking-wider uppercase">
-                                    Volt AI can make mistakes. Check important information.
+                                    {t('voltAiCanMakeMistakes')}
                                 </p>
                             </div>
                         </motion.div>

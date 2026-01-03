@@ -11,7 +11,8 @@ import {
   Plus,
   User,
   LogOut,
-  ChevronUp
+  ChevronUp,
+  ShoppingCart
 } from "lucide-react"
 
 import {
@@ -33,6 +34,7 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { signOut } from "next-auth/react"
+import { useTranslations } from "next-intl"
 
 const data = {
   navMain: [
@@ -46,6 +48,11 @@ const data = {
       title: "Products",
       url: "/dashboard/products",
       icon: Package,
+    },
+    {
+      title: "Orders",
+      url: "/dashboard/orders",
+      icon: ShoppingCart,
     },
     {
       title: "Users",
@@ -67,7 +74,8 @@ const data = {
   ]
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
+  const t = useTranslations('Dashboard')
   const pathname = usePathname();
 
   return (
@@ -78,7 +86,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <span className="text-white font-black text-lg italic">V</span>
             </div>
             <div className="flex flex-col group-data-[collapsible=icon]:hidden overflow-hidden">
-                <span className="font-black text-lg tracking-tighter text-gray-900 leading-none truncate">VANDAITUI<span className="text-primary">Admin</span></span>
+                <span className="font-black text-lg tracking-tighter text-gray-900 leading-none truncate"><span className="text-primary">Admin</span></span>
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate">v1.0</span>
             </div>
         </div>
@@ -156,7 +164,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
                 <Link href="/dashboard/products/manage">
                     <Plus className="size-5 shrink-0" />
-                    <span className="group-data-[collapsible=icon]:hidden truncate">Quick Add</span>
+                    <span className="group-data-[collapsible=icon]:hidden truncate">{t('quickAdd')}</span>
                 </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -188,12 +196,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <DropdownMenuItem asChild>
                     <Link href="/" className="cursor-pointer gap-2">
                         <Store className="size-4" />
-                        <span>Back to Store</span>
+                        <span>{t('backToStore')}</span>
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer gap-2 text-red-500 focus:text-red-500 focus:bg-red-50">
                   <LogOut className="size-4" />
-                  <span>Sign out</span>
+                  <span>{t('signOut')}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -203,3 +211,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     </Sidebar>
   )
 }
+
+export default AppSidebar;

@@ -70,7 +70,7 @@ const AccountForm = ({ user }: AccountFormProps) => {
                     <Settings className="w-5 h-5 text-primary" />
                     <CardTitle className="text-xl font-bold">{t('accountSettings')}</CardTitle>
                 </div>
-                <CardDescription>Manage your contact information and account security.</CardDescription>
+                <CardDescription>{t('accountDescription')}</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>

@@ -19,6 +19,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { OrderCreate } from '@/server/actions/order';
 
 
 type CartDrawerProps = {
@@ -34,41 +35,65 @@ type CartDrawerProps = {
 
 
 export const CartDrawer = ({user} : CartDrawerProps) => {
+    const t = useTranslations('Cart'); 
   const { cartItems, addToCart, removeOne, removeFromCart } = useCartStore();
-//   const t = useTranslations('Cart'); 
 const ownCartItems = cartItems.filter(item => item.userId === user.id);
   
   const totalPrice = ownCartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const totalItems = ownCartItems.length;
 
-  const handleWhatsAppCheckout = () => {
+  const handleWhatsAppCheckout = async () => {
     if (ownCartItems.length === 0) return;
 
-    const adminPhone = "60183570581"; 
-    
-    let message = `*New Order Request*\n`;
-    message += `User name: ${user.name}\n`;
-    message += `User phone: ${user.phone_number}\n`;
-    message += `User address: ${user.address}\n`;
-    message += `---------------------\n`;
-    
-    ownCartItems.forEach((item, index) => {
-        message += `${index + 1}. ${item.title}\n`;
-        message += `   - Color: ${item.variant.variantName}\n`;
-        message += `   - Storage: ${item.variant.storage} GB\n`;
-        message += `   - Qty: ${item.quantity}\n`;
-        message += `   - Price: ${priceFormatter({price: item.price * item.quantity})}\n\n`;
-    });
-    
-    message += `---------------------\n`;
-    message += `*Total: ${priceFormatter({price: totalPrice})}*`;
+    const adminPhone = process.env.ADMIN_PHONE_NUMBER!; 
 
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${adminPhone}?text=${encodedMessage}`;
-    
-    if (typeof window !== 'undefined') {
-        window.open(whatsappUrl, '_blank');
+    //  userId: string;
+    // quantity: number;
+    // totalPrice: number;
+    // orderItems: {
+    //     productId: string;
+    //     productVariantId: string;
+    // }[];
+
+    // create order
+    const order = await OrderCreate({
+        userId: user.id,
+        quantity: totalItems,
+        totalPrice: totalPrice,
+        orderItems: ownCartItems.map(item => ({
+            productId: item.id,
+            productVariantId: item.variant.variantId,
+        }))
+    });
+
+    if(order.error) {
+        return;
     }
+
+    // Send message to admin
+    // let message = `*New Order Request*\n`;
+    // message += `User name: ${user.name}\n`;
+    // message += `User phone: ${user.phone_number}\n`;
+    // message += `User address: ${user.address}\n`;
+    // message += `---------------------\n`;
+    
+    // ownCartItems.forEach((item, index) => {
+    //     message += `${index + 1}. ${item.title}\n`;
+    //     message += `   - Color: ${item.variant.variantName}\n`;
+    //     message += `   - Storage: ${item.variant.storage} GB\n`;
+    //     message += `   - Qty: ${item.quantity}\n`;
+    //     message += `   - Price: ${priceFormatter({price: item.price * item.quantity})}\n\n`;
+    // });
+    
+    // message += `---------------------\n`;
+    // message += `*Total: ${priceFormatter({price: totalPrice})}*`;
+
+    // const encodedMessage = encodeURIComponent(message);
+    // const whatsappUrl = `https://wa.me/${adminPhone}?text=${encodedMessage}`;
+    
+    // if (typeof window !== 'undefined') {
+    //     window.open(whatsappUrl, '_blank');
+    // }
   };
 
   return (
@@ -87,7 +112,7 @@ const ownCartItems = cartItems.filter(item => item.userId === user.id);
         <SheetHeader className="px-1">
           <SheetTitle className="text-xl font-bold flex items-center gap-2">
             <ShoppingBag className="h-5 w-5" />
-            Shopping Cart <span className="text-sm font-normal text-gray-500">({totalItems} items)</span>
+            {t('shoppingCart')} <span className="text-sm font-normal text-gray-500">({totalItems} {t('items')})</span>
           </SheetTitle>
         </SheetHeader>
         
@@ -150,10 +175,10 @@ const ownCartItems = cartItems.filter(item => item.userId === user.id);
                     <Separator />
                     <div className="space-y-1.5">
                         <div className="flex items-center justify-between text-base">
-                            <span className="font-medium text-gray-600">Subtotal</span>
+                            <span className="font-medium text-gray-600">{t('subtotal')}</span>
                             <span className="font-bold text-gray-900">{priceFormatter({ price: totalPrice })}</span>
                         </div>
-                        <p className="text-xs text-gray-400">Shipping and taxes calculated at checkout.</p>
+                        <p className="text-xs text-gray-400">{t('shippingAndTaxesCalculatedAtCheckout')}</p>
                     </div>
                     <div className="grid gap-3">
                          <SheetClose asChild>
@@ -163,7 +188,7 @@ const ownCartItems = cartItems.filter(item => item.userId === user.id);
                                 size="lg"
                              >
                                 <MessageCircle size={20} />
-                                Order via WhatsApp
+                                {t('orderViaWhatsApp')}
                             </Button>
                          </SheetClose>
                     </div>
@@ -176,13 +201,13 @@ const ownCartItems = cartItems.filter(item => item.userId === user.id);
                     <ShoppingBag className="relative h-16 w-16 text-primary" />
                 </div>
                 <div className="text-center space-y-1">
-                    <h3 className="font-bold text-lg">Your cart is empty</h3>
-                    <p className="text-sm text-gray-500">Looks like you haven't added anything yet.</p>
+                    <h3 className="font-bold text-lg">{t('yourCartIsEmpty')}</h3>
+                    <p className="text-sm text-gray-500">{t('looksLikeYouHaveNotAddedAnythingYet')}</p>
                 </div>
                 <SheetClose asChild>
                    <Link href="/search">
                     <Button variant="outline" className="mt-4 rounded-xl cursor-pointer">
-                        Start Shopping
+                        {t('startShopping')}
                     </Button>
                    </Link>
                 </SheetClose>

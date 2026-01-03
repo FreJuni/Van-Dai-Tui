@@ -39,10 +39,11 @@ export const Pagination = ({ totalPages, currentPage }: PaginationProps) => {
                 pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
             }
         }
+        
         return pages;
     };
 
-    if (totalPages <= 1) return null;
+    // if (totalPages <= 1) return null;
 
     return (
         <nav className="flex items-center justify-center gap-2 py-12">

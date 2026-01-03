@@ -1,3 +1,5 @@
+import { parsePhoneNumber } from "libphonenumber-js";
+
 export const FILTERS = {
   category: ["All Categories","Phones", "Laptops"],
   brand: ["Apple", "Samsung", "Dell", "HP", "Lenovo", "Asus"],
@@ -10,3 +12,11 @@ export const SORT_OPTIONS = [
   { label: "Price: High to Low", value: "price-high" },
   { label: "Newest First", value: "newest" },
 ];
+
+export const phoneNumberFormat = (phone_number: string | number) => {
+  if (!phone_number) return "";
+
+  const phoneNumber = parsePhoneNumber(phone_number.toString());
+
+  return phoneNumber?.formatInternational();
+}

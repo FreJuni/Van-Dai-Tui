@@ -177,7 +177,7 @@ const ListingDetails = ({data, userId, isFavoriteInitial = false}: ListingDetail
                     onClick={handleAddToCart}
                     className="flex-1 cursor-pointer bg-black text-white h-14 rounded-2xl font-bold text-lg hover:bg-gray-900 transition-all shadow-lg active:scale-[0.98]"
                 >
-                    Add to Cart
+                    {t('addToCart')}
                 </button>
                 <button 
                     onClick={handleAddFavorite}
@@ -198,9 +198,6 @@ const ListingDetails = ({data, userId, isFavoriteInitial = false}: ListingDetail
                     />
                 </button>
             </div>
-            <p className="text-center text-xs font-medium text-gray-400">
-                Free shipping on all orders • 30-day money-back guarantee
-            </p>
         </div>
         
     </div>

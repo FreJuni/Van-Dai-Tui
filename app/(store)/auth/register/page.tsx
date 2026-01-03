@@ -15,9 +15,11 @@ import z from 'zod';
 import { ToastContainer, toast } from 'react-toastify';
 import { redirect, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 
 const RegisterPage = () => {
+    const t = useTranslations('Auth');
     const router = useRouter();
     const form = useForm<z.infer<typeof SignupSchema>>({
         resolver: zodResolver(SignupSchema),
@@ -77,7 +79,7 @@ const RegisterPage = () => {
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Name</FormLabel>
+                                    <FormLabel>{t('name')}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Name " {...field} />
                                     </FormControl>
@@ -91,7 +93,7 @@ const RegisterPage = () => {
                             name="address"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Address</FormLabel>
+                                    <FormLabel>{t('address')}</FormLabel>
                                     <FormControl>
                                         <Input type="text" placeholder="Address" {...field} />
                                     </FormControl>
@@ -105,9 +107,9 @@ const RegisterPage = () => {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>{t('password')}</FormLabel>
                                     <FormControl>
-                                        <Input type="password" placeholder="Password" {...field} />
+                                        <Input type="password" placeholder={t('password')} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -119,7 +121,7 @@ const RegisterPage = () => {
                             name="phone_number"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Phone number</FormLabel>
+                                    <FormLabel>{t('phoneNumber')}</FormLabel>
                                     <FormControl>
                                         <PhoneNumberInput field={field} />
                                         {/* <Input placeholder="Phone number" {...field} /> */}
@@ -129,7 +131,7 @@ const RegisterPage = () => {
                             )}
                         />
 
-                        <Button disabled={status === 'executing'} className={cn(' cursor-pointer', status === 'executing' && 'animate-pulse')} type="submit">Submit</Button>
+                        <Button disabled={status === 'executing'} className={cn(' cursor-pointer', status === 'executing' && 'animate-pulse')} type="submit">{t('submit')}</Button>
                     </form>
                 </Form>
             </AuthForm>

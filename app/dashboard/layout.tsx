@@ -1,7 +1,7 @@
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
-import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import AppSidebar from "@/components/dashboard/app-sidebar";
 
 export default async function DashboardLayout({
     children,

@@ -17,17 +17,15 @@ import { cn } from '@/lib/utils';
 import UserSearchInput from '@/components/dashboard/user-search-input';
 import ActionDropdown from '@/components/dashboard/action-dropdown';
 import { auth } from '@/server/auth';
+import { getTranslations } from 'next-intl/server';
 
-export default async function UsersPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
+const UsersPage = async ({searchParams}: {searchParams: Promise<{ [key: string]: string | string[] | undefined }>}) => {
   const params = await searchParams;
   const page = Number(params.page) || 1;
   const query = typeof params.q === 'string' ? params.q : '';
   const pageSize = 10;
   const session = await auth();
+  const t = await getTranslations('Dashboard');  
 
   const { items: users, totalCount } = await fetchAllUsers(
     page,
@@ -42,16 +40,16 @@ export default async function UsersPage({
       <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
         <div>
           <h1 className="text-4xl font-black tracking-tighter text-gray-900">
-            User Management
+            {t('userManagement')}
           </h1>
           <p className="mt-2 font-medium text-gray-500">
-            View and manage all registered customers and their roles.
+            {t('viewAndManageAllRegisteredCustomersAndTheirRoles')}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <div className="bg-primary/10 text-primary flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold">
             <Users size={16} />
-            {totalCount} Total Users
+            {totalCount} {t('stats.totalUsers')}
           </div>
         </div>
       </div>
@@ -158,9 +156,9 @@ export default async function UsersPage({
                       <div className="mb-4 rounded-3xl bg-gray-50 p-6">
                         <Users className="text-gray-300" size={32} />
                       </div>
-                      <p className="font-black text-gray-900">No users found</p>
+                      <p className="font-black text-gray-900">{t('noUsersFound')}</p>
                       <p className="mt-1 text-sm font-medium text-gray-400">
-                        Try a different search term.
+                        {t('tryADifferentSearchTerm')}
                       </p>
                     </div>
                   </td>
@@ -173,7 +171,7 @@ export default async function UsersPage({
         {/* Pagination Footer */}
         <div className="flex items-center justify-between border-t border-gray-50 p-8">
           <p className="text-xs font-bold tracking-widest text-gray-400 uppercase">
-            Showing {users.length} of {totalCount} users
+            {t('showing')} {users.length} {t('of')} {totalCount} {t('users')}
           </p>
           <Pagination totalPages={totalPages} currentPage={page} />
         </div>
@@ -181,3 +179,6 @@ export default async function UsersPage({
     </div>
   );
 }
+
+export default UsersPage;
+

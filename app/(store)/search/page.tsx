@@ -76,16 +76,16 @@ export default async function SearchPage({
                             {totalCount}+ {query ? `"${query}" results` : (params.category || 'Products')}
                         </h1>
                         <p className="text-sm font-bold text-gray-400">
-                            Discover the latest tech deals on our store. Amazing prices, every day.
+                            {t('discoverLatestTechDeals')}
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-2xl border border-gray-100">
+                    {/* <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-2xl border border-gray-100">
                         <span className="text-sm font-bold text-gray-600 mb-0.5">Save this search</span>
                         <div className="w-10 h-5 bg-gray-200 rounded-full relative cursor-pointer ring-4 ring-white shadow-inner">
                             <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-all shadow-md translate-x-5" />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Filter Bar */}
@@ -105,8 +105,8 @@ export default async function SearchPage({
                         </>
                     ) : (
                         <div className="text-center py-32 bg-gray-50 rounded-[3rem] border-4 border-white shadow-2xl">
-                            <h3 className="text-xl font-black text-gray-900 uppercase tracking-widest">No products found</h3>
-                            <p className="text-gray-400 font-bold mt-2">Try adjusting your filters or search query.</p>
+                            <h3 className="text-xl font-black text-gray-900 uppercase tracking-widest">{t('noProductsFound')}</h3>
+                            <p className="text-gray-400 font-bold mt-2">{t('tryAdjustingYourFiltersOrSearchQuery')}</p>
                         </div>
                     )}
                 </div>

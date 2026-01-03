@@ -54,7 +54,7 @@ export const Hero = () => {
                             className="h-14 px-8 text-base font-bold bg-white/5 border-zinc-800 text-white hover:bg-white/10 hover:text-white rounded-2xl cursor-pointer gap-2"
                         >
                             <Sparkles className="w-5 h-5 text-primary" />
-                            Ask Volt AI
+                            {t("askVoltAI")}
                         </Button>
                     </div>
 
@@ -83,7 +83,7 @@ export const Hero = () => {
                                 className="rounded-xl h-10 px-4 font-bold bg-primary hover:bg-primary/90 cursor-pointer"
                             >
                                 <Sparkles className="w-4 h-4 mr-2" />
-                                Smart Search
+                                {t("smartSearch")}
                             </Button>
                         </div>
                     </div>

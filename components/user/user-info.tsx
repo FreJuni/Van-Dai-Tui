@@ -34,7 +34,7 @@ const UserInformation = ({ children, session }: UserInformationProps) => {
                     <Link href={'/dashboard'}>
                         <DropdownMenuItem className="cursor-pointer select-none">{t("adminDashboard")}</DropdownMenuItem>
                     </Link>}
-                <Link href={'/order'}>
+                <Link href={'/my-orders'}>
                     <DropdownMenuItem className="cursor-pointer select-none">{user?.role === 'admin' ? t('adminOrders') : t('userOrder')}</DropdownMenuItem>
                 </Link>
                 <Link href={'/profile'}>

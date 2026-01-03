@@ -73,7 +73,7 @@ const LoginPage = () => {
                             name="phone_number"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Phone number</FormLabel>
+                                    <FormLabel>{t('phoneNumber')}</FormLabel>
                                     <FormControl>
                                         <PhoneNumberInput field={field} />
                                     </FormControl>
@@ -87,9 +87,9 @@ const LoginPage = () => {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>{t('password')}</FormLabel>
                                     <FormControl>
-                                        <Input type="password" placeholder="Password" {...field} />
+                                        <Input type="password" placeholder={t('password')} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -100,7 +100,7 @@ const LoginPage = () => {
                             <Link href="/auth/forgot-password" className='text-sm text-blue-600 hover:underline'>{t('forgetPassword')}</Link>
                         </div>
 
-                        <Button disabled={status === 'executing'} className={cn(' cursor-pointer', status === 'executing' && 'animate-pulse')} type="submit">Submit</Button>
+                        <Button disabled={status === 'executing'} className={cn(' cursor-pointer', status === 'executing' && 'animate-pulse')} type="submit">{t('submit')}</Button>
                     </form>
                 </Form>
             </AuthForm>

@@ -1,6 +1,3 @@
-"use client";
-
-import React from 'react';
 import { 
     Smartphone, 
     Battery, 
@@ -16,9 +13,11 @@ import {
     MapPin
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
 const services = [
     {
@@ -69,7 +68,9 @@ const stats = [
     { label: "Warranty Period", value: "6 Months", icon: Shield },
 ];
 
-export default function ServicesPage() {
+const ServicesPage = async () => {
+    const t = await getTranslations('Services');
+
     return (
         <div className="min-h-screen bg-slate-50/50">
             {/* Hero Section */}
@@ -82,21 +83,21 @@ export default function ServicesPage() {
                 <div className="max-w-7xl mx-auto px-6 text-center">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 text-primary text-sm font-semibold mb-6">
                         <Zap className="w-4 h-4 fill-primary" />
-                        <span>Professional Hardware Services</span>
+                        <span>{t('professionalHardwareServices')}</span>
                     </div>
                     <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight">
-                        Restore Your Device to <span className="text-primary italic">Perfection</span>
+                        {t('restoreYourDeviceToPerfection')}
                     </h1>
                     <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-                        Expert repairs for smartphones, tablets, and laptops. We specialize in precision hardware solutions with premium components and industry-leading turnaround times.
+                        {t('expertRepairsForSmartphonesTabletsAndLaptops')}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Button size="lg" className="rounded-full px-8 h-14 text-lg shadow-lg hover:shadow-xl transition-all gap-2">
                            <MessageSquare className="w-5 h-5" />
-                           Consult Repair Now
+                           {t('consultRepairNow')}
                         </Button>
                         <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-lg bg-white/50 backdrop-blur-sm">
-                            View Pricing
+                            {t('viewPricing')}
                         </Button>
                     </div>
                 </div>
@@ -123,9 +124,9 @@ export default function ServicesPage() {
             <section className="max-w-7xl mx-auto px-6 mb-24">
                 <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-6">
                     <div className="text-left max-w-xl">
-                        <h2 className="text-3xl font-bold text-slate-900 mb-4">Our Core Specialities</h2>
+                        <h2 className="text-3xl font-bold text-slate-900 mb-4">{t('ourCoreSpecialities')}</h2>
                         <p className="text-slate-600 leading-relaxed">
-                            From minor fixes to major hardware overhauls, our certified technicians ensure every Repair meets strict quality standards before it leaves our lab.
+                            {t('fromMinorFixesToMajorHardwareOverhaulsOurCertifiedTechniciansEnsureEveryRepairMeetsStrictQualityStandardsBeforeItLeavesOurLab')}
                         </p>
                     </div>
                     <div className="hidden lg:block">
@@ -134,8 +135,8 @@ export default function ServicesPage() {
                                 <ShieldCheck className="w-6 h-6" />
                             </div>
                             <div>
-                                <div className="font-bold text-slate-900">Certified Techs</div>
-                                <div className="text-xs text-slate-500">100% Quality Assurance</div>
+                                <div className="font-bold text-slate-900">{t('certifiedTechs')}</div>
+                                <div className="text-xs text-slate-500">{t('100QualityAssurance')}</div>
                             </div>
                         </div>
                     </div>
@@ -170,7 +171,7 @@ export default function ServicesPage() {
                                                 ))}
                                             </ul>
                                             <Button variant="ghost" className="p-0 h-auto hover:bg-transparent text-primary font-bold gap-2 group/btn">
-                                                Learn detail process
+                                                {t('learnDetailProcess')}
                                                 <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
                                             </Button>
                                         </div>
@@ -188,16 +189,16 @@ export default function ServicesPage() {
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400/20 rounded-full -ml-32 -mb-32 blur-3xl" />
                     
-                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Need a Custom Quote?</h2>
+                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">{t('needACustomQuote')}</h2>
                     <p className="text-primary-foreground/80 text-lg max-w-xl mx-auto mb-10 leading-relaxed font-medium">
-                        Chat with our hardware experts today for a precise estimate on your device repair.
+                        {t('chatWithOurHardwareExpertsTodayForAPreciseEstimateOnYourDeviceRepair')}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Button variant="secondary" size="lg" className="rounded-full px-10 h-14 text-lg font-bold">
-                            WhatsApp Us
+                            {t('whatsappUs')}
                         </Button>
                         <Button variant="ghost" size="lg" className="rounded-full px-10 h-14 text-lg text-white hover:bg-white/10 font-bold border border-white/20">
-                            Check FAQ
+                            {t('checkFAQ')}
                         </Button>
                     </div>
                 </div>
@@ -205,3 +206,6 @@ export default function ServicesPage() {
         </div>
     );
 }
+
+
+export default ServicesPage;
