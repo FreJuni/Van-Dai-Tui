@@ -1,7 +1,7 @@
 {
     "NavBar": {
         "projectName": "VANDAITUI",
-        "loginRegister": "အကောင့်ဝင်ရန် / အကောင့်ဖွင့်ရန်",
+        "loginRegister": "Login / Register",
         "search": "ရှာဖွေရန်",
         "addProduct": "ကုန်ပစ္စည်းအသစ်ထည့်ရန်",
         "searchPlaceholder": "ပစ္စည်းများရှာဖွေရန်...",
