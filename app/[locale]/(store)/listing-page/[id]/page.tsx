@@ -13,31 +13,7 @@ type ListingPageParams = {
     }
 }
 
-export async function generateStaticParams() {
-    const data = await db.query.products.findMany({
-    with : {
-        productVariant : {
-            with : {
-                productVariantOption : true,
-                productVariantColor : true,
-                productVariantImage : true,
-                productVariantCondition : true,
-            }
-        }
-    }
-  })
-
-  if(data) {
-    const arrIds = data.map(d => ({
-            id: d.id.toString()
-        }))
-
-    return arrIds;
-  }
-
-  return [];
-
-}
+export const dynamic = 'force-dynamic';
  
 const ListingPage = async ({params} : ListingPageParams) => {
     const productId = await params?.id;
