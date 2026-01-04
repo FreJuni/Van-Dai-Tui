@@ -1,6 +1,6 @@
 import ProductCard from '@/components/productCard/product-card';
 import {  fetchAllAdminProducts } from '@/server/actions/product';
-import React from 'react';
+import React, { Suspense } from 'react';
 import noImage from '@/public/images/no-image-available-icon-vector.jpg';
 import { Plus, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -62,7 +62,9 @@ const ProductsPage = async ({
                 </Link>
             </div>
 
-            <ProductSearchInput />
+            <Suspense fallback={null}>
+                <ProductSearchInput />
+            </Suspense>
 
             {/* List */}
             {productData && productData.length > 0 ? (
@@ -74,7 +76,9 @@ const ProductsPage = async ({
                     </div>
 
                     <div className="flex justify-center pt-8">
-                        <Pagination totalPages={totalPages} currentPage={page} />
+                        <Suspense fallback={null}>
+                           <Pagination totalPages={totalPages} currentPage={page} />
+                        </Suspense>
                     </div>
                 </>
             ) : (

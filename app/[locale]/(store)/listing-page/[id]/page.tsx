@@ -75,7 +75,9 @@ const ListingPage = async ({params} : ListingPageParams) => {
         </div>
         <div className='flex flex-col lg:flex-row gap-10 justify-center items-center lg:items-start'>
             <div className='w-full lg:w-auto flex justify-center'>
-                <ImageCarousel variant={data?.productVariant || []} />
+                <Suspense fallback={<div className="w-full h-[550px] bg-gray-100 animate-pulse rounded-xl" />}>
+                     <ImageCarousel variant={data?.productVariant || []} />
+                </Suspense>
             </div>
             <div className='flex-1 w-full'>
                 <Suspense fallback={<div>Loading...</div>}>

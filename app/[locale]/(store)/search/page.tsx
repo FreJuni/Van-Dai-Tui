@@ -5,6 +5,7 @@ import { FilterBar } from '@/components/shop/filter-bar';
 import { ShopProductCard } from '@/components/shop/shop-product-card';
 import { auth } from '@/server/auth';
 import { Pagination } from '@/components/ui/pagination-custom';
+import { Suspense } from 'react';
 
 export const dynamic = 'force-dynamic';
 
@@ -89,7 +90,9 @@ export default async function SearchPage({
                 </div>
 
                 {/* Filter Bar */}
-                <FilterBar />
+                <Suspense fallback={null}>
+                   <FilterBar />
+                </Suspense>
 
                 {/* Grid */}
                 <div>
@@ -101,7 +104,9 @@ export default async function SearchPage({
                                 ))}
                             </div>
                             
-                            <Pagination totalPages={totalPages} currentPage={page} />
+                            <Suspense fallback={null}>
+                                <Pagination totalPages={totalPages} currentPage={page} />
+                            </Suspense>
                         </>
                     ) : (
                         <div className="text-center py-32 bg-gray-50 rounded-[3rem] border-4 border-white shadow-2xl">
