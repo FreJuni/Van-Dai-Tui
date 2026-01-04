@@ -341,8 +341,8 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
                     {
                         isLoggedIn ?
                             <UserInformation session={session}>
-                                <Avatar className='w-11 h-11 border-2 border-white shadow-sm ring-1 ring-gray-100 cursor-pointer hover:ring-primary transition-all active:scale-95'>
-                                    <AvatarImage src={session?.user?.image!} alt={session?.user?.name!} />
+                                <Avatar className='w-11 h-11 border-2 object-cover border-white shadow-sm ring-1 ring-gray-100 cursor-pointer hover:ring-primary transition-all active:scale-95'>
+                                    <AvatarImage className='object-cover' src={session?.user?.image!} alt={session?.user?.name!} />
                                     <AvatarFallback className='bg-gray-50 font-bold text-gray-400 select-none'>
                                         {session?.user?.name!?.slice(0, 2).toUpperCase()}
                                     </AvatarFallback>

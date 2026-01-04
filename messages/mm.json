@@ -90,7 +90,8 @@
         "generalInformation": "အထွေထွေအချက်အလက်",
         "provideClearAndDescriptiveNameForYourProduct": "သင်၏ကုန်ပစ္စည်းအတွက် ရှင်းလင်းပြီး ပြည့်စုံသောအမည်ကို ပေးပါ။",
         "explainTheFeaturesConditionAndDetailsOfWhatYouAreSelling": "သင်ရောင်းချမည့်ပစ္စည်း၏ အင်္ဂါရပ်များ၊ အခြေအနေနှင့် အသေးစိတ်အချက်အလက်များကို ရှင်းပြပါ။",
-        "categorization": "အမျိုးအစားခွဲခြားခြင်း"
+        "categorization": "အမျိုးအစားခွဲခြားခြင်း",
+        "deleteVariant": "အမျိုးအစားပယ်ဖျက်ရန်"
     },
     "Favourites": {
         "yourFavourites": "သင်နှစ်သက်သောပစ္စည်းများ",
@@ -280,7 +281,7 @@
         "totalAmount": "စုစုပေါင်းကျသင့်ငွေ",
         "chatSupport": "စကားပြောအကူအညီ",
         "returnToList": "စာရင်းသို့ ပြန်သွားရန်",
-        "whatsappOrderHelp": "မင်္ဂလာပါ၊ ကျွန်ုပ်၏အမှာစာ #{id} အတွက် အကူအညီလိုချင်ပါတယ်။",
+        "whatsappOrderHelp": "မင်္ဂလာပါ၊ ကျွန်ုပ်၏အမှာစာ {id} အတွက် အကူအညီလိုချင်ပါတယ်။",
         "whatsappGeneralHelp": "မင်္ဂလာပါ၊ အမှာစာတွေနဲ့ ပတ်သက်ပြီး မေးချင်လို့ပါ။",
         "orderStatus": "အမှာစာ အခြေအနေ",
         "lastUpdated": "နောက်ဆုံး ပြင်ဆင်ချိန်",

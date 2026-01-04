@@ -12,7 +12,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from '@/src/i18n/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import TipTap from './tip-tap';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
@@ -43,6 +44,7 @@ const ProductForm = () => {
                 toast.error(data.error)
             }
             if (data?.success) {
+                router.push('/dashboard/products');
                 toast.success(data?.success);
             }
         }
@@ -76,7 +78,7 @@ const ProductForm = () => {
             const product = await fetchProduct(productId);
 
             if (product?.error) {
-                router.push('/add-product');
+                router.push('/dashboard/products/manage');
             }
 
             if (product?.product) {

@@ -14,7 +14,7 @@ import {
     CheckCircle2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
+import { Link } from '@/src/i18n/navigation';
 import { getTranslations } from 'next-intl/server';
 
 async function getStats() {

@@ -24,7 +24,7 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ o
     
     // Construct WhatsApp message with order details
     const whatsappMessage = order ? 
-        t('whatsappOrderHelp', { id: order.id.slice(-8).toUpperCase() }) : 
+        t('whatsappOrderHelp', { id: order.id }) : 
         t('whatsappGeneralHelp');
     
     const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
@@ -68,10 +68,10 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ o
                 </div>
                 <div className="hidden md:flex items-center gap-2">
                     <Button className="bg-green-600 hover:bg-green-700 text-white gap-2" asChild>
-                        <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                        <Link href={whatsappLink} target="_blank" rel="noopener noreferrer">
                             <MessageCircle className="w-4 h-4" />
                             {t('needHelp')}
-                        </a>
+                        </Link>
                     </Button>
                 </div>
             </div>

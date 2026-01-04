@@ -4,13 +4,13 @@ import {   fetchFavouriteProducts } from '@/server/actions/product';
 import React from 'react';
 import noImage from '@/public/images/no-image-available-icon-vector.jpg';
 import { Plus, Package, Search } from 'lucide-react';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { getTranslations } from 'next-intl/server';
 import { ShopProductCard } from '@/components/shop/shop-product-card';
 import { auth } from '@/server/auth';
 import { redirect } from 'next/navigation';
 import { Pagination } from '@/components/ui/pagination-custom';
+import { Link } from '@/src/i18n/navigation';
 
 const FavouritesPage = async ({ 
     searchParams 

@@ -3,11 +3,17 @@ import ProductForm from '@/components/product/product-form';
 import React from 'react'
 import { auth } from '@/server/auth';
 import { redirect } from 'next/navigation';
-import { ChevronLeft } from 'lucide-react';
-import Link from 'next/link';
+import { ChevronLeft, Plus } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import { Button } from '@/components/ui/button';
+import { Link } from '@/src/i18n/navigation';
+import AddProductBtn from '@/components/product/add-product-btn';
 
-const ManageProductPage = async () => {
+const ManageProductPage = async (props: {
+    searchParams: Promise<{ productId?: string }>
+}) => {
+    const searchParams = await props.searchParams;
+    const productId = searchParams.productId;
     const session = await auth();
     const t = await getTranslations('Dashboard');
 
@@ -18,7 +24,8 @@ const ManageProductPage = async () => {
     return (
         <div className="space-y-10">
             {/* Header */}
-            <div>
+            <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6'>
+                <div>
                 <Link 
                     href="/dashboard/products" 
                     className="inline-flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-primary transition-colors mb-4 group"
@@ -30,8 +37,11 @@ const ManageProductPage = async () => {
                 <p className="text-gray-500 mt-2 font-medium">{t('createANewProductOrUpdateAnExistingOne')}</p>
             </div>
 
+                <AddProductBtn />
+            </div>
+
             <div className='bg-white rounded-[3rem] border border-gray-100 shadow-sm'>
-                <ProductForm />
+                <ProductForm key={productId || 'new'} />
             </div>
         </div>
     )

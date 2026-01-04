@@ -18,7 +18,7 @@ import z from "zod";
 import { Button } from "../ui/button";
 import VariantsImage from "./variant-images";
 import { useAction } from "next-safe-action/hooks";
-import { addProductVariantAction } from "@/server/actions/product";
+import { addProductVariantAction, deleteVariant } from "@/server/actions/product";
 import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import { VariantsWithImagesTags } from "@/lib/infer-type";
@@ -59,7 +59,7 @@ const VariantModal = ({ children, productId, editMode, variant }: VariantsModalP
             form.reset();
             if (result?.data?.success) {
                 toast.success(result.data.success);
-                router.push(`/products`);
+                // router.push(`/dashboard/products`);
                 setOpen(false);
             }
             if (result?.data?.error) {
@@ -117,6 +117,19 @@ const VariantModal = ({ children, productId, editMode, variant }: VariantsModalP
             }));
         }
     }
+
+    const handleDeleteVariant = useAction(deleteVariant, {
+        onSuccess({ data }) {
+            setOpen(false);
+            form.reset();
+            if (data?.success) {
+                toast.success(data.success);
+            }
+            if (data?.error) {
+                toast.error(data.error);
+            }
+        }
+    })
 
     useEffect(() => {
         getOldData();
@@ -256,7 +269,19 @@ const VariantModal = ({ children, productId, editMode, variant }: VariantsModalP
                             <VariantsImage />
 
                             <div className=" w-full flex gap-2">
-                                <Button disabled={status === 'executing'} className={cn("cursor-pointer flex-1", status === 'executing' && 'animate-pulse opacity-50')} type="submit">{editMode ? t('updateVariant') : t('createProductVariants')}</Button>
+                                <Button  disabled={status === 'executing'} className={cn("cursor-pointer flex-1", status === 'executing' && 'animate-pulse opacity-50')} type="submit">{editMode ? t('updateVariant') : t('createProductVariants')}</Button>
+                                {
+                                    editMode && variant && (
+                                        <Button 
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleDeleteVariant.execute({
+                                                id: variant?.id!
+                                            })
+                                        }}
+                                         type="button" variant="destructive" disabled={status === 'executing'} className={cn("cursor-pointer flex-1", status === 'executing' && 'animate-pulse opacity-50')} >{t('deleteVariant')}</Button>
+                                    )
+                                }
                             </div>
                         </form>
                     </Form>

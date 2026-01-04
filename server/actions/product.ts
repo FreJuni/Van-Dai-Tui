@@ -10,6 +10,7 @@ import { revalidatePath } from "next/cache";
 import { VariantsSchema } from "@/types/variants-schema";
 import { auth } from "../auth";
 import { ProductsWithVariants, VariantsWithImagesTags } from "@/lib/infer-type";
+import z from "zod";
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -381,7 +382,7 @@ export const addProductVariantAction = actionClient
                     condition: condition,
                 })
 
-                revalidatePath('/products');
+                revalidatePath('/dashboard/products');
                 return {
                     success: "Product variant updated successfully.",
                 }
@@ -421,7 +422,7 @@ export const addProductVariantAction = actionClient
                     condition: condition,
                 })
 
-                revalidatePath('/products');
+                revalidatePath('/dashboard/products');
                 return {
                     success: "Product variant added successfully.",
                 }
@@ -431,5 +432,22 @@ export const addProductVariantAction = actionClient
             return {
                 error: "Something went wrong."
             }
+        }
+    })
+
+    export const deleteVariant = actionClient
+    .inputSchema(z.object({ id: z.string() }))
+    .action(async ({ parsedInput: { id } }) => {
+        try {
+            if(!id) return { error: "Something went wrong." }
+
+            await db.delete(productVariant).where(eq(productVariant.id, id));
+
+            revalidatePath('/dashboard/products');
+            return { success: "Variant delete successfully." };
+        } catch (error) {
+            console.log(error);
+            return { error: "Something went wrong." }
+
         }
     })

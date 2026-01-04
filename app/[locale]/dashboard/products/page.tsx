@@ -3,11 +3,11 @@ import {  fetchAllAdminProducts } from '@/server/actions/product';
 import React from 'react';
 import noImage from '@/public/images/no-image-available-icon-vector.jpg';
 import { Plus, Package } from 'lucide-react';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { getTranslations } from 'next-intl/server';
 import { Pagination } from '@/components/ui/pagination-custom';
 import ProductSearchInput from '@/components/dashboard/product-search-input';
+import { Link } from '@/src/i18n/navigation';
 
 const ProductsPage = async ({ 
     searchParams 

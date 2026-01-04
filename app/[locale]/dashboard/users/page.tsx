@@ -90,7 +90,7 @@ const UsersPage = async ({searchParams}: {searchParams: Promise<{ [key: string]:
                     <td className="border-b border-gray-50 px-8 py-6">
                       <div className="flex items-center gap-4">
                         <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
-                          <AvatarImage src={user.image!} />
+                          <AvatarImage className='object-cover' src={user.image!} />
                           <AvatarFallback className="bg-primary/5 text-primary text-xs font-black">
                             {user.name?.slice(0, 2).toUpperCase()}
                           </AvatarFallback>

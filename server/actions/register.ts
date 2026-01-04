@@ -6,6 +6,8 @@ import { db } from "..";
 import { eq } from "drizzle-orm";
 import { users } from "../schema";
 import bcrypt from 'bcrypt';
+import { signIn } from "../auth";
+import { revalidatePath } from "next/cache";
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -24,15 +26,24 @@ export const RegisterAction = actionClient
 
             const hashPassword = await bcrypt.hash(password, 10);
 
-            await db.insert(users).values({
+            const user = await db.insert(users).values({
                 name: name,
                 address: address,
                 password: hashPassword,
                 phone_number: phone_number
             }).returning();
 
+
+            await signIn('credentials', {
+                phone_number,
+                password,
+                redirect: false,
+            })
+            
+            revalidatePath('/')
             return {
-                success: "Register Account Successfully."
+                success: "Register Account Successfully.",
+                role: user?.[0].role
             }
         } catch (error) {
             return {

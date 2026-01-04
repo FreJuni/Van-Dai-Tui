@@ -11,7 +11,7 @@ import { LoginSchema } from '@/types/login-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useAction } from 'next-safe-action/hooks';
-import Link from 'next/link';
+import { Link, useRouter } from '@/src/i18n/navigation';
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import { toast, ToastContainer } from 'react-toastify';
@@ -19,6 +19,7 @@ import z from 'zod';
 
 const LoginPage = () => {
     const t = useTranslations('Auth');
+    const router = useRouter();
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
         defaultValues: {
@@ -35,13 +36,11 @@ const LoginPage = () => {
             if (data?.success) {
                 toast.success(data.success);
                 
-                if (typeof window !== 'undefined') {
-                    // Redirect based on role
-                    if (data.role === 'admin') {
-                        window.location.href = '/dashboard';
-                    } else {
-                        window.location.href = '/';
-                    }
+                // Redirect based on role using localized router
+                if (data.role === 'admin') {
+                    router.push('/dashboard');
+                } else {
+                    router.push('/');
                 }
             }
         }

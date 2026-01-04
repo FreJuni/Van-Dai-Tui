@@ -88,7 +88,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
             <CardContent className='p-5'>
                 <div className='flex justify-between items-start gap-2 mb-4'>
                     <CardTitle className='text-lg font-bold line-clamp-1 group-hover:text-primary transition-colors'>{data.title}</CardTitle>
-                    <p className='text-lg font-black text-primary'>{priceFormatter({ price: data.price })}</p>
+                    <p className='text-lg font-black text-primary'>{priceFormatter({ price: data?.variants[0]?.productVariantOption[0]?.price || 0 })}</p>
                 </div>
 
                 <div className='space-y-4'>
@@ -96,7 +96,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
                         <h4 className='text-xs font-bold uppercase tracking-wider text-gray-400 mb-2'>{t('variants')}</h4>
                         <div className='flex flex-wrap gap-2 items-center'>
                             {
-                                data?.variants?.length > 0 && data.variants.map((variant) => {
+                                data?.variants?.length > 0 && data?.variants?.map((variant) => {
                                     return (
                                         <VariantModal
                                             key={variant.id}

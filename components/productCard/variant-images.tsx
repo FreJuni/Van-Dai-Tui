@@ -8,7 +8,7 @@ import { VariantsSchema } from "@/types/variants-schema";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { UploadDropzone } from "@/app/[locale]/api/uploadthing/uploadthing";
+import { UploadDropzone } from "@/app/api/uploadthing/uploadthing";
 
 const VariantsImage = () => {
     const t = useTranslations('Product');
@@ -31,8 +31,8 @@ const VariantsImage = () => {
                         <FormControl>
                             <UploadDropzone
                                 endpoint="variantImageUploader"
-                                onBeforeUploadBegin={(files) => {
-                                    files?.forEach((file) => {
+                                onBeforeUploadBegin={(files: File[]) => {
+                                    files?.forEach((file: File) => {
                                         const image = URL.createObjectURL(file);
                                         append({
                                             url: image,
@@ -47,7 +47,7 @@ const VariantsImage = () => {
                                     const variantsImages = getValues('variantImages');
                                     variantsImages?.forEach((Img, index) => {
                                         if (Img.url.startsWith("blob:")) {
-                                            const image = data.find(img => img.name === Img.name) as any;
+                                            const image = data?.find(img => img.name === Img.name) as any;
                                             if (image) {
                                                 update(index, {
                                                     url: image.url,

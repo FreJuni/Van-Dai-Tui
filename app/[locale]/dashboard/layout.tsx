@@ -16,7 +16,7 @@ export default async function DashboardLayout({
     }
 
     return (
-        <SidebarProvider>
+        <SidebarProvider >
             <AppSidebar />
             <SidebarInset className="bg-gray-50/50 min-h-screen">
                 <div className="p-4 border-b border-gray-100 flex items-center gap-4 bg-white sticky top-0 z-10 w-full mb-4 md:hidden">

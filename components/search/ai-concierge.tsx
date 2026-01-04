@@ -44,9 +44,6 @@ export const AIConcierge = () => {
         }
     }, [response, isLoading]);
 
-    console.log(response);
-    
-
     return (
         <>
             {/* Floating Assistant Button */}

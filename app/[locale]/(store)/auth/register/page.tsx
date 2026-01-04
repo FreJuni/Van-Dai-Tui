@@ -48,7 +48,9 @@ const RegisterPage = () => {
                     theme: "light",
                 });
             }
-            router.push('/auth/login')
+            if (typeof window !== 'undefined') {
+                window.location.href = '/';
+            }
         }
     })
 

@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useAction } from 'next-safe-action/hooks';
 import { UploadImageAction } from '@/server/actions/upload-profile-image';
 import { toast, ToastContainer } from 'react-toastify';
-import { UploadButton } from '@/app/[locale]/api/uploadthing/uploadthing';
+import { UploadButton } from '@/app/api/uploadthing/uploadthing';
 
 type UploadProfileFormProps = {
     image: string
@@ -86,7 +86,7 @@ const UploadProfileForm = ({ image, name, userId }: UploadProfileFormProps) => {
                             onUploadBegin={() => {
                                 setIsUploading(true);
                             }}
-                            onUploadError={(error) => {
+                            onUploadError={(error: Error) => {
                                 form.setError('image', {
                                     type: 'validate',
                                     message: error.message
@@ -95,12 +95,14 @@ const UploadProfileForm = ({ image, name, userId }: UploadProfileFormProps) => {
                                 toast.error(error.message);
                             }}
                             onClientUploadComplete={(res) => {
-                                form.setValue('image', res[0].url!);
-                                form.handleSubmit(onSubmit)();
+                                if (res && res[0]) {
+                                    form.setValue('image', res[0].url!);
+                                    form.handleSubmit(onSubmit)();
+                                }
                                 setIsUploading(false);
                             }}
                             content={{
-                                button({ ready }) {
+                                button({ ready }: { ready: boolean }) {
                                     if (ready) return <div className='flex items-center justify-center'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-camera"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg></div>
                                     return <div className="animate-spin"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-loader-2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg></div>
                                 }

@@ -90,7 +90,8 @@
         "generalInformation": "General Information",
         "provideClearAndDescriptiveNameForYourProduct": "Provide a clear and descriptive name for your product.",
         "explainTheFeaturesConditionAndDetailsOfWhatYouAreSelling": "Explain the features, condition, and details of what you're selling.",
-        "categorization": "Categorization"
+        "categorization": "Categorization",
+        "deleteVariant": "Delete variant"
     },
     "Favourites": {
         "yourFavourites": "Your Favourites",
@@ -280,7 +281,7 @@
         "totalAmount": "Total Amount",
         "chatSupport": "Chat Support",
         "returnToList": "Return to list",
-        "whatsappOrderHelp": "Hi, I need help with my order #{id}.",
+        "whatsappOrderHelp": "Hi, I need help with my order {id}.",
         "whatsappGeneralHelp": "Hi, I have a question about my orders.",
         "orderStatus": "Order Status",
         "lastUpdated": "Last Updated",

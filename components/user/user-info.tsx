@@ -11,8 +11,7 @@ import {
 import { Session } from "next-auth";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from '@/src/i18n/navigation';
-import { signOut } from "next-auth/react";
-
+import { LogoutAction } from "@/server/actions/logout";
 
 type UserInformationProps = {
     children: React.ReactNode;
@@ -25,7 +24,7 @@ const UserInformation = ({ children, session }: UserInformationProps) => {
     const router = useRouter();
 
     const handleSignOut = async () => {
-        await signOut({redirectTo : "/"});
+        await LogoutAction();
     }
 
     return (
