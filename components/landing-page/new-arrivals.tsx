@@ -41,7 +41,7 @@ export const NewArrivals = async () => {
                     {products.map((product) => {
                          const mappedProduct = {
                             ...product,
-                            price: product.price || 0,
+                            price: product.productVariant?.[0]?.productVariantOption?.[0]?.price || 0,
                             brand: product.brand || undefined,
                             variants: product.productVariant,
                             image: product.productVariant?.[0]?.productVariantImage?.[0]?.image_url || "",
