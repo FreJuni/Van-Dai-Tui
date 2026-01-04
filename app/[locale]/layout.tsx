@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/src/i18n/routing";
 import { TopLoader } from "@/components/ui/top-loader";
+import { ToastProvider } from "@/components/providers/toast-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +46,7 @@ return (
       >
         <NextIntlClientProvider locale={locale}>
           <TopLoader />
+          <ToastProvider />
           {children}
         </NextIntlClientProvider>
       </body>

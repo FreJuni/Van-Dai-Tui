@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useForm } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import PhoneNumberInput from '../phoneInput/phone-number-input';
 import z from 'zod';
 import { useAction } from 'next-safe-action/hooks';
@@ -64,7 +64,7 @@ const AccountForm = ({ user }: AccountFormProps) => {
     }
 
     return (
-        <Card className="border-gray-100 shadow-sm bg-white/50 backdrop-blur-sm">
+        <Card className="border-gray-100 shadow-sm bg-white/50 backdrop-blur-sm h-full">
             <CardHeader>
                 <div className="flex items-center gap-2 mb-1">
                     <Settings className="w-5 h-5 text-primary" />
@@ -125,7 +125,6 @@ const AccountForm = ({ user }: AccountFormProps) => {
                     </form>
                 </Form>
             </CardContent>
-            <ToastContainer />
         </Card>
     )
 }

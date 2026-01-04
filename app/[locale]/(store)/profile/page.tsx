@@ -15,19 +15,24 @@ const Profile = async () => {
     if(session.user.role === 'admin') return redirect('/dashboard/settings/profile');
 
     return (
-        <div className='max-w-4xl mx-auto py-12 px-6'>
-            <div className="mb-6">
+        <div className='max-w-5xl mx-auto py-12 px-6'>
+            <div className="mb-8">
                 <BackButton />
+                <div className="mt-4">
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Profile Settings</h1>
+                    <p className="text-muted-foreground mt-1">Update your public profile information</p>
+                </div>
             </div>
-            <div className='flex flex-col md:flex-row gap-12 items-start justify-center'>
-                <div className='w-full md:w-auto flex justify-center'>
-                    <UploadProfileForm
+            
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-8 items-start'>
+                <div className='md:col-span-1 flex justify-center bg-white/50 backdrop-blur-sm p-6 rounded-lg border border-gray-100 shadow-sm'>
+                   <UploadProfileForm
                         name={session?.user?.name!}
                         image={session?.user?.image!}
                         userId={session?.user?.id!}
                     />
                 </div>
-                <div className='flex-1 w-full max-w-md'>
+                <div className='md:col-span-2 w-full'>
                     <UserNameForm
                         name={session?.user?.name!}
                         userId={session?.user?.id!}

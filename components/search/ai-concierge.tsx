@@ -53,10 +53,10 @@ export const AIConcierge = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-8 cursor-pointer right-8 z-100 w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-2xl shadow-primary/40 group overflow-hidden"
+                className="fixed bottom-6 cursor-pointer right-6 z-100 w-14 h-14 bg-primary rounded-full flex items-center justify-center shadow-2xl shadow-primary/40 group overflow-hidden"
             >
                 <div className="absolute inset-0 bg-linear-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <Sparkles className="text-white w-7 h-7 animate-pulse" />
+                <Sparkles className="text-white w-6 h-6 animate-pulse" />
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center">
                     <div className="w-2 h-2 bg-primary rounded-full animate-ping" />
                 </div>
@@ -76,7 +76,7 @@ export const AIConcierge = () => {
                             <div className="p-6 border-b border-white/5 flex items-center justify-between bg-zinc-900/50">
                                 <div className="flex items-center gap-4">
                                     <div className="w-12 h-12 bg-primary/20 rounded-2xl flex items-center justify-center border border-primary/30">
-                                        <Bot className="text-primary w-7 h-7" />
+                                        <Bot className="text-primary w-6 h-6" />
                                     </div>
                                     <div>
                                         <h3 className="text-white font-bold text-lg text-balance">

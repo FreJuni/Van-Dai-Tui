@@ -17,7 +17,7 @@ import { Button } from '../ui/button';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/src/i18n/navigation';
 import { deleteProduct } from '@/server/actions/product';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useAction } from 'next-safe-action/hooks';
 import { cn } from '@/lib/utils';
 import VariantModal from './variant-modal';
@@ -136,7 +136,6 @@ const ProductCard = ({ data }: ProductCardProps) => {
                         </Button>
                     </div>
                 </div>
-                <ToastContainer />
             </CardContent>
         </Card>
     )

@@ -12,7 +12,7 @@ export const UploadImageAction = actionClient
     .action(async ({ parsedInput: { userId, image } }) => {
 
         try {
-            if (!userId || !image) return { error: "Something went wrong." }
+            if (!userId || !image) return { error: "Missing user ID or image data." }
 
             const checkUserExistOrNot = await db.query.users.findFirst({
                 where: eq(users.id, userId)
@@ -30,8 +30,12 @@ export const UploadImageAction = actionClient
             }
 
         } catch (error) {
+            console.error("Error in UploadImageAction:", error);
+            if (error instanceof Error) {
+                return { error: error.message };
+            }
             return {
-                error: "Something went wrong."
+                error: "Something went wrong while uploading the image."
             }
         }
     })
@@ -41,7 +45,7 @@ export const UpdateUsernameAction = actionClient
     .action(async ({ parsedInput: { name, userId } }) => {
 
         try {
-            if (!name) return { error: "Something went wrong." }
+            if (!name) return { error: "Name is required." }
 
             const checkUserExistOrNot = await db.query.users.findFirst({
                 where: eq(users.id, userId)

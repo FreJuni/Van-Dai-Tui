@@ -12,7 +12,7 @@ import { useAction } from "next-safe-action/hooks";
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import z from 'zod';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { redirect, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
@@ -65,7 +65,7 @@ const RegisterPage = () => {
     }
 
     return (
-        <div className='flex justify-center items-center mt-20'>
+        <div className='flex justify-center items-center mt-10 md:mt-20 px-4'>
             <AuthForm
                 title="Sign up"
                 description="Sign up account to continue shopping."
@@ -137,7 +137,6 @@ const RegisterPage = () => {
                     </form>
                 </Form>
             </AuthForm>
-            <ToastContainer />
         </div>
     )
 }

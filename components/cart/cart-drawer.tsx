@@ -43,7 +43,7 @@ const ownCartItems = cartItems.filter(item => item.userId === user?.id);
   const totalPrice = ownCartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const totalItems = ownCartItems.length;
 
-  const handleWhatsAppCheckout = async () => {
+    const handleWhatsAppCheckout = async () => {
     if (!user) {
         toast.error("Please login to place an order");
         return;
@@ -51,14 +51,6 @@ const ownCartItems = cartItems.filter(item => item.userId === user?.id);
     if (ownCartItems.length === 0) return;
 
     const adminPhone = process.env.ADMIN_PHONE_NUMBER!; 
-
-    //  userId: string;
-    // quantity: number;
-    // totalPrice: number;
-    // orderItems: {
-    //     productId: string;
-    //     productVariantId: string;
-    // }[];
 
     // create order
     const order = await OrderCreate({
@@ -76,30 +68,31 @@ const ownCartItems = cartItems.filter(item => item.userId === user?.id);
     }
 
     // Send message to admin
-    // let message = `*New Order Request*\n`;
-    // message += `User name: ${user.name}\n`;
-    // message += `User phone: ${user.phone_number}\n`;
-    // message += `User address: ${user.address}\n`;
-    // message += `---------------------\n`;
+    let message = `*New Order Request*\n`;
+    message += `User name: ${user.name}\n`;
+    message += `User phone: ${user.phone_number}\n`;
+    message += `User address: ${user.address}\n`;
+    message += `---------------------\n`;
     
-    // ownCartItems.forEach((item, index) => {
-    //     message += `${index + 1}. ${item.title}\n`;
-    //     message += `   - Color: ${item.variant.variantName}\n`;
-    //     message += `   - Storage: ${item.variant.storage} GB\n`;
-    //     message += `   - Qty: ${item.quantity}\n`;
-    //     message += `   - Price: ${priceFormatter({price: item.price * item.quantity})}\n\n`;
-    // });
+    ownCartItems.forEach((item, index) => {
+        message += `${index + 1}. ${item.title}\n`;
+        message += `   - Color: ${item.variant.variantName}\n`;
+        message += `   - Storage: ${item.variant.storage} GB\n`;
+        message += `   - Qty: ${item.quantity}\n`;
+        message += `   - Price: ${priceFormatter({price: item.price * item.quantity})}\n\n`;
+    });
     
-    // message += `---------------------\n`;
-    // message += `*Total: ${priceFormatter({price: totalPrice})}*`;
+    message += `---------------------\n`;
+    message += `*Total: ${priceFormatter({price: totalPrice})}*`;
 
-    // const encodedMessage = encodeURIComponent(message);
-    // const whatsappUrl = `https://wa.me/${adminPhone}?text=${encodedMessage}`;
-    
-    // if (typeof window !== 'undefined') {
-    //     window.open(whatsappUrl, '_blank');
-    // }
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${adminPhone}?text=${encodedMessage}`;
+
+    if (typeof window !== 'undefined') {
+        window.open(whatsappUrl, '_blank');
+    }
   };
+
 
   return (
     <Sheet>
@@ -130,10 +123,12 @@ const ownCartItems = cartItems.filter(item => item.userId === user?.id);
                         <div className="relative aspect-square h-24 w-24 min-w-24 overflow-hidden rounded-xl border bg-gray-50">
                             {item.image && (
                                 <Image
+                                aria-describedby={item.id}
                                 src={item.image}
                                 alt={item.title}
                                 fill
                                 className="object-cover"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 />
                             )}
                         </div>

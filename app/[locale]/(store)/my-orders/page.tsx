@@ -74,7 +74,7 @@ export default async function MyOrdersPage({ searchParams }: { searchParams: Pro
                             <div className="flex justify-between items-start gap-2">
                                 <div className="space-y-1">
                                     <CardTitle className="text-base font-semibold">
-                                        {t('order')} {order.id}
+                                        #{order.id?.slice(0, 8).toString().toUpperCase()}
                                     </CardTitle>
                                     <div className="flex items-center text-xs text-muted-foreground gap-1">
                                         <Calendar className="w-3 h-3" />
@@ -84,9 +84,9 @@ export default async function MyOrdersPage({ searchParams }: { searchParams: Pro
                                 <StatusBadge status={order.status} />
                             </div>
                         </CardHeader>
-                        <CardContent className="pt-4 flex-grow space-y-4">
+                        <CardContent className="pt-4 grow space-y-4">
                              <div className="flex items-center gap-3">
-                                <div className="p-2 bg-primary/10 rounded-lg flex-shrink-0">
+                                <div className="p-2 bg-primary/10 rounded-lg shrink-0">
                                     <Package className="w-5 h-5 text-primary" />
                                 </div>
                                 <div className="overflow-hidden">

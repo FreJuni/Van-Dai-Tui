@@ -12,7 +12,7 @@ import { Link } from '@/src/i18n/navigation';
 
 import { cn } from '@/lib/utils';
 import { addFavourites } from '@/server/actions/favourite';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useAction } from 'next-safe-action/hooks';
 
 type ShopProductCardProps = {
@@ -139,7 +139,6 @@ export const ShopProductCard = ({ data, user }: ShopProductCardProps) => {
                     </Button> */}
                 </div>
             </CardContent>
-            <ToastContainer />
         </Card>
         </>
     );

@@ -169,13 +169,13 @@ export const getAdminOrder = async (orderId: string) => {
         },
         orderProducts: {
           with: {
-            productVariant: {
-              with: {
-                productVariantImage: true,
-                productVariantColor: true,
-                productVariantOption: true,
-              },
-            },
+           productVariant : {
+            with : {
+             productVariantImage : true,
+             productVariantColor : true,
+             productVariantOption : true,
+            }
+           },
             products: true,
           },
         },

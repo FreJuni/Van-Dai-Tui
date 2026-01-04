@@ -1,3 +1,5 @@
+
+
 import { parsePhoneNumber } from "libphonenumber-js";
 
 export const FILTERS = {
@@ -14,6 +16,8 @@ export const SORT_OPTIONS = [
 ];
 
 export const phoneNumberFormat = (phone_number: string | number) => {
+  console.log(phone_number);
+  
   if (!phone_number) return "";
 
   const phoneNumber = parsePhoneNumber(phone_number.toString());

@@ -2,7 +2,7 @@
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import z from 'zod';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
 import { UserNameSchema } from '@/types/upload-profile-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -107,7 +107,6 @@ const UserNameForm = ({ name, userId }: UserNameFormProps) => {
                     </form>
                 </Form>
             </CardContent>
-            <ToastContainer />
         </Card>
     )
 }

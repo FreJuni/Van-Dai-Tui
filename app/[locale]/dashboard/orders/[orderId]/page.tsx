@@ -1,7 +1,6 @@
 import { getAdminOrder } from '@/server/actions/get-admin-orders'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Package, User, Mail, Calendar, MapPin, AlertCircle } from 'lucide-react'
 import Image from 'next/image'
@@ -9,11 +8,15 @@ import { Separator } from '@/components/ui/separator'
 import { OrderStatusSelect } from '@/components/dashboard/order-status-select'
 import { phoneNumberFormat } from '@/lib/const'
 import { getTranslations } from 'next-intl/server'
+import { Link } from '@/src/i18n/navigation'
 
 export default async function AdminOrderDetailsPage({ params }: { params: Promise<{ orderId: string }> }) {
     const { orderId } = await params;
     const { success: order, error } = await getAdminOrder(orderId);
     const t = await getTranslations('Dashboard.orders');
+
+    console.log("order", order);
+    
 
     if (error || !order) {
         return (

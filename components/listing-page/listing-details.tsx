@@ -11,7 +11,7 @@ import { priceFormatter } from '@/helper/priceFormatter';
 import { addFavourites } from '@/server/actions/favourite';
 import { Heart } from 'lucide-react';
 import { useCartStore } from '@/lib/cart';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 type ListingDetailsProps = {
   data: ProductsWithVariants;
@@ -249,7 +249,6 @@ const ListingDetails = ({
           </div>
         </div>
       </div>
-      <ToastContainer />
     </>
   );
 };

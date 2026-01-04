@@ -1,5 +1,6 @@
 "use server";
 import AccountForm from '@/components/account/account-form';
+import ChangePasswordForm from '@/components/account/change-password-form';
 import { auth } from '@/server/auth';
 import React from 'react'
 
@@ -15,11 +16,23 @@ const AccountSettings = async () => {
     
 
     return (
-        <div className='max-w-md mx-auto py-12 px-6'>
-            <div className="mb-6">
+        <div className='max-w-5xl mx-auto py-12 px-6'>
+            <div className="mb-8">
                 <BackButton />
+                <div className="mt-4">
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Account Settings</h1>
+                    <p className="text-muted-foreground mt-1">Manage your security and contact details</p>
+                </div>
             </div>
-            <AccountForm user={session?.user!} />
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div className="h-full">
+                    <AccountForm user={session?.user!} />
+                </div>
+                <div className="h-full">
+                    <ChangePasswordForm />
+                </div>
+            </div>
         </div>
     )
 }

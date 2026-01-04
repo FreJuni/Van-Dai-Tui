@@ -18,6 +18,7 @@ import UserSearchInput from '@/components/dashboard/user-search-input';
 import ActionDropdown from '@/components/dashboard/action-dropdown';
 import { auth } from '@/server/auth';
 import { getTranslations } from 'next-intl/server';
+import { phoneNumberFormat } from '@/lib/const';
 
 const UsersPage = async ({searchParams}: {searchParams: Promise<{ [key: string]: string | string[] | undefined }>}) => {
   const params = await searchParams;
@@ -109,7 +110,7 @@ const UsersPage = async ({searchParams}: {searchParams: Promise<{ [key: string]:
                       <div className="space-y-1">
                         <div className="flex items-center gap-2 text-xs font-medium text-gray-600">
                           <Phone size={12} className="text-gray-400" />
-                          {user.phone_number || 'N/A'}
+                          {phoneNumberFormat(user.phone_number!) || 'N/A'}
                         </div>
                         {user.address && (
                           <p className="max-w-[200px] truncate text-[10px] text-gray-400">

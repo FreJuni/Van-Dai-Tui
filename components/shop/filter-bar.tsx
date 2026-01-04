@@ -1,7 +1,7 @@
 "use client";
 
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter, usePathname } from '@/src/i18n/navigation';
 import { useSearchParams } from 'next/navigation';
 import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
@@ -15,12 +15,12 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 
 import { FILTERS, SORT_OPTIONS } from "@/lib/const";
 
@@ -63,6 +63,203 @@ const FilterPopover = ({
   );
 };
 
+// Separate component for filter content to prevent re-renders
+const MoreFiltersContent = ({ 
+  searchParams, 
+  router, 
+  setIsMoreOpen,
+  localMinPrice,
+  setLocalMinPrice,
+  localMaxPrice,
+  setLocalMaxPrice,
+  setMinPrice,
+  setMaxPrice,
+  localSort,
+  setLocalSort,
+  localBrands,
+  setLocalBrands,
+  localConditions,
+  setLocalConditions,
+  clearAll,
+  handleApplyFilters
+}: any) => {
+  
+  const toggleBrand = (brand: string) => {
+    setLocalBrands((prev: string[]) => 
+      prev.includes(brand) 
+        ? prev.filter(b => b !== brand)
+        : [...prev, brand]
+    );
+  };
+
+  const toggleCondition = (condition: string) => {
+    setLocalConditions((prev: string[]) => 
+      prev.includes(condition) 
+        ? prev.filter(c => c !== condition)
+        : [...prev, condition]
+    );
+  };
+
+  return (
+    <div className="flex flex-col h-full">
+    
+    <div className="flex flex-row items-center justify-between py-4 px-6 border-b border-gray-100 shrink-0">
+         <SheetTitle className="text-xl font-black tracking-tight text-slate-900">Filters and Sort</SheetTitle>
+         <SheetClose>
+          <p className="text-slate-600 cursor-pointer select-none font-bold">Close</p>
+        </SheetClose>
+    </div>
+
+      <div className="flex-1 overflow-y-auto p-6 space-y-8">
+        {/* Sort Section */}
+        <section className="space-y-4">
+          <h3 className="text-sm font-black uppercase tracking-widest text-primary">Sort</h3>
+          <div className="space-y-3">
+            {SORT_OPTIONS.map((opt) => (
+              <label key={opt.value} className="flex items-center justify-between cursor-pointer group">
+                <span className={cn(
+                    "text-base font-bold transition-colors",
+                    localSort === opt.value ? "text-slate-900" : "text-slate-400 group-hover:text-slate-600"
+                )}>{opt.label}</span>
+                <div className={cn(
+                    "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
+                    localSort === opt.value ? "border-primary" : "border-gray-300"
+                )}>
+                    {localSort === opt.value && <div className="w-3 h-3 rounded-full bg-primary" />}
+                </div>
+                <input 
+                    type="radio" 
+                    name="sort-mobile" 
+                    className="hidden" 
+                    checked={localSort === opt.value}
+                    onChange={() => setLocalSort(opt.value)}
+                />
+              </label>
+            ))}
+          </div>
+        </section>
+
+        {/* Brand Section */}
+        <section className="space-y-4">
+          <h3 className="text-sm font-black uppercase tracking-widest text-primary">Brand</h3>
+          <div className="grid grid-cols-2 gap-3">
+            {FILTERS.brand.map((brand) => (
+              <label 
+                key={brand} 
+                className={cn(
+                    "flex items-center gap-3 p-4 rounded-2xl border-2 transition-all cursor-pointer",
+                    localBrands.includes(brand) 
+                        ? "bg-primary/10 border-primary text-slate-900" 
+                        : "bg-gray-50 border-gray-200 text-slate-600 hover:bg-gray-100"
+                )}
+              >
+                <Checkbox 
+                    checked={localBrands.includes(brand)}
+                    onClick={() => toggleBrand(brand)}
+                    className="border-gray-300 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                />
+                <span className="text-sm font-bold">{brand}</span>
+              </label>
+            ))}
+          </div>
+        </section>
+
+        {/* Condition Section */}
+        <section className="space-y-4">
+            <h3 className="text-sm font-black uppercase tracking-widest text-primary">Condition</h3>
+            <div className="grid grid-cols-2 gap-3">
+                {FILTERS.condition.map((cond) => (
+                    <label 
+                        key={cond} 
+                        className={cn(
+                            "flex items-center gap-3 p-4 rounded-2xl border-2 transition-all cursor-pointer",
+                            localConditions.includes(cond) 
+                                ? "bg-primary/10 border-primary text-slate-900" 
+                                : "bg-gray-50 border-gray-200 text-slate-600 hover:bg-gray-100"
+                        )}
+                    >
+                        <Checkbox 
+                            checked={localConditions.includes(cond)}
+                            onClick={() => toggleCondition(cond)}
+                            className="border-gray-300 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                        />
+                        <span className="text-sm font-bold">{cond}</span>
+                    </label>
+                ))}
+            </div>
+        </section>
+      </div>
+
+      {/* Price + Actions Footer - Always Visible */}
+      <div className="border-t border-gray-100 bg-white shrink-0">
+        {/* Price Section */}
+        <div className="p-6 pb-4 space-y-4">
+          <h3 className="text-sm font-black uppercase tracking-widest text-primary">Price Range</h3>
+          <div className="flex gap-4">
+            <div className="flex-1 space-y-2">
+                <div className="mb-1">
+                  <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Min (RM)</span>
+                </div>
+                <input 
+                    id="minPrice"
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="off"
+                    placeholder="0" 
+                    value={localMinPrice}
+                    onChange={(e) => {
+                        const value = e.target.value.replace(/[^0-9]/g, '');
+                        setLocalMinPrice(value);
+                    }}
+                    onBlur={() => setMinPrice(localMinPrice)}
+                    className="flex h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-3 py-2 text-base font-bold text-slate-900 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+            </div>
+            <div className="flex-1 space-y-2">
+                <div className="mb-1">
+                  <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Max (RM)</span>
+                </div>
+                <input 
+                    id="maxPrice"
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="off"
+                    placeholder="Any" 
+                    value={localMaxPrice}
+                    onChange={(e) => {
+                        const value = e.target.value.replace(/[^0-9]/g, '');
+                        setLocalMaxPrice(value);
+                    }}
+                    onBlur={() => setMaxPrice(localMaxPrice)}
+                    className="flex h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-3 py-2 text-base font-bold text-slate-900 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="px-6 pb-6 grid grid-cols-2 gap-4">
+          <Button 
+              className="rounded-2xl bg-gray-100 text-slate-700 hover:bg-gray-200 h-12 cursor-pointer select-none font-black uppercase tracking-widest"
+              onClick={clearAll}
+          >
+              Clear
+          </Button>
+          <Button 
+              className="rounded-2xl cursor-pointer select-none h-12 font-black uppercase tracking-widest bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20"
+              onClick={() => {
+                  handleApplyFilters();
+                  setIsMoreOpen(false);
+              }}
+          >
+              Apply
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const FilterBar = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -78,14 +275,18 @@ export const FilterBar = () => {
     setMounted(true);
   }, []);
 
-  // Price states for inputs
+  // Price states for inputs - use local state to prevent re-renders
   const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
   const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
+  
+  // Local input states to prevent re-renders while typing
+  const [localMinPrice, setLocalMinPrice] = useState(minPrice);
+  const [localMaxPrice, setLocalMaxPrice] = useState(maxPrice);
 
-  useEffect(() => {
-    setMinPrice(searchParams.get("minPrice") || "");
-    setMaxPrice(searchParams.get("maxPrice") || "");
-  }, [searchParams]);
+  // Local filter states - only apply when clicking Apply button
+  const [localSort, setLocalSort] = useState(searchParams.get("sort") || "relevance");
+  const [localBrands, setLocalBrands] = useState<string[]>(searchParams.get("brand")?.split(',').filter(Boolean) || []);
+  const [localConditions, setLocalConditions] = useState<string[]>(searchParams.get("condition")?.split(',').filter(Boolean) || []);
 
   if (!mounted) return (
     <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
@@ -105,12 +306,36 @@ export const FilterBar = () => {
     }
   };
 
-  const handlePriceApply = () => {
+  const handleApplyFilters = () => {
     const params = new URLSearchParams(searchParams.toString());
+    
+    // Apply sort
+    if (localSort && localSort !== 'relevance') {
+      params.set("sort", localSort);
+    } else {
+      params.delete("sort");
+    }
+    
+    // Apply brands
+    if (localBrands.length > 0) {
+      params.set("brand", localBrands.join(','));
+    } else {
+      params.delete("brand");
+    }
+    
+    // Apply conditions
+    if (localConditions.length > 0) {
+      params.set("condition", localConditions.join(','));
+    } else {
+      params.delete("condition");
+    }
+    
+    // Apply prices
     if (minPrice) params.set("minPrice", minPrice);
     else params.delete("minPrice");
     if (maxPrice) params.set("maxPrice", maxPrice);
     else params.delete("maxPrice");
+    
     setIsPriceOpen(false);
     router.push(`/search?${params.toString()}`);
   };
@@ -118,154 +343,18 @@ export const FilterBar = () => {
   const clearAll = () => {
     setMinPrice("");
     setMaxPrice("");
+    setLocalMinPrice("");
+    setLocalMaxPrice("");
+    setLocalSort("relevance");
+    setLocalBrands([]);
+    setLocalConditions([]);
+    setIsMoreOpen(false);
     router.push("/search");
   };
 
   const currentCategoryLabel = searchParams.get("category") || "Category";
   const currentSortLabel = SORT_OPTIONS.find(s => s.value === (searchParams.get("sort") || 'relevance'))?.label || "Sort";
   const hasFilters = Array.from(searchParams.keys()).filter(k => k !== 'q').length > 0;
-
-  const MoreFiltersContent = () => (
-    <div className="flex flex-col bg-[#121212] text-white h-[100vh]">
-    
-    <div className="flex flex-row items-center justify-between py-4 px-6">
-         <DrawerClose>
-          <p className="text-white cursor-pointer select-none">Close</p>
-        </DrawerClose>
-        <DrawerTitle className="text-xl font-black tracking-tight text-white">Filters and Sort</DrawerTitle>
-    </div>
-
-      <div className="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide">
-        {/* Sort Section */}
-        <section className="space-y-4">
-          <h3 className="text-sm font-black uppercase tracking-widest text-[#00A082]">Sort</h3>
-          <div className="space-y-3">
-            {SORT_OPTIONS.map((opt) => (
-              <label key={opt.value} className="flex items-center justify-between cursor-pointer group">
-                <span className={cn(
-                    "text-base font-bold transition-colors",
-                    (searchParams.get("sort") || 'relevance') === opt.value ? "text-white" : "text-gray-400 group-hover:text-gray-300"
-                )}>{opt.label}</span>
-                <div className={cn(
-                    "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
-                    (searchParams.get("sort") || 'relevance') === opt.value ? "border-[#00A082]" : "border-gray-700"
-                )}>
-                    {(searchParams.get("sort") || 'relevance') === opt.value && <div className="w-3 h-3 rounded-full bg-[#00A082]" />}
-                </div>
-                <input 
-                    type="radio" 
-                    name="sort-mobile" 
-                    className="hidden" 
-                    checked={(searchParams.get("sort") || 'relevance') === opt.value}
-                    onChange={() => {
-                        const params = new URLSearchParams(searchParams.toString());
-                        params.set("sort", opt.value);
-                        router.push(`/search?${params.toString()}`);
-                        setIsMoreOpen(false);
-                    }}
-                />
-              </label>
-            ))}
-          </div>
-        </section>
-
-        {/* Brand Section */}
-        <section className="space-y-4">
-          <h3 className="text-sm font-black uppercase tracking-widest text-[#00A082]">Brand</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {FILTERS.brand.map((brand) => (
-              <label 
-                key={brand} 
-                className={cn(
-                    "flex items-center gap-3 p-4 rounded-2xl border-2 transition-all cursor-pointer",
-                    searchParams.get("brand")?.split(',').includes(brand) 
-                        ? "bg-[#00A082]/10 border-[#00A082] text-white" 
-                        : "bg-white/5 border-transparent text-gray-400 hover:bg-white/10"
-                )}
-              >
-                <Checkbox 
-                    checked={searchParams.get("brand")?.split(',').includes(brand)}
-                    onChange={() => handleToggle("brand", brand)}
-                    className="border-gray-600 data-[state=checked]:bg-[#00A082] data-[state=checked]:border-[#00A082] bg-white/5"
-                />
-                <span className="text-sm font-bold">{brand}</span>
-              </label>
-            ))}
-          </div>
-        </section>
-
-        {/* Condition Section */}
-        <section className="space-y-4">
-            <h3 className="text-sm font-black uppercase tracking-widest text-[#00A082]">Condition</h3>
-            <div className="grid grid-cols-2 gap-3">
-                {FILTERS.condition.map((cond) => (
-                    <label 
-                        key={cond} 
-                        className={cn(
-                            "flex items-center gap-3 p-4 rounded-2xl border-2 transition-all cursor-pointer",
-                            searchParams.get("condition")?.split(',').includes(cond) 
-                                ? "bg-[#00A082]/10 border-[#00A082] text-white" 
-                                : "bg-white/5 border-transparent text-gray-400 hover:bg-white/10"
-                        )}
-                    >
-                        <Checkbox 
-                            checked={searchParams.get("condition")?.split(',').includes(cond)}
-                            onChange={() => handleToggle("condition", cond)}
-                            className="border-gray-600 data-[state=checked]:bg-[#00A082] data-[state=checked]:border-[#00A082] bg-white/5"
-                        />
-                        <span className="text-sm font-bold">{cond}</span>
-                    </label>
-                ))}
-            </div>
-        </section>
-
-        {/* Price Section */}
-        <section className="space-y-4">
-          <h3 className="text-sm font-black uppercase tracking-widest text-[#00A082]">Price</h3>
-          <div className="flex gap-4">
-            <div className="flex-1 space-y-2">
-                <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Min Price (USD)</span>
-                <Input 
-                    type="number" 
-                    placeholder="0" 
-                    value={minPrice}
-                    onChange={(e) => setMinPrice(e.target.value)}
-                    className="bg-white/5 border-white/10 rounded-2xl h-14 text-lg font-bold focus:ring-[#00A082] focus:border-[#00A082] text-white"
-                />
-            </div>
-            <div className="flex-1 space-y-2">
-                <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Max Price (USD)</span>
-                <Input 
-                    type="number" 
-                    placeholder="Any" 
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(e.target.value)}
-                    className="bg-white/5 border-white/10 rounded-2xl h-14 text-lg font-bold focus:ring-[#00A082] focus:border-[#00A082] text-white"
-                />
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div className="p-6 border-t border-white/5 grid grid-cols-2 gap-4 bg-[#121212]">
-        <Button 
-            className="rounded-2xl bg-white/5 text-white h-14 cursor-pointer select-none font-black uppercase tracking-widest"
-            onClick={clearAll}
-        >
-            Clear
-        </Button>
-        <Button 
-            className="rounded-2xl cursor-pointer select-none h-14 font-black uppercase tracking-widest bg-[#00A082] hover:bg-[#008A70] text-white shadow-lg shadow-[#00A082]/20"
-            onClick={() => {
-                handlePriceApply();
-                setIsMoreOpen(false);
-            }}
-        >
-            Apply
-        </Button>
-      </div>
-    </div>
-  );
 
   return (
     <div className="flex flex-col gap-4">
@@ -365,7 +454,8 @@ export const FilterBar = () => {
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Min</label>
-                        <Input 
+                        <Input
+                            id="minPrice"
                             type="number" 
                             placeholder="0"
                             value={minPrice}
@@ -385,7 +475,7 @@ export const FilterBar = () => {
                     </div>
                 </div>
              </div>
-             <Button className="w-full rounded-xl cursor-pointer font-bold bg-primary hover:bg-primary/90 text-white" onClick={handlePriceApply}>Apply Price</Button>
+             <Button className="w-full rounded-xl cursor-pointer font-bold bg-primary hover:bg-primary/90 text-white" onClick={handleApplyFilters}>Apply Price</Button>
           </div>
         </FilterPopover>
 
@@ -431,20 +521,38 @@ export const FilterBar = () => {
 
           <div className="h-6 w-px bg-gray-200 mx-1" />
 
-        <Drawer direction="top"  open={isMoreOpen} onOpenChange={setIsMoreOpen}>
-            <DrawerTrigger>
-                <p className={cn(
+        <Sheet open={isMoreOpen} onOpenChange={setIsMoreOpen}>
+            <SheetTrigger asChild>
+                <button className={cn(
                     "flex items-center gap-2 px-6 py-2 rounded-full border text-[11px] md:text-sm font-black uppercase tracking-widest transition-all cursor-pointer",
                     hasFilters ? "bg-primary border-primary text-white" : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50"
                 )}>
                     More filters
                     <SlidersHorizontal className="w-3.5 h-3.5" />
-                </p>
-            </DrawerTrigger>
-            <DrawerContent >
-                <MoreFiltersContent />
-            </DrawerContent>
-        </Drawer>
+                </button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="h-[100vh] p-0">
+                <MoreFiltersContent 
+                  searchParams={searchParams}
+                  router={router}
+                  setIsMoreOpen={setIsMoreOpen}
+                  localMinPrice={localMinPrice}
+                  setLocalMinPrice={setLocalMinPrice}
+                  localMaxPrice={localMaxPrice}
+                  setLocalMaxPrice={setLocalMaxPrice}
+                  setMinPrice={setMinPrice}
+                  setMaxPrice={setMaxPrice}
+                  localSort={localSort}
+                  setLocalSort={setLocalSort}
+                  localBrands={localBrands}
+                  setLocalBrands={setLocalBrands}
+                  localConditions={localConditions}
+                  setLocalConditions={setLocalConditions}
+                  clearAll={clearAll}
+                  handleApplyFilters={handleApplyFilters}
+                />
+            </SheetContent>
+        </Sheet>
       </div>
     </div>
   );

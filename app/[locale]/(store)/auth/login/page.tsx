@@ -14,7 +14,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { Link, useRouter } from '@/src/i18n/navigation';
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import z from 'zod';
 
 const LoginPage = () => {
@@ -37,11 +37,14 @@ const LoginPage = () => {
                 toast.success(data.success);
                 
                 // Redirect based on role using localized router
-                if (data.role === 'admin') {
-                    router.push('/dashboard');
-                } else {
-                    router.push('/');
+                if(typeof window !== 'undefined'){
+                    if (data.role === 'admin') {
+                        window.location.href = '/en/dashboard';
+                    } else {
+                        window.location.href = '/';
+                    }
                 }
+                
             }
         }
     })
@@ -55,7 +58,7 @@ const LoginPage = () => {
     }
 
     return (
-        <div className='flex justify-center items-center mt-20'>
+        <div className='flex justify-center items-center mt-10 md:mt-20 px-4'>
             <AuthForm
                 title="Sign in"
                 description="Login to your account."
@@ -103,7 +106,6 @@ const LoginPage = () => {
                     </form>
                 </Form>
             </AuthForm>
-            <ToastContainer />
         </div>
     )
 }

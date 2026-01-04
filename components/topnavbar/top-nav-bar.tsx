@@ -83,7 +83,7 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
 
     return (
         <header className='sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md'>
-            <div className=' px-6 md:px-12 lg:px-[100px] flex justify-between items-center py-4'>
+            <div className=' px-4 md:px-12 lg:px-[100px] flex justify-between items-center py-4'>
                 {/* Brand Logo */}
                 <Link href="/" className='flex items-center gap-2 group transition-all active:scale-95'>
                     <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
@@ -317,17 +317,18 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
                     </div>
 
                 {/* Action Icons & User Info */}
-                <div className='flex gap-4 md:gap-6 items-center'>
-                    <div className="flex items-center gap-2 border-r border-gray-100 pr-4 md:pr-6 mr-1">
+                <div className='flex gap-3 md:gap-6 items-center'>
+                    <div className="flex items-center gap-2 border-r border-gray-100 pr-3 md:pr-6 mr-1">
                         {
                             session?.user?.role === 'admin' ?
-                                <Link 
-                                    className='h-10 px-4 flex items-center gap-2 bg-primary/10 text-primary hover:bg-primary/20 transition-colors rounded-lg text-sm font-bold' 
-                                    href={'/add-product'}
-                                >
-                                    <span className="hidden lg:inline">{t("addProduct")}</span>
-                                    <span className="lg:hidden text-lg">+</span>
-                                </Link>
+                                <></>
+                                // <Link 
+                                //     className='h-10 px-4 flex items-center gap-2 bg-primary/10 text-primary hover:bg-primary/20 transition-colors rounded-lg text-sm font-bold' 
+                                //     href={'/add-product'}
+                                // >
+                                //     <span className="hidden lg:inline">{t("addProduct")}</span>
+                                //     <span className="lg:hidden text-lg">+</span>
+                                // </Link>
                                 :
                                 <>
                                     <Link href={'/favourites'} className='cursor-pointer p-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-full transition-all'>
@@ -350,8 +351,13 @@ const TopNavBar = ({ session }: TopNavBarProps) => {
                             </UserInformation>
                             :
                             <Link href={'/auth/register'}>
-                                <button className='cursor-pointer h-11 px-6 bg-gray-900 text-white rounded-xl font-bold text-sm tracking-wide shadow-sm hover:bg-black transition-all active:scale-95'>
+                                {/* Desktop Button */}
+                                <button className='hidden md:block cursor-pointer h-11 px-6 bg-gray-900 text-white rounded-xl font-bold text-sm tracking-wide shadow-sm hover:bg-black transition-all active:scale-95'>
                                     {t("loginRegister")}
+                                </button>
+                                {/* Mobile Button: Icon only */}
+                                <button className='md:hidden cursor-pointer h-10 w-10 flex items-center justify-center bg-gray-900 text-white rounded-xl shadow-sm hover:bg-black transition-all active:scale-95'>
+                                    <UserIcon size={20} />
                                 </button>
                             </Link>
                     }

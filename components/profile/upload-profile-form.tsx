@@ -19,7 +19,7 @@ import { ImageUploadSchema } from '@/types/upload-profile-form-schema';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useAction } from 'next-safe-action/hooks';
 import { UploadImageAction } from '@/server/actions/upload-profile-image';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { UploadButton } from '@/app/api/uploadthing/uploadthing';
 
 type UploadProfileFormProps = {
@@ -142,7 +142,6 @@ const UploadProfileForm = ({ image, name, userId }: UploadProfileFormProps) => {
                     )}
                 />
             </form>
-            <ToastContainer />
         </Form>
     )
 }

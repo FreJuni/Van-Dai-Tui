@@ -19,7 +19,7 @@ import { Button } from "../ui/button";
 import VariantsImage from "./variant-images";
 import { useAction } from "next-safe-action/hooks";
 import { addProductVariantAction, deleteVariant } from "@/server/actions/product";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { VariantsWithImagesTags } from "@/lib/infer-type";
 import { cn } from "@/lib/utils";

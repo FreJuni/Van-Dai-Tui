@@ -49,7 +49,7 @@ export const Hero = () => {
                             variant="outline" 
                             size="lg" 
                             onClick={() => {
-                                const aiBtn = document.querySelector('button.fixed.bottom-8.right-8') as HTMLButtonElement;
+                                const aiBtn = document.querySelector('button.fixed.bottom-6.right-6') as HTMLButtonElement;
                                 if (aiBtn) aiBtn.click();
                             }}
                             className="h-14 px-8 text-base font-bold bg-white/5 border-zinc-800 text-white hover:bg-white/10 hover:text-white rounded-2xl cursor-pointer gap-2"
@@ -70,7 +70,7 @@ export const Hero = () => {
                                 className="bg-transparent border-none focus:ring-0 text-white text-sm flex-1 px-3 outline-none"
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
-                                        const aiBtn = document.querySelector('button.fixed.bottom-8.right-8') as HTMLButtonElement;
+                                        const aiBtn = document.querySelector('button.fixed.bottom-6.right-6') as HTMLButtonElement;
                                         if (aiBtn) aiBtn.click();
                                     }
                                 }}
@@ -78,7 +78,7 @@ export const Hero = () => {
                             <Button 
                                 size="sm" 
                                 onClick={() => {
-                                    const aiBtn = document.querySelector('button.fixed.bottom-8.right-8') as HTMLButtonElement;
+                                    const aiBtn = document.querySelector('button.fixed.bottom-6.right-6') as HTMLButtonElement;
                                     if (aiBtn) aiBtn.click();
                                 }}
                                 className="rounded-xl h-10 px-4 font-bold bg-primary hover:bg-primary/90 cursor-pointer"
@@ -127,7 +127,7 @@ export const Categories = () => {
                     <div className="w-20 h-1.5 bg-primary mx-auto rounded-full" />
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+                <div className="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-8">
                     {categories.map((cat) => (
                         <Link 
                             key={cat.name} 

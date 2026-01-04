@@ -15,7 +15,7 @@ type AuthFormProps = {
 
 const AuthForm = ({ children, title, description, href, label, btnText, isProvider }: AuthFormProps) => {
     return (
-        <Card className=' w-[500px]'>
+        <Card className='w-full max-w-[500px] border-none shadow-none md:border md:shadow-sm'>
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
                 <CardDescription>{description}</CardDescription>

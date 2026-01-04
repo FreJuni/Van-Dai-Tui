@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { ChangeRoleAction, DeleteUserAction } from '@/server/actions/admin-user';
 interface ActionDropDownProps {
   children: React.ReactNode;
@@ -86,7 +86,6 @@ const ActionDropdown = ({
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <ToastContainer />
     </>
   );
 };

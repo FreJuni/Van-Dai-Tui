@@ -33,10 +33,12 @@ const UserInformation = ({ children, session }: UserInformationProps) => {
             <DropdownMenuContent align="end" className="w-40">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {user?.role === 'admin' &&
+                {user?.role === 'admin' ?
                     <Link href={'/dashboard'}>
                         <DropdownMenuItem className="cursor-pointer select-none">{t("adminDashboard")}</DropdownMenuItem>
-                    </Link>}
+                    </Link> 
+                    :
+                <>
                 <Link href={'/my-orders'}>
                     <DropdownMenuItem className="cursor-pointer select-none">{user?.role === 'admin' ? t('adminOrders') : t('userOrder')}</DropdownMenuItem>
                 </Link>
@@ -46,8 +48,12 @@ const UserInformation = ({ children, session }: UserInformationProps) => {
                 <Link href={'/account'}>
                     <DropdownMenuItem className="cursor-pointer select-none">{t('accountSettings')}</DropdownMenuItem>
                 </Link>
+                </>
+                }
                 <DropdownMenuSeparator />
+
                 <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer select-none">{t("logout")}</DropdownMenuItem>
+
             </DropdownMenuContent>
         </DropdownMenu>
     )

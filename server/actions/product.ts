@@ -341,7 +341,7 @@ export const addProductVariantAction = actionClient
     .inputSchema(VariantsSchema)
     .action(async ({ parsedInput: { id, editMode, productID, name, color, variantImages, storages, condition } }) => {
         try {
-            if (!productID || !name || !color || !variantImages || !storages || !condition) return { error: "Something went wrong." }
+            if (!productID || !name || !color || !variantImages || !storages || !condition) return { error: "Missing required fields." }
 
             if (editMode && id) {
                 const variant = await db.update(productVariant).set({
@@ -429,8 +429,12 @@ export const addProductVariantAction = actionClient
             }
 
         } catch (error) {
+            console.error("Error in addProductVariantAction:", error);
+            if (error instanceof Error) {
+                return { error: error.message };
+            }
             return {
-                error: "Something went wrong."
+                error: "Something went wrong while saving the variant."
             }
         }
     })

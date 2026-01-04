@@ -57,7 +57,7 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ o
                     </Button>
                     <div>
                         <h1 className="text-2xl font-bold flex items-center gap-2">
-                            {order.id}
+                            #{order.id?.slice(0, 8).toString().toUpperCase()}
                         </h1>
                         <p className="text-sm text-muted-foreground">
                             {t('placedOn')} {order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-US', {
