@@ -191,36 +191,36 @@ const VariantModal = ({ children, productId, editMode, variant }: VariantsModalP
                             />
 
                             <FormField
-                            control={form.control}
-                            name="condition"
-                            render={({ field }) => (
-                                <FormItem>
-                                <FormLabel className="flex items-center gap-2">
-                                    <Package className="w-4 h-4 text-gray-500" />
-                                    Condition
-                                </FormLabel>
+                                control={form.control}
+                                name="condition"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="flex items-center gap-2">
+                                            <Package className="w-4 h-4 text-gray-500" />
+                                            Condition
+                                        </FormLabel>
 
-                                <Select
-                                    defaultValue={field.value}
-                                    onValueChange={(value) => field.onChange(value)}
-                                >
-                                    <FormControl>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue  placeholder="Select a category" />
-                                    </SelectTrigger>
-                                    </FormControl>
-                                    <SelectGroup>
-                                    <SelectContent>
-                                    <SelectItem value="New">New</SelectItem>
-                                    <SelectItem value="Used">Used</SelectItem>
-                                    <SelectItem value="Refurbished">Refurbished</SelectItem>
-                                    </SelectContent>
-                                    </SelectGroup>
-                                </Select>
+                                        <Select
+                                            defaultValue={field.value}
+                                            onValueChange={(value) => field.onChange(value)}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder="Select a category" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectGroup>
+                                                <SelectContent>
+                                                    <SelectItem value="New">New</SelectItem>
+                                                    <SelectItem value="Used">Used</SelectItem>
+                                                    <SelectItem value="Refurbished">Refurbished</SelectItem>
+                                                </SelectContent>
+                                            </SelectGroup>
+                                        </Select>
 
-                                <FormMessage />
-                                </FormItem>
-                            )}
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
 
                             {fields.map((item, index) => {
@@ -265,21 +265,32 @@ const VariantModal = ({ children, productId, editMode, variant }: VariantsModalP
                             })}
                             <Button className="cursor-pointer" type="button" onClick={() => append({ storage: "", price: 0 })}>{t('addStorage')}</Button>
 
-
                             <VariantsImage />
 
                             <div className=" w-full flex gap-2">
-                                <Button  disabled={status === 'executing'} className={cn("cursor-pointer flex-1", status === 'executing' && 'animate-pulse opacity-50')} type="submit">{editMode ? t('updateVariant') : t('createProductVariants')}</Button>
+                                <Button
+                                    disabled={
+                                        status === 'executing' ||
+                                        !form.watch('name') ||
+                                        !form.watch('color') ||
+                                        !form.watch('condition') ||
+                                        form.watch('variantImages')?.length === 0 ||
+                                        form.watch('variantImages')?.some((image) => image.url.startsWith('blob:')) ||
+                                        form.watch('storages')?.length === 0 ||
+                                        form.watch('storages')?.some((item) => !item.storage || !item.price)
+                                    }
+                                    className={cn("cursor-pointer flex-1", status === 'executing' && 'animate-pulse opacity-50')} type="submit">{editMode ? t('updateVariant') : t('createProductVariants')}
+                                </Button>
                                 {
                                     editMode && variant && (
-                                        <Button 
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            handleDeleteVariant.execute({
-                                                id: variant?.id!
-                                            })
-                                        }}
-                                         type="button" variant="destructive" disabled={status === 'executing'} className={cn("cursor-pointer flex-1", status === 'executing' && 'animate-pulse opacity-50')} >{t('deleteVariant')}</Button>
+                                        <Button
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleDeleteVariant.execute({
+                                                    id: variant?.id!
+                                                })
+                                            }}
+                                            type="button" variant="destructive" disabled={status === 'executing'} className={cn("cursor-pointer flex-1", status === 'executing' && 'animate-pulse opacity-50')} >{t('deleteVariant')}</Button>
                                     )
                                 }
                             </div>

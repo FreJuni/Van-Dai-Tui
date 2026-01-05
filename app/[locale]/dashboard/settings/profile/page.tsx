@@ -1,4 +1,5 @@
 
+import ChangePasswordForm from '@/components/account/change-password-form';
 import UploadProfileForm from '@/components/profile/upload-profile-form';
 import UserNameForm from '@/components/profile/user-name-form';
 import { auth } from '@/server/auth';
@@ -36,6 +37,9 @@ const DashboardProfilePage = async () => {
                                 name={session?.user?.name!}
                                 userId={session?.user?.id!}
                             />
+                        </div>
+                        <div className="bg-gray-50/50 p-8 rounded-3xl border border-gray-50 mt-8">
+                             <ChangePasswordForm />
                         </div>
                     </div>
                 </div>
