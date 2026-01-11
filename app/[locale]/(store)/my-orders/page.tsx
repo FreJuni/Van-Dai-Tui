@@ -11,6 +11,14 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/src/i18n/navigation'
 import { auth } from '@/server/auth'
 import { redirect } from 'next/navigation'
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'My Orders',
+    robots: {
+        index: false,
+    },
+}
 
 export default async function MyOrdersPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
     const params = await searchParams;

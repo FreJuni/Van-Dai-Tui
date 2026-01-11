@@ -2,6 +2,11 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { ShieldCheck, Heart, Users, Sparkles, Wrench, Eye } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'About Us',
+};
 
 const AboutPage = () => {
     const t = useTranslations('AboutPage');

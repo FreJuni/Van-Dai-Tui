@@ -2,6 +2,12 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { ShieldCheck, RefreshCcw, Wrench, AlertTriangle, Clock, Shield, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Warranty Policy",
+  description: "Understand our warranty terms, return policies, and service agreements for repairs and product purchases.",
+};
 
 const WarrantyPolicyPage = () => {
     const t = useTranslations('PolicyPage');

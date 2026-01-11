@@ -3,6 +3,12 @@ import { getTranslations } from 'next-intl/server';
 import { ShoppingCart, MessageCircle, Package, CheckCircle, Search, FileText, Wrench, Shield, Phone } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Link } from '@/src/i18n/navigation';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "How It Works",
+  description: "Learn about our simple process for buying devices and getting repairs. Shop, order, and track with ease.",
+};
 
 const HowItWorksPage = async () => {
     const t = await getTranslations('HowItWorksPage');
