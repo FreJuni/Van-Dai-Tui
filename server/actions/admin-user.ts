@@ -7,6 +7,7 @@ import { auth } from "../auth";
 import { revalidatePath } from "next/cache";
 import { actionClient } from "./safe-action";
 import { z } from "zod";
+import bcrypt from 'bcrypt';
 
 export const fetchAllUsers = async (page: number = 1, pageSize: number = 10, search?: string) => {
     const session = await auth();
@@ -85,3 +86,29 @@ export const ChangeRoleAction = async ({userId} : {userId : string}) => {
     }
 }
 
+
+export const AdminResetPasswordAction = async ({ userId, password }: { userId: string, password?: string }) => {
+    try {
+        if (!userId) return { error: 'User ID is required' }
+        if (!password) return { error: 'Password is required' }
+        if (password.length < 6) return { error: "Password must be at least 6 characters" }
+
+        const checkUser = await db.query.users.findFirst({
+            where: eq(users.id, userId)
+        })
+
+        if (!checkUser) return { error: 'User not found' }
+
+        const hashPassword = await bcrypt.hash(password, 10);
+
+        await db.update(users).set({ password: hashPassword }).where(eq(users.id, userId))
+
+        revalidatePath('/dashboard/users');
+        return { success: 'Password reset successfully' }
+
+    } catch (error) {
+        return {
+            error: 'Something went wrong'
+        }
+    }
+}

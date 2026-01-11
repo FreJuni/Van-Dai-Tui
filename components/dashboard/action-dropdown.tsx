@@ -10,9 +10,21 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { ChangeRoleAction, DeleteUserAction } from '@/server/actions/admin-user';
+import { AdminResetPasswordAction, ChangeRoleAction, DeleteUserAction } from '@/server/actions/admin-user';
 interface ActionDropDownProps {
   children: React.ReactNode;
   currentUser: {
@@ -40,6 +52,23 @@ const ActionDropdown = ({
   currentUser,
   user,
 }: ActionDropDownProps) => {
+    const [open, setOpen] = useState(false);
+    const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleResetPassword = async () => {
+        setIsLoading(true);
+        const response = await AdminResetPasswordAction({ userId: user.id, password });
+        if (response.success) {
+            toast.success(response.success);
+            setOpen(false);
+            setPassword("");
+        }
+        if (response.error) {
+            toast.error(response.error);
+        }
+        setIsLoading(false);
+    }
   const handleDeleteUser = async (userId: string) => {
     const response = await DeleteUserAction({ userId });
     if (response.success) {
@@ -75,6 +104,13 @@ const ActionDropdown = ({
               {user.role === 'admin' ? 'Change To User' : 'Change To Admin'}
             </DropdownMenuItem>
             <DropdownMenuItem
+                className="hover:text-primary cursor-pointer"
+                onSelect={(e) => e.preventDefault()}
+                onClick={() => setOpen(true)}
+            >
+                Reset Password
+            </DropdownMenuItem>
+            <DropdownMenuItem
               onClick={() => handleDeleteUser(user.id)}
               className={cn(
                 'cursor-pointer text-red-500 hover:text-red-600!',
@@ -86,6 +122,34 @@ const ActionDropdown = ({
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+                <DialogTitle>Reset Password</DialogTitle>
+                <DialogDescription>
+                    Enter the new password for this user.
+                </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="password" className="text-right">
+                        Password
+                    </Label>
+                    <Input
+                        id="password"
+                        type='password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="col-span-3"
+                    />
+                </div>
+            </div>
+            <DialogFooter>
+                <Button className='cursor-pointer' disabled={isLoading} onClick={handleResetPassword} type="submit">Save changes</Button>
+            </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

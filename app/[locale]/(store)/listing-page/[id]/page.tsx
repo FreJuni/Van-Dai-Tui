@@ -6,6 +6,8 @@ import { BackButton } from '@/components/ui/back-button';
 import { auth } from '@/server/auth';
 import { and, eq } from 'drizzle-orm';
 import React, { Suspense } from 'react';
+import { Metadata } from 'next';
+import {cache} from 'react';
 
 type ListingPageParams = {
     params : {
@@ -13,13 +15,9 @@ type ListingPageParams = {
     }
 }
 
-export const dynamic = 'force-dynamic';
- 
-const ListingPage = async ({params} : ListingPageParams) => {
-    const productId = await params?.id;
-    const session = await auth();
-
-    const data = await db.query.products.findFirst({
+//Manual duplicate fetching data  by using cache
+const getListingData = cache( async (productId : string) => {
+     const data = await db.query.products.findFirst({
         where : eq(products.id, productId),
         with : {
             productVariant : {
@@ -32,6 +30,38 @@ const ListingPage = async ({params} : ListingPageParams) => {
             }
         }
     })
+
+    return data;
+})
+
+export const generateMetadata = async ({params} : ListingPageParams): Promise<Metadata> => {
+    const productId = await params?.id;
+    const data = await getListingData(productId!);
+    return {
+        title : data?.title,
+        description : data?.description,
+        openGraph : {
+            title : data?.title,
+            description : data?.description,
+            images : [
+                {
+                    url : data?.productVariant[0]?.productVariantImage[0]?.image_url!,
+                    width : 1200,
+                    height : 630,
+                    alt : data?.title,
+                }
+            ]
+        }
+    }
+}
+
+export const dynamic = 'force-dynamic';
+ 
+const ListingPage = async ({params} : ListingPageParams) => {
+    const productId = await params?.id;
+    const session = await auth();
+
+    const data = await getListingData(productId!);
 
     let isFavorite = false;
     if (session?.user?.id && productId) {
@@ -53,7 +83,7 @@ const ListingPage = async ({params} : ListingPageParams) => {
             <div className='w-full lg:w-auto flex justify-center'>
                 <Suspense fallback={<div className="w-full h-[550px] bg-gray-100 animate-pulse rounded-xl" />}>
                      <ImageCarousel variant={data?.productVariant || []} />
-                </Suspense>
+                </Suspense>  
             </div>
             <div className='flex-1 w-full'>
                 <Suspense fallback={<div>Loading...</div>}>

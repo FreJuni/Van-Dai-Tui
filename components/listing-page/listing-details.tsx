@@ -184,7 +184,7 @@ const ListingDetails = ({
             </div>
             <div className="flex flex-wrap gap-2">
               {currentVariant?.productVariantOption
-                ?.sort((a, b) => Number(a?.storage) - Number(b?.storage))
+                ?.sort((a, b) => Number(a?.price) - Number(b?.price))
                 ?.map((option, i) => {
                   const isSelected = option.storage === variantStorage;
                   return (

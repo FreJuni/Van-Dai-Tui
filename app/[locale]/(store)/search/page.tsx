@@ -6,6 +6,12 @@ import { ShopProductCard } from '@/components/shop/shop-product-card';
 import { auth } from '@/server/auth';
 import { Pagination } from '@/components/ui/pagination-custom';
 import { Suspense } from 'react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Search Products",
+  description: "Browse our extensive collection of mobile phones, tablets, and accessories. Filter by brand, price, and condition.",
+};
 
 export const dynamic = 'force-dynamic';
 

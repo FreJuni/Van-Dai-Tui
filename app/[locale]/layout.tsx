@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import "./globals.css";
-import TopNavBar from "@/components/topnavbar/top-nav-bar";
-import { auth } from "@/server/auth";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/src/i18n/routing";
@@ -22,8 +20,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VANDAITUI",
+  title: {
+    default : "VANDAITUI",
+    template : "%s | VANDAITUI",
+  },
   description: "Your trusted source for quality tech gadgets and repairs.",
+  twitter: {
+    card: "summary_large_image",
+  },
+  verification : {
+    google : "googled9f56207fa22732f.html"
+  }
 };
 
 type Props = {

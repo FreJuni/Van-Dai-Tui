@@ -2,6 +2,14 @@ import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/dashboard/app-sidebar";
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    robots: {
+        index: false,
+    },
+    title: 'Dashboard',
+}
 
 export default async function DashboardLayout({
     children,

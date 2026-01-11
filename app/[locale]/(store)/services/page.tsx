@@ -18,6 +18,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Our Services - Repairs & More",
+  description: "Professional hardware repair services for smartphones, tablets, and laptops. Screen replacement, battery replacement, and more.",
+};
 
 const services = [
   {

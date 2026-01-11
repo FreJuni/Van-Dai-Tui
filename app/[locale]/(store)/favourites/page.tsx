@@ -11,6 +11,14 @@ import { auth } from '@/server/auth';
 import { redirect } from 'next/navigation';
 import { Pagination } from '@/components/ui/pagination-custom';
 import { Link } from '@/src/i18n/navigation';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'My Favourites',
+    robots: {
+        index: false,
+    },
+}
 
 const FavouritesPage = async ({ 
     searchParams 

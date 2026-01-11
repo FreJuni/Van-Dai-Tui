@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
@@ -7,13 +7,13 @@ const nextConfig: NextConfig = {
     turbopackPersistentCaching: false,
   },
   env: {
-    ADMIN_PHONE_NUMBER : process.env.ADMIN_PHONE_NUMBER,
-    ADMIN_PHONE_NUMBER_FOR_FORMAT : process.env.ADMIN_PHONE_NUMBER_FOR_FORMAT,
-    BASE_URL: process.env.BASE_URL
+    ADMIN_PHONE_NUMBER: process.env.ADMIN_PHONE_NUMBER,
+    ADMIN_PHONE_NUMBER_FOR_FORMAT: process.env.ADMIN_PHONE_NUMBER_FOR_FORMAT,
+    BASE_URL: process.env.BASE_URL,
   },
   images: {
-    domains: ['utfs.io']
-  }
+    domains: ['utfs.io'],
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();

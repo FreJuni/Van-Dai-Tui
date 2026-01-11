@@ -5,6 +5,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Contact Us",
+  description: "Get in touch with us for inquiries, repairs, or support. Visit our shop in Mandalay or contact us via WhatsApp or Messenger.",
+};
 
 const ContactPage = async () => {
     const t = await getTranslations('ContactPage');

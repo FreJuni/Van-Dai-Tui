@@ -1,5 +1,13 @@
 import ProfileNavigation from "@/components/profile-nav/profile-nav"
 import { auth } from "@/server/auth";
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Account Settings',
+    robots: {
+        index: false,
+    },
+}
 
 export default async function AccountLayout({
     children,
