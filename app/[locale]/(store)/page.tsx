@@ -7,7 +7,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: "Best Phone Shop in Malaysia",
-  description: "Your trusted source for quality tech gadgets and repairs in Malaysia. We offer a wide range of phones, tablets, and laptops.",
+  description: "Your trusted source for quality tech gadgets and repairs in Malaysia. We offer a wide range of phones and laptops.",
 };
 
 export default async function Home() {

@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
   },
   verification : {
-    google : "googled9f56207fa22732f"
+    google : process.env.SEARCH_GOOGLE_CONSOLE
   }
 };
 
