@@ -2,6 +2,12 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Shield, ShoppingBag, Wrench, CreditCard, AlertTriangle, UserCheck, ArrowRight, Info } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description: "Read our terms and conditions regarding sales, warranty, repairs, and website usage.",
+};
 
 const TermsOfServicePage = () => {
     const t = useTranslations('TermsPage');

@@ -2,6 +2,12 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Shield, FileText, Lock, Users, ArrowRight, Info } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "Learn how we collect, use, and protect your personal information at VANDAITUI.",
+};
 
 const PrivacyPolicyPage = () => {
     const t = useTranslations('PrivacyPage');
