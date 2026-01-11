@@ -41,6 +41,7 @@ export const AIConcierge = () => {
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+            setQuery("");
         }
     }, [response, isLoading]);
 
@@ -118,8 +119,7 @@ export const AIConcierge = () => {
                                             
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-md">
                                                 {[
-                                                    { text: "Best phone under 1500RM", icon: Smartphone },
-                                                    { text: "Need a laptop for work", icon: Laptop },
+                                                    { text: "Best phone under 2000RM", icon: Smartphone },
                                                     { text: "My device needs repair", icon: Wrench }
                                                 ].map((suggest) => (
                                                     <button 
@@ -177,7 +177,7 @@ export const AIConcierge = () => {
 
                                                     {response.items?.length > 0 && (
                                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                            {response.items.map((item: any) => {
+                                                            {response.items.map((item: any , index: number) => {
                                                                 const urlParams = new URLSearchParams();
                                                                 if (item.urlParams) {
                                                                     Object.entries(item.urlParams).forEach(([key, value]) => {
@@ -190,7 +190,7 @@ export const AIConcierge = () => {
 
                                                                 return (
                                                                     <div 
-                                                                        key={item.id}
+                                                                        key={item.id + index}
                                                                         className="group relative bg-zinc-900 border border-white/5 rounded-[24px] p-4 hover:border-primary/40 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10"
                                                                     >
                                                                         <div className="relative aspect-square rounded-2xl overflow-hidden bg-black/40 mb-4 border border-white/5">
@@ -252,7 +252,9 @@ export const AIConcierge = () => {
                                     <div className="relative flex-1 group">
                                         <Input 
                                             value={query}
-                                            onChange={(e) => setQuery(e.target.value)}
+                                            onChange={(e) =>{
+                                                setQuery(e.target.value);
+                                            }}
                                             placeholder="Message Volt..."
                                             className="h-16 pl-6 pr-16 bg-zinc-800/50 border-white/10 focus:border-primary/50 focus:ring-primary/20 rounded-2xl text-white placeholder:text-zinc-500"
                                         />
