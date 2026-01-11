@@ -23,6 +23,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "VANDAITUI",
+  icons: {
+    icon: "/favicon.ico",
+  },
   description: "Your trusted source for quality tech gadgets and repairs.",
 };
 
