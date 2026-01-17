@@ -16,6 +16,7 @@
         "selectLanguage": "Language"
     },
     "UserInfo": {
+        "myAccount": "My Account",
         "profileSettings": "Profile settings",
         "userOrder": "My orders",
         "adminOrders": "Orders",
@@ -60,7 +61,8 @@
         "newPassword": "New Password",
         "confirmNewPassword": "Confirm New Password",
         "changePasswordDescription": "Ensure your account is secure by using a strong password.",
-        "updatePassword": "Update Password"
+        "updatePassword": "Update Password",
+        "updating": "Updating..."
     },
     "Product": {
         "addProduct": "Add Product",
@@ -223,6 +225,19 @@
             "pending": "Pending",
             "products": "Products"
         },
+        "sidebar": {
+            "platform": "Platform",
+            "management": "Management",
+            "overview": "Overview",
+            "products": "Products",
+            "orders": "Orders",
+            "locations": "Locations",
+            "users": "Users",
+            "settings": "Settings",
+            "discounts": "Discounts",
+            "my profile": "My Profile",
+            "account settings": "Account Settings"
+        },
         "orders": {
             "title": "Orders Management",
             "subtitle": "Manage all customer orders",
@@ -260,6 +275,60 @@
             "deliveryAddress": "Delivery Address",
             "noAddressProvided": "No delivery address provided",
             "orderId": "Order ID"
+        },
+        "locations": {
+            "title": "Manage Locations",
+            "subtitle": "Add and manage your store branches and office locations.",
+            "addLocation": "Add Location",
+            "editLocation": "Edit Location",
+            "noLocations": "No locations added yet",
+            "noLocationsDesc": "Start by adding your first location using the button above.",
+            "addNewLocation": "Add New Location",
+            "addNewLocationDesc": "Fill in the details for the new location.",
+            "updateLocation": "Update Location",
+            "updateLocationDesc": "Update the details for this location.",
+            "form": {
+                "name": "Location Name",
+                "phone": "Phone Number",
+                "address": "Address",
+                "hours": "Opening Hours",
+                "maps": "Google Maps Embed HTML",
+                "title": "Google Maps Embed",
+                "mapsHelper": "Paste the <iframe> code from Google Maps Share/Embed"
+            },
+            "toast": {
+                "added": "Location added successfully",
+                "updated": "Location updated successfully",
+                "deleted": "Location deleted successfully",
+                "addFailed": "Failed to add location",
+                "updateFailed": "Failed to update location",
+                "deleteFailed": "Failed to delete location"
+            },
+            "delete": {
+                "title": "Are you absolutely sure?",
+                "desc": "This action cannot be undone. This will permanently delete the location."
+            }
+        },
+        "discounts": {
+            "title": "Discounts Management",
+            "subtitle": "Manage price-based discounts for your products.",
+            "addDiscount": "Add Discount",
+            "editDiscount": "Edit Discount",
+            "noDiscounts": "No discounts found",
+            "noDiscountsDesc": "Start by adding your first discount rule.",
+            "form": {
+                "minPrice": "Minimum Price",
+                "maxPrice": "Maximum Price",
+                "discount": "Discount Value",
+                "startDate": "Start Date",
+                "endDate": "End Date"
+            },
+            "toast": {
+                "added": "Discount created successfully",
+                "updated": "Discount updated successfully",
+                "deleted": "Discount deleted successfully",
+                "error": "Something went wrong"
+            }
         }
     },
     "MyOrders": {
@@ -455,7 +524,13 @@
         "message": "Message",
         "sendMessage": "Send Message",
         "directSupport": "Direct Support",
-        "chatOnWhatsApp": "Chat on WhatsApp"
+        "chatOnWhatsApp": "Chat on WhatsApp",
+        "formIntro": "Have a specific question? We'll get back to you within 24 hours.",
+        "noLocationsMessage": "No locations available yet.",
+        "ourLocations": "Our Locations",
+        "messageSentSuccess": "Message sent successfully!",
+        "messageSentError": "Failed to send message",
+        "phoneNumber": "Phone Number"
     },
     "NotFound": {
         "title": "Page Not Found",

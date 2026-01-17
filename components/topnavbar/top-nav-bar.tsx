@@ -20,11 +20,10 @@ import {
 } from "@/components/ui/select"
 
 import { Loader2, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { priceFormatter } from '@/helper/priceFormatter';
 
 type TopNavBarProps = {
-    session: Session;
+    session: Session | null | undefined;
 }
 
 import { Search } from 'lucide-react';

@@ -120,7 +120,7 @@ const AccountForm = ({ user }: AccountFormProps) => {
                             className={cn('h-11 cursor-pointer font-semibold shadow-sm mt-4 transition-all active:scale-[0.98]', status === 'executing' && 'animate-pulse opacity-50')} 
                             type="submit"
                         >
-                            {status === 'executing' ? "Updating..." : t('updateAccount')}
+                            {status === 'executing' ? t('updating') : t('updateAccount')}
                         </Button>
                     </form>
                 </Form>

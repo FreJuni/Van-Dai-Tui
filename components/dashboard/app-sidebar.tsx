@@ -12,7 +12,8 @@ import {
   User,
   LogOut,
   ChevronUp,
-  ShoppingCart
+  ShoppingCart,
+  MapPin
 } from "lucide-react"
 
 import {
@@ -55,6 +56,16 @@ const data = {
       icon: ShoppingCart,
     },
     {
+      title: "Locations",
+      url: "/dashboard/locations",
+      icon: MapPin,
+    },
+    {
+      title: "Discounts",
+      url: "/dashboard/discounts",
+      icon: Settings,
+    },
+    {
       title: "Users",
       url: "/dashboard/users",
       icon: Users,
@@ -94,7 +105,9 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
 
       <SidebarContent className="p-2 gap-0 overflow-x-hidden">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[10px] font-black uppercase tracking-widest text-gray-300 px-4 py-2 group-data-[collapsible=icon]:hidden">Platform</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-[10px] font-black uppercase tracking-widest text-gray-300 px-4 py-2 group-data-[collapsible=icon]:hidden">
+            {t("sidebar.platform")}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {data.navMain.map((item) => {
@@ -104,7 +117,7 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
                     <SidebarMenuButton 
                         asChild 
                         isActive={isActive} 
-                        tooltip={item.title}
+                        tooltip={t(`sidebar.${item.title.toLowerCase()}`)}
                         className={cn(
                             "py-5 px-4 rounded-xl transition-all duration-200",
                             isActive ? "bg-primary/5 text-primary font-bold shadow-sm" : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
@@ -125,7 +138,9 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
         <SidebarSeparator className="mx-4 my-2 group-data-[collapsible=icon]:hidden bg-gray-100" />
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[10px] font-black uppercase tracking-widest text-gray-300 px-4 py-2 group-data-[collapsible=icon]:hidden">Settings</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-[10px] font-black uppercase tracking-widest text-gray-300 px-4 py-2 group-data-[collapsible=icon]:hidden">
+            {t("sidebar.management")}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {data.settings.map((item) => {
@@ -135,7 +150,7 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
                     <SidebarMenuButton 
                         asChild 
                         isActive={isActive} 
-                        tooltip={item.title}
+                        tooltip={t(`sidebar.${item.title.toLowerCase()}`)}
                         className={cn(
                             "py-5 px-4 rounded-xl transition-all duration-200",
                             isActive ? "bg-primary/5 text-primary font-bold shadow-sm" : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
@@ -143,7 +158,7 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
                     >
                       <Link href={item.url}>
                         <item.icon className={cn("size-5 shrink-0", isActive && "text-primary")} />
-                        <span className="text-sm truncate">{item.title}</span>
+                        <span className="text-sm truncate">{t(`sidebar.${item.title.toLowerCase()}`)}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -191,7 +206,7 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
               <DropdownMenuContent
                 
                 side="top"
-                className="w-[15rem]"
+                className="w-60"
               >
                 <DropdownMenuItem asChild>
                     <Link href="/" className="cursor-pointer gap-2">

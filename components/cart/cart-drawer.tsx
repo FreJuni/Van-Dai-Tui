@@ -182,14 +182,14 @@ const ownCartItems = cartItems.filter(item => item.userId === user?.id);
                     </div>
                     <div className="grid gap-3">
                          <SheetClose asChild>
-                             <Button 
-                                onClick={handleWhatsAppCheckout}
-                                className="w-full cursor-pointer h-12 text-base font-bold rounded-xl bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2" 
-                                size="lg"
-                             >
-                                <MessageCircle size={20} />
-                                {t('orderViaWhatsApp')}
-                            </Button>
+                                    <Button 
+                                        onClick={handleWhatsAppCheckout}
+                                        className="w-full cursor-pointer h-12 text-base font-bold rounded-xl bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2" 
+                                        size="lg"
+                                    >
+                                        <MessageCircle size={20} />
+                                        {t('orderViaWhatsApp')}
+                                    </Button>
                          </SheetClose>
                     </div>
                 </div>

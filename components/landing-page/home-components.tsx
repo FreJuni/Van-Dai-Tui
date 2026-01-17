@@ -96,7 +96,8 @@ export const Hero = () => {
                         <Image 
                             src={LandingPageImage} 
                             alt="Premium Smartphone" 
-                            fill
+                            fill={true}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-contain drop-shadow-[0_0_50px_rgba(var(--primary),0.3)] animate-float"
                             priority
                         />

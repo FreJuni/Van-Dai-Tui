@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ProductsWithVariants } from '@/lib/infer-type';
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from '@/src/i18n/navigation';
@@ -17,19 +17,71 @@ type ListingDetailsProps = {
   data: ProductsWithVariants;
   userId?: string;
   isFavoriteInitial?: boolean;
+  discount: {
+    discount: number;
+    finalPrice: number;
+    startDate: Date;
+    endDate: Date;
+  } | null;
 };
+
+export const revalidate = 60;
 
 const ListingDetails = ({
   data,
   userId,
   isFavoriteInitial = false,
+  discount
 }: ListingDetailsProps) => {
   const t = useTranslations('ListingPage');
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isFavorite, setIsFavorite] = useState(isFavoriteInitial);
   const [isLoadingFav, setIsLoadingFav] = useState(false);
+  const [timeLeft, setTimeLeft] = useState<string>('');
+  const [isMounted, setIsMounted] = useState(false);
   const { addToCart } = useCartStore();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted || !discount?.endDate) return;
+
+    const calculateDiscount = () => {
+      const now = new Date().getTime();
+      const distance = new Date(discount.endDate).getTime() - now;
+
+      if (distance < 0) {
+        setTimeLeft('EXPIRED');
+        return false;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+      console.log('timeLeft', timeLeft);
+      return true;
+    };
+
+    // Calculate immediately
+    const isActive = calculateDiscount();
+    if (!isActive) return;
+
+    const timer = setInterval(() => {
+      const isActive = calculateDiscount();
+      if(!isActive) return clearInterval(timer);
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [discount?.endDate, isMounted]);
 
   const currentVariant = React.useMemo(() => {
     const variantId = searchParams.get('variantId');
@@ -123,9 +175,24 @@ const ListingDetails = ({
         ></div>
         <div className="mt-2 flex flex-col gap-4">
           <div className="flex flex-wrap items-center gap-4">
-            <p className="text-primary text-3xl font-bold md:text-4xl">
-              {priceFormatter({ price: variantPrice })}
-            </p>
+            <div className="flex flex-col items-start">
+              {discount && (
+                  <span className="text-xl font-black text-gray-500 line-through">
+                      {priceFormatter({ price: variantPrice })}
+                  </span>
+              )}
+              <div className="flex items-center gap-2">
+                <p className="text-primary text-3xl font-bold md:text-4xl">
+                  {priceFormatter({ price: discount ? discount.finalPrice : variantPrice })}
+                </p>
+                {discount && (
+                  <div className="bg-red-500 text-white text-xs font-black px-2 py-1 rounded-[4px] shadow-lg">
+                      -{discount.discount}%
+                  </div>
+                )}
+              </div>
+            </div>
+
             {currentVariant?.productVariantCondition?.condition && (
               <div
                 className={cn(
@@ -137,6 +204,15 @@ const ListingDetails = ({
               >
                 {currentVariant.productVariantCondition.condition}
               </div>
+            )}
+            
+            {timeLeft && discount && (
+                <div className="flex items-center gap-2 bg-black/5 border border-black/10 px-3 py-1.5 rounded-lg">
+                    <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                    <span className="text-sm font-bold text-gray-700 font-mono">
+                        {timeLeft === "EXPIRED" ? "SALE ENDED" : `Ends in: ${timeLeft}`}
+                    </span>
+                </div>
             )}
           </div>
           <div className="flex flex-col gap-2">

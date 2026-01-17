@@ -66,6 +66,7 @@ export default async function SearchPage({
                 condition: p.productVariant[0].productVariantCondition?.condition || "New",
                 isFavourite: p.favouriteProduct,
                 variants: p.productVariant,
+                discount: p.discount,
             };
         } catch (e) {
             console.error('Error mapping product:', p.id, e);

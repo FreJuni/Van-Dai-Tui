@@ -31,7 +31,7 @@ const UserInformation = ({ children, session }: UserInformationProps) => {
         <DropdownMenu modal={false}>
             <DropdownMenuTrigger className="cursor-pointer" asChild>{children}</DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{t("myAccount")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {user?.role === 'admin' ?
                     <Link href={'/dashboard'}>

@@ -14,7 +14,7 @@ export default async function StoreLayout({
 
   return (
     <div className="flex flex-col min-h-screen">
-      <TopNavBar session={session!} />
+      <TopNavBar session={session || undefined} />
       <main className="grow">
         {children}
       </main>

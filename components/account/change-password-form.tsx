@@ -136,7 +136,7 @@ const ChangePasswordForm = () => {
                             className={cn('h-11 cursor-pointer font-semibold shadow-sm mt-2 w-full md:w-auto md:self-start min-w-[150px]', isPending && 'animate-pulse opacity-50')} 
                             type="submit"
                         >
-                            {isPending ? "Updating..." : t('updatePassword')}
+                            {isPending ? t('updating') : t('updatePassword')}
                         </Button>
                     </form>
                 </Form>
